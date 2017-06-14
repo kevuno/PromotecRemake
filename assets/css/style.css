@@ -2,7 +2,7 @@
 
 body{
     background: url("../img/fondo_promotec.png") no-repeat;
-    background-size: 100%;
+    background-size: cover;
 }
 
         
@@ -20,7 +20,7 @@ body{
 
 /* Nav */
 
-.promotec-nav {
+#promotec-nav {
     background: url("../img/Promotec-banner.png") no-repeat center top;
     background-size: 100% 100%;
     height: 9em;
@@ -30,7 +30,7 @@ body{
 
 /* Banner */
 
-.ganar_dinero-banner {
+#ganar_dinero-banner {
     background-color: orange;
     background-size: contain;
     margin-top: 60px;
@@ -38,18 +38,51 @@ body{
     text-align: center;
 }
 
-.ganar_dinero-banner span{
+#ganar_dinero-banner span{
     font-weight: 900;
     font-size: 3em;
     color: blue;
     text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
 }
 
+/* Description */
+#descripcion {
+    padding: 2% 0 2% 0;
+    text-align: center;
+}
+
+#descripcion p, #descripcion span{
+    color: white;
+    margin-top:20px;
+    font-size: 25px;
+}
+
+.logo{
+    height: 150px;
+    width: 150px;
+}
+.store-logo{
+    height: 50px;
+    width: 150px;
+    margin: 20px;
+}
+
+.opacity {
+    background-color:rgba(14, 171, 245, 0.7) !important;
+}
+
+#store-logos-container > *{
+    margin: 1em 0 1em 0;
+}
+
+#micro-tec-logo {
+    font-size: 20px;
+}
 
 /* Responsive */
 
 @media (max-width: 320px) {
-    .promotec-nav {
+    #promotec-nav {
         background: url("../img/Promotec-banner.png") no-repeat center top;
         background-size: 100% 100%;
         height: 4em;
@@ -60,7 +93,7 @@ body{
         margin: 0px;
     }
 
-    .ganar_dinero-banner {
+    #ganar_dinero-banner {
         background-color: orange;
         background-size: contain;
         margin-top: 30px;
@@ -68,12 +101,17 @@ body{
         text-align: center;
     }
 
-    .ganar_dinero-banner span{
+    #ganar_dinero-banner span{
         font-weight: 900;
         font-size: 1em;
         color: blue;
         text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     }
+    #descripcion p, #descripcion span{
+        color: white;
+        margin-top:20px;
+        font-size: 15px;
+    }    
 }
 
 @media  (min-width: 321px)  and (max-width: 768px) {
@@ -81,14 +119,14 @@ body{
         line-height: 1;
     }
 
-    .promotec-nav {
+    #promotec-nav {
         background: url("../img/Promotec-banner.png") no-repeat center top;
         background-size: 100% 100%;;
         height: 6em;
         padding-right: 2em;
     }
 
-    .ganar_dinero-banner {
+    #ganar_dinero-banner {
         background-color: orange;
         background-size: contain;
         margin-top: 30px;
@@ -96,12 +134,17 @@ body{
         text-align: center;
     }
 
-    .ganar_dinero-banner span{
+    #ganar_dinero-banner span{
         font-weight: 900;
         font-size: 1.5em;
         color: blue;
         text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
     }
+    #descripcion p, #descripcion span{
+        color: white;
+        margin-top:20px;
+        font-size: 15px;
+    }      
 
 }
 
@@ -111,13 +154,13 @@ body{
         line-height: 1.2;
     }
     
-    .promotec-nav {
+    #promotec-nav {
         background: url("../img/Promotec-banner.png") no-repeat center top;
         background-size: 100% 100%;
         height: 8em;
         padding-right: 2em;
     }
-    .ganar_dinero-banner {
+    #ganar_dinero-banner {
         background-color: orange;
         background-size: contain;
         margin-top: 50px;
@@ -125,24 +168,23 @@ body{
         text-align: center;
     }
 
-    .ganar_dinero-banner span{
+    #ganar_dinero-banner span{
         font-weight: 900;
         font-size: 2.5em;
         color: blue;
         text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
     }
 
+    #descripcion p, #descripcion span{
+        color: white;
+        margin-top:20px;
+        font-size: 25px;
+    }         
+
 }
 
 /*Footer*/
 
-.footer {
-    position: absolute;
-    top-margin:15px;
-    bottom: 0;
-    width: 100%;
-    background-color: #f5f5f5;
-}
 
 /** For laravel-like landing page **/
 .landing {
