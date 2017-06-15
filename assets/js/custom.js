@@ -23,12 +23,6 @@ function loadFilesAndModal(){
 	$('#modalLRForm').modal();
 }
 
-
-
-
-
-
-
 // The model data
 var data = {
 	estados: [],
@@ -51,18 +45,23 @@ var Vue = new Vue({
 	methods: {
 		//open the form in the login tab
 		openLogin(){
-			$('#register_tab').removeClass("active");
-			$('#register_panel').removeClass("show active");
-			$('#login_tab').addClass("active");
+			$('#register_tab_link').removeClass("active");
+			$('#register_panel').removeClass("show active");			
+			$('#login_tab_link').addClass("active");
 			$('#login_panel').addClass("show active");
+			$('#login_tab').show();
+			$('#register_tab').hide();
+			$('#register_tab').hide();
 			loadFilesAndModal();
 		},
 		//open the form in the register tab
 		openRegister(){
-			$('#login_tab').removeClass("active");
+			$('#login_tab_link').removeClass("active");
 			$('#login_panel').removeClass("show active");	
-			$('#register_tab').addClass("active");
+			$('#register_tab_link').addClass("active");
 			$('#register_panel').addClass("show active");
+			$('#login_tab').hide();
+			$('#register_tab').show();
 			loadFilesAndModal();			
 		},
 		//Updates the list of municipios by filtering the ones that match the estado id

@@ -26,6 +26,16 @@
 
 <body>
     <div id="main_content">
+        <!-- Blue background for banner -->
+        <div class="banner_arriba">
+            <!--Footer Links-->
+            <div class="container-fluid">
+                <div class="row">
+                </div>
+            </div>
+            <!--/.Footer Links-->
+
+        </div>
         <!--Navbar-->
         <div id="promotec-nav"  class="wow fadeIn">
             <div class="float-right button-wrapper ">
@@ -71,17 +81,18 @@
                              <button type="button" class="btn btn-danger btn-lg" @click="openRegister">Comienza a ganar dinero</button> 
                         </div>
                     </div>
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-center" id="descarga_app">
                         <div class="col-md-6">
                              <b><span>Descarga la App</span></b>
+                             <br>
                              <br>
                              <a href=""><img src="assets/img/promotec-logo.jpg" alt="Entrar" class="logo"></a>
                         </div>
                     </div>
                     <div class="row justify-content-center" id="store-logos-container">
                         <div class="col-md-10">
-                             <a href="#"><img src="assets/img/playstore.png" alt="Entrar" class="store-logo"></a>
                              <a href="#"><img src="assets/img/appstore.png" alt="Entrar" class="store-logo"></a>
+                             <a href="#"><img src="assets/img/playstore.png" alt="Entrar" class="store-logo"></a>
                         </div>
                     </div>                    
                 </div>
@@ -89,118 +100,135 @@
         </div>
         <!-- /Contenido -->
         <!--Modal-->
-        <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog cascading-modal" role="document">
+        <div class="modal fade right" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-full-height modal-right modal-lg " role="document">
                 <!--Content-->
                 <div class="modal-content">
-
                     <!--Modal cascading tabs-->
                     <div class="modal-c-tabs">
-
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tabs-2 light-blue darken-3" role="tablist">
-                            <li class="nav-item">
-                                <a id="login_tab" class="nav-link" data-toggle="tab" href="#login_panel" role="tab"><i class="fa fa-user mr-1"></i> Login</a>
+                            <li class="nav-item" id="login_tab">
+                                <a id="login_tab_link" class="nav-link" data-toggle="tab" href="#login_panel" role="tab"><i class="fa fa-user mr-1"></i> Login</a>
                             </li>
-                            <li class="nav-item">
-                                <a id="register_tab" class="nav-link active" data-toggle="tab" href="#register_panel" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
+                            <li class="nav-item" id="register_tab">
+                                <a id="register_tab_link" class="nav-link active" data-toggle="tab" href="#register_panel" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
                             </li>
                         </ul>
+                        <form action="check_login.php">
+                            <!-- Tab panels -->
+                            <div class="tab-content">
+                                <!--Panel de registro-->
+                                <div class="tab-pane fade in" id="login_panel" role="tabpanel">
+                                    <!--Body-->
+                                    <div class="modal-body mb-1">
+                                        <div class="md-form form-sm">
+                                            <i class="fa fa-envelope prefix"></i>
+                                            <input type="text" id="usuario" class="form-control">
+                                            <label for="usuario">Usuario</label>
+                                        </div>
 
-                        <!-- Tab panels -->
-                        <div class="tab-content">
-                            <!--Panel de registro-->
-                            <div class="tab-pane fade in" id="login_panel" role="tabpanel">
-                                <!--Body-->
-                                <div class="modal-body mb-1">
-                                    <div class="md-form form-sm">
-                                        <i class="fa fa-envelope prefix"></i>
-                                        <input type="text" id="usuario" class="form-control">
-                                        <label for="usuario">Usuario</label>
-                                    </div>
-
-                                    <div class="md-form form-sm">
-                                        <i class="fa fa-lock prefix"></i>
-                                        <input type="password" id="pass" class="form-control">
-                                        <label for="pass">Contraseña</label>
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <button class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
-                                    </div>
+                                        <div class="md-form form-sm">
+                                            <i class="fa fa-lock prefix"></i>
+                                            <input type="password" id="pass" class="form-control">
+                                            <label for="pass">Contraseña</label>
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <button class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
+                                        </div>
+                                    </div>                                    
                                 </div>
-                                <!--Footer-->
-                                <div class="modal-footer display-footer">
-                                    <div class="options text-center text-md-right mt-1">
-                                        <p>Not a member? <a href="#" class="blue-text">Sign Up</a></p>
-                                        <p>Forgot <a href="#" class="blue-text">Password?</a></p>
-                                    </div>
-                                    <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>
-                                </div>
+                                <!--/.Panel de login-->
 
+                                <!--Panel de registro-->
+                                <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
+                                    <form action="check_login.php"></form>
+                                        <!--Body-->
+                                        <div class="modal-body">
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-user prefix"></i>
+                                                <input type="text" id="nombre" class="form-control">
+                                                <label for="nombre">Nombre</label>
+                                            </div>
+                                            <div class="md-form form-sm">
+                                                <input type="text" id="apaterno" class="form-control">
+                                                <label for="form24">Apellido Paterno</label>
+                                            </div>
+                                            <div class="md-form form-sm">
+                                                <input type="text" id="amaterno" class="form-control">
+                                                <label for="nombre">Apellido Materno</label>
+                                            </div>
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-mobile prefix"></i>
+                                                <input type="text" max-length="10" id="celular" class="form-control">
+                                                <label for="celular">Celular</label>
+                                            </div>
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-mobile prefix"></i>
+                                                <input type="text" max-length="10" id="celular" class="form-control">
+                                                <label for="celular">Telefono de casa</label>
+                                            </div>                   
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-envelope prefix"></i>
+                                                <input type="text" id="email" class="form-control">
+                                                <label for="email">Tu email</label>
+                                            </div>
+                                            <div class="form-group form-sm">
+
+                                                <label for="estado">Estado</label>
+                                                <select id="estado" class="form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
+                                                    <option value="" disabled selected>Seleccione</option>
+                                                    <option v-bind:value="estado" v-for="estado in estados" v-bind:value="estado.id">{{estado.name}}</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group form-sm">
+
+                                                <label for="municipio">Municipio</label>
+                                                <select id="municipio" class="form-control">
+                                                    <option value="" disabled selected>Seleccione</option>
+                                                    <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group form-sm">
+                                                <label for="municipio">Ciudad</label>
+                                                <select id="municipio" class="form-control">
+                                                    <option value="" disabled selected>Seleccione</option>
+                                                    <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                                </select>                                                
+                                            </div>
+                                            <div class="form-group form-sm">
+                                                <label for="municipio">Colonia</label>
+                                                <select id="municipio" class="form-control">
+                                                    <option value="" disabled selected>Seleccione</option>
+                                                    <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                                </select>                                                
+                                            </div>                   
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-envelope prefix"></i>
+                                                <input type="text" id="calle" class="form-control">
+                                                <label for="calle">Calle</label>
+                                            </div>
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-mobile prefix"></i>
+                                                <input type="number" id="numext" class="form-control">
+                                                <label for="numext">Número Exterior</label>
+                                            </div>                   
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-envelope prefix"></i>
+                                                <input type="text" id="cp" class="form-control">
+                                                <label for="cp">Código Postal</label>
+                                            </div>
+                                            <div class="text-center form-sm mt-2">
+                                                <button type="submit" class="btn btn-info">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                                            </div>
+
+                                        </div>
+                                </div>
+                                <!--/.Panel 8-->
                             </div>
-                            <!--/.Panel de login-->
-
-                            <!--Panel de registro-->
-                            <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
-
-                                <!--Body-->
-                                <div class="modal-body">
-                                    <div class="md-form form-sm">
-                                        <i class="fa fa-user prefix"></i>
-                                        <input type="text" id="nombre" class="form-control">
-                                        <label for="nombre">Nombre</label>
-                                    </div>
-                                    <div class="md-form form-sm">
-                                        <input type="text" id="apaterno" class="form-control">
-                                        <label for="form24">Apellido Paterno</label>
-                                    </div>
-                                    <div class="md-form form-sm">
-                                        <input type="text" id="amaterno" class="form-control">
-                                        <label for="nombre">Apellido Materno</label>
-                                    </div>
-                                    <div class="md-form form-sm">
-                                        <i class="fa fa-mobile prefix"></i>
-                                        <input type="text" id="celular" class="form-control">
-                                        <label for="form24">Celular</label>
-                                    </div>                            
-                                    <div class="md-form form-sm">
-                                        <i class="fa fa-envelope prefix"></i>
-                                        <input type="text" id="email" class="form-control">
-                                        <label for="form24">Your email</label>
-                                    </div>
-                                    <div class="form-group form-sm">
-
-                                        <label for="estado">Estado</label>
-                                        <select id="estado" class="form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
-                                            <option value="" disabled selected>Seleccione</option>
-                                            <option v-bind:value="estado" v-for="estado in estados" v-bind:value="estado.id">{{estado.name}}</option>
-                                        </select>
-                                        
-                                    </div>
-                                    <div class="form-group form-sm">
-
-                                        <label for="municipio">Municipio</label>
-                                        <select id="municipio" class="form-control">
-                                            <option value="" disabled selected>Seleccione</option>
-                                            <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
-                                        </select>
-                                        
-                                    </div>
-                                    <div class="text-center form-sm mt-2">
-                                        <button class="btn btn-info">Sign up <i class="fa fa-sign-in ml-1"></i></button>
-                                    </div>
-
-                                </div>
-                                <!--Footer-->
-                                <div class="modal-footer">
-                                    <div class="options text-right">
-                                        <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
-                                    </div>
-                                    <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>
-                                </div>
-                            </div>
-                            <!--/.Panel 8-->
-                        </div>
+                        </form>
 
                     </div>
                 </div>
@@ -210,31 +238,31 @@
         <!--Modal: Login / Register Form-->
         <!--/Modals-->
     </div>
-
-
-        <!-- Footer -->
-        <footer class="page-footer info-color-dark center-on-small-only opacity">
-            <!--Footer Links-->
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <ul>
-                            <li><a href="#!">@MicrotecOficial</a></li>
-                            <li><a href="#!">Microtec Oficial</a></li>
-                            <li><a href="#!">01 222478 05 Ext. 9</a></li>
-                            <li><a href="#!">Avenida Juárez N° 2318, 1er piso, Edificio Diana Oficina 101</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="float-right" id="micro-tec-logo">
-                            Un programa de <img src="assets/img/micro-logo.png">
+    <!-- Footer -->
+    <footer class="page-footer info-color-dark center-on-small-only opacity">
+        <!--Footer Links-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col footer">
+                    <ul>
+                        <li><a href="#!">@MicrotecOficial</a></li>
+                        <li><a href="#!">Microtec Oficial</a></li>
+                        <li><a href="#!">01 222478 05 Ext. 9</a></li>
+                        <li><a href="#!">Avenida Juárez N° 2318, 1er piso, Edificio Diana Oficina 101</a></li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <div class="float-right" id="micro-tec-logo">
+                        <div class="col-lg-12">
+                            Un programa de <img src="assets/img/micro-logo.png" id="micro-logo">
                         </div>
                     </div>
                 </div>
             </div>
-            <!--/.Footer Links-->
+        </div>
+        <!--/.Footer Links-->
 
-        </footer>
+    </footer>
 </body>
 
     <!-- SCRIPTS -->

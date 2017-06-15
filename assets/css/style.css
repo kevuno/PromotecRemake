@@ -5,6 +5,19 @@ body{
     background-size: cover;
 }
 
+
+.banner_arriba{
+    position: absolute;
+    top: 0;
+    display: inline;
+    height: 7em;
+    width: 100%;
+    z-index: -1;
+
+    background: #2F007B;
+    background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
         
 .button-wrapper {
     height: 100%;
@@ -22,25 +35,28 @@ body{
 
 #promotec-nav {
     background: url("../img/Promotec-banner.png") no-repeat center top;
-    background-size: 100% 100%;
-    height: 9em;
+    background-size: contain;
+    height: 7em;
     padding-right: 4em;
+    z-index: 4;
 }
 
 
 /* Banner */
 
 #ganar_dinero-banner {
-    background-color: orange;
+    background: #FF512F;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #F09819, #FF512F);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #F09819, #FF512F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-size: contain;
     margin-top: 60px;
-    padding: 2% 0 2% 0;
+    padding: 1% 0 1% 0;
     text-align: center;
 }
 
 #ganar_dinero-banner span{
     font-weight: 900;
-    font-size: 3em;
+    font-size: 2.2em;
     color: blue;
     text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
 }
@@ -54,15 +70,18 @@ body{
 #descripcion p, #descripcion span{
     color: white;
     margin-top:20px;
-    font-size: 25px;
+    font-size: 23px;
 }
 
 .logo{
-    height: 150px;
-    width: 150px;
+    height: 125px;
+    width: 125px;
+}
+#descarga_app {    
+    margin: 20px 0 20px 0;
 }
 .store-logo{
-    height: 50px;
+    height: 40px;
     width: 150px;
     margin: 20px;
 }
@@ -75,8 +94,8 @@ body{
     margin: 1em 0 1em 0;
 }
 
-#micro-tec-logo {
-    font-size: 20px;
+.footer, #micro-tec-logo {
+    font-size: 15px;
 }
 
 /* Responsive */
@@ -110,8 +129,15 @@ body{
     #descripcion p, #descripcion span{
         color: white;
         margin-top:20px;
-        font-size: 15px;
-    }    
+        font-size: 12px;
+    }
+    .footer, #micro-tec-logo {
+        font-size: 10px;
+    }
+    #micro-logo{
+        height: 75px;
+        width: 75px;
+    }
 }
 
 @media  (min-width: 321px)  and (max-width: 768px) {
@@ -145,7 +171,9 @@ body{
         margin-top:20px;
         font-size: 15px;
     }      
-
+    .footer, #micro-tec-logo {
+        font-size: 10px;
+    }
 }
 
 @media (min-width: 769px) and (max-width: 992px) {
