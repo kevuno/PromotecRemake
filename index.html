@@ -19,14 +19,17 @@
     <!-- Personalized styles -->
     <link href="assets/css/style.css" rel="stylesheet">
 
+    
+
 
 </head>
 
 <body>
+    <div id="main_content">
         <!--Navbar-->
         <div id="promotec-nav"  class="wow fadeIn">
             <div class="float-right button-wrapper ">
-                <button class="btn btn-warning btn-responsive butonn" data-toggle="modal" data-target="#modalLRForm">Login</button>
+                <button class="btn btn-warning btn-responsive butonn" @click="openLogin">Login</button>
             </div>    
         </div>
         <!--/Navbar-->
@@ -65,7 +68,7 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-6">
-                             <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalLRForm">Comienza a ganar dinero</button> 
+                             <button type="button" class="btn btn-danger btn-lg" @click="openRegister">Comienza a ganar dinero</button> 
                         </div>
                     </div>
                     <div class="row justify-content-center">
@@ -85,110 +88,128 @@
             </div>
         </div>
         <!-- /Contenido -->
+        <!--Modal-->
+        <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
 
-<!--Modal-->
-<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog cascading-modal" role="document">
-        <!--Content-->
-        <div class="modal-content">
+                    <!--Modal cascading tabs-->
+                    <div class="modal-c-tabs">
 
-            <!--Modal cascading tabs-->
-            <div class="modal-c-tabs">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs tabs-2 light-blue darken-3" role="tablist">
+                            <li class="nav-item">
+                                <a id="login_tab" class="nav-link" data-toggle="tab" href="#login_panel" role="tab"><i class="fa fa-user mr-1"></i> Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="register_tab" class="nav-link active" data-toggle="tab" href="#register_panel" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
+                            </li>
+                        </ul>
 
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs tabs-2 light-blue darken-3" role="tablist">
-                    <li class="nav-item">
-                        <a id="tab_login" class="nav-link " data-toggle="tab" href="#panel7" role="tab"><i class="fa fa-user mr-1"></i> Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="tab_register" class="nav-link active" data-toggle="tab" href="#panel8" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
-                    </li>
-                </ul>
+                        <!-- Tab panels -->
+                        <div class="tab-content">
+                            <!--Panel de registro-->
+                            <div class="tab-pane fade in" id="login_panel" role="tabpanel">
+                                <!--Body-->
+                                <div class="modal-body mb-1">
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-envelope prefix"></i>
+                                        <input type="text" id="usuario" class="form-control">
+                                        <label for="usuario">Usuario</label>
+                                    </div>
 
-                <!-- Tab panels -->
-                <div class="tab-content">
-                    <!--Panel 7-->
-                    <div class="tab-pane fade in" id="login_panel" role="tabpanel">
-                        <!--Body-->
-                        <div class="modal-body mb-1">
-                            <div class="md-form form-sm">
-                                <i class="fa fa-envelope prefix"></i>
-                                <input type="text" id="form22" class="form-control">
-                                <label for="form22">Your email</label>
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-lock prefix"></i>
+                                        <input type="password" id="pass" class="form-control">
+                                        <label for="pass">Contraseña</label>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <button class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
+                                    </div>
+                                </div>
+                                <!--Footer-->
+                                <div class="modal-footer display-footer">
+                                    <div class="options text-center text-md-right mt-1">
+                                        <p>Not a member? <a href="#" class="blue-text">Sign Up</a></p>
+                                        <p>Forgot <a href="#" class="blue-text">Password?</a></p>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>
+                                </div>
+
                             </div>
+                            <!--/.Panel de login-->
 
-                            <div class="md-form form-sm">
-                                <i class="fa fa-lock prefix"></i>
-                                <input type="password" id="form23" class="form-control">
-                                <label for="form23">Your password</label>
+                            <!--Panel de registro-->
+                            <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
+
+                                <!--Body-->
+                                <div class="modal-body">
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-user prefix"></i>
+                                        <input type="text" id="nombre" class="form-control">
+                                        <label for="nombre">Nombre</label>
+                                    </div>
+                                    <div class="md-form form-sm">
+                                        <input type="text" id="apaterno" class="form-control">
+                                        <label for="form24">Apellido Paterno</label>
+                                    </div>
+                                    <div class="md-form form-sm">
+                                        <input type="text" id="amaterno" class="form-control">
+                                        <label for="nombre">Apellido Materno</label>
+                                    </div>
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-mobile prefix"></i>
+                                        <input type="text" id="celular" class="form-control">
+                                        <label for="form24">Celular</label>
+                                    </div>                            
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-envelope prefix"></i>
+                                        <input type="text" id="email" class="form-control">
+                                        <label for="form24">Your email</label>
+                                    </div>
+                                    <div class="form-group form-sm">
+
+                                        <label for="estado">Estado</label>
+                                        <select id="estado" class="form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
+                                            <option value="" disabled selected>Seleccione</option>
+                                            <option v-bind:value="estado" v-for="estado in estados" v-bind:value="estado.id">{{estado.name}}</option>
+                                        </select>
+                                        
+                                    </div>
+                                    <div class="form-group form-sm">
+
+                                        <label for="municipio">Municipio</label>
+                                        <select id="municipio" class="form-control">
+                                            <option value="" disabled selected>Seleccione</option>
+                                            <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                        </select>
+                                        
+                                    </div>
+                                    <div class="text-center form-sm mt-2">
+                                        <button class="btn btn-info">Sign up <i class="fa fa-sign-in ml-1"></i></button>
+                                    </div>
+
+                                </div>
+                                <!--Footer-->
+                                <div class="modal-footer">
+                                    <div class="options text-right">
+                                        <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>
+                                </div>
                             </div>
-                            <div class="text-center mt-2">
-                                <button class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
-                            </div>
-                        </div>
-                        <!--Footer-->
-                        <div class="modal-footer display-footer">
-                            <div class="options text-center text-md-right mt-1">
-                                <p>Not a member? <a href="#" class="blue-text">Sign Up</a></p>
-                                <p>Forgot <a href="#" class="blue-text">Password?</a></p>
-                            </div>
-                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>
+                            <!--/.Panel 8-->
                         </div>
 
                     </div>
-                    <!--/.Panel 7-->
-
-                    <!--Panel 8-->
-                    <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
-
-                        <!--Body-->
-                        <div class="modal-body">
-                            <div class="md-form form-sm">
-                                <i class="fa fa-envelope prefix"></i>
-                                <input type="text" id="form24" class="form-control">
-                                <label for="form24">Your email</label>
-                            </div>
-
-                            <div class="md-form form-sm">
-                                <i class="fa fa-lock prefix"></i>
-                                <input type="password" id="form25" class="form-control">
-                                <label for="form25">Your password</label>
-                            </div>
-
-                            <div class="md-form form-sm">
-                                <i class="fa fa-lock prefix"></i>
-                                <input type="password" id="form26" class="form-control">
-                                <label for="form26">Repeat password</label>
-                            </div>
-
-                            <div class="text-center form-sm mt-2">
-                                <button class="btn btn-info">Sign up <i class="fa fa-sign-in ml-1"></i></button>
-                            </div>
-
-                            <fieldset class="additional-option">
-                                <input type="checkbox" id="checkbox21">
-                                <label for="checkbox21">Subscribe me to the newsletter</label>
-                            </fieldset>
-
-                        </div>
-                        <!--Footer-->
-                        <div class="modal-footer">
-                            <div class="options text-right">
-                                <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
-                            </div>
-                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>
-                        </div>
-                    </div>
-                    <!--/.Panel 8-->
                 </div>
-
+                <!--/.Content-->
             </div>
         </div>
-        <!--/.Content-->
+        <!--Modal: Login / Register Form-->
+        <!--/Modals-->
     </div>
-</div>
-<!--Modal: Login / Register Form-->
-<!--/Modals-->
 
 
         <!-- Footer -->
@@ -220,6 +241,8 @@
        
     <!-- JQuery -->
     <script src="assets/js/jquery-3.1.1.min.js"></script>
+    <!-- Vue js -->
+    <script src="https://unpkg.com/vue"></script>
     <!-- Tooltips -->
     <script src="assets/js/tether.min.js"></script>
     <!-- Bootstrap core JavaScript -->
