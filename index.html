@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Promotec</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
@@ -91,8 +89,8 @@
                     </div>
                     <div class="row justify-content-center" id="store-logos-container">
                         <div class="col-md-10">
-                             <a href="#"><img src="assets/img/appstore.png" alt="Entrar" class="store-logo"></a>
-                             <a href="#"><img src="assets/img/playstore.png" alt="Entrar" class="store-logo"></a>
+                             <a href="#"><img src="assets/img/ios.png" alt="Entrar" class="store-logo"></a>
+                             <a href="#"><img src="assets/img/android.png" alt="Entrar" class="store-logo"></a>
                         </div>
                     </div>                    
                 </div>
@@ -115,10 +113,10 @@
                                 <a id="register_tab_link" class="nav-link active" data-toggle="tab" href="#register_panel" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
                             </li>
                         </ul>
-                        <form action="check_login.php">
-                            <!-- Tab panels -->
-                            <div class="tab-content">
-                                <!--Panel de registro-->
+                        <!-- Tab panels -->
+                        <div class="tab-content">
+                            <form v-on:submit.prevent>                              
+                                <!--Panel de Login-->
                                 <div class="tab-pane fade in" id="login_panel" role="tabpanel">
                                     <!--Body-->
                                     <div class="modal-body mb-1">
@@ -133,13 +131,23 @@
                                             <input type="password" id="pass" class="form-control">
                                             <label for="pass">Contraseña</label>
                                         </div>
-                                        <div class="text-center mt-2">
-                                            <button class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
+                                        <div class="md-form form-sm">
+                                            <div class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button @keyup.enter="submitLogin" @click="submitLogin" class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
+                                            </div>
+                                            <div class="col">
+                                                <button type="button" id="forgot_pass" class="btn btn-info">Olvido su contraseña? <i class="fa fa-question-circle ml-1"></i></button>
+                                            </div>
                                         </div>
                                     </div>                                    
                                 </div>
                                 <!--/.Panel de login-->
+                            </form>
 
+                            <form action="check_login.php">
                                 <!--Panel de registro-->
                                 <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
                                     <form action="check_login.php"></form>
@@ -226,9 +234,9 @@
 
                                         </div>
                                 </div>
-                                <!--/.Panel 8-->
-                            </div>
-                        </form>
+                                <!--/.Panel registro-->
+                            </form>
+                        </div>
 
                     </div>
                 </div>
@@ -265,22 +273,25 @@
     </footer>
 </body>
 
-    <!-- SCRIPTS -->
-       
-    <!-- JQuery -->
-    <script src="assets/js/jquery-3.1.1.min.js"></script>
-    <!-- Vue js -->
-    <script src="https://unpkg.com/vue"></script>
-    <!-- Tooltips -->
-    <script src="assets/js/tether.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script src="assets/js/bootstrap.min.js"></script>
-    <!-- Cool animations -->
-    <script src="assets/js/wow.js"></script>
-    <script src="assets/js/mdb.min.js"></script>
-    <!-- Custom JavaScript -->
-    <script src="assets/js/custom.js"></script>
-    <script type="text/javascript">
-        new WOW().init();    
-    </script>
+    <!-- SCRIPTS -->       
+        <!-- JQuery -->
+        <script src="assets/js/jquery-3.1.1.min.js"></script>
+        <!-- Vue js -->
+        <script src="https://unpkg.com/vue"></script>
+        <!-- Tooltips -->
+        <script src="assets/js/tether.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script src="assets/js/bootstrap.min.js"></script>
+        <!-- Material design bootstrap js -->
+        <script src="assets/js/mdb.min.js"></script>
+        <!-- Custom JavaScript -->
+        <script src="assets/js/custom.js"></script>
+        <!-- Google captcha -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <!-- Wow animations -->
+        <script src="assets/js/wow.js"></script>
+        <!-- Wow animations initialization-->
+        <script type="text/javascript">
+            new WOW().init();    
+        </script>
     

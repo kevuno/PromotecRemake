@@ -1,3 +1,46 @@
+//Check login
+
+function checkLogin(user,pass,captcha){
+    error="0";
+    /*
+    if (ca.length=="") { error="Da Click en 'No soy un robot'"; acc=null; }
+    if (pass.length<3 || pass==" " || pass=="") { error="Revise su contraseña"; acc=$('input#pass').focus(); }
+    if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
+	*/
+    if (error=="0"){
+		var t3 = user+","+pass+","+captcha;
+      	console.log(t3);
+      	$.post("check_login.php",{login:t3},function(respuesta){
+        	console.log("respuesta: "+respuesta);
+        	/*
+			if (respuesta.substring(0,2)==="UV") {
+			  window.location="/promotor";
+			}
+			else if (respuesta.substring(0,2)==="E2") {
+			$("#myModalPassword").modal('show');
+			grecaptcha.reset();
+			$('#msj').html('');
+			grecaptcha.reset();
+			} 
+			else if (respuesta.substring(0,2)==="EC") {
+			  grecaptcha.reset();
+			  alert("Codigo captcha invalido");
+			} else if(respuesta==="Uinvalid"){
+			   $('#myModalogin').modal('show');grecaptcha.reset();
+			} else {
+			  $("#msj").html("Usuario o contraseña invalido");
+			  alert("El usuario o la contraseña no son validos");grecaptcha.reset();
+			}
+			*/
+      	})
+    }else{
+		alert(error);
+		acc;
+    }
+}
+
+
+
 //Loading the json files with the estados and municipios and save the data
 function loadJsonFileOntoVar(filename,type){
 	$('.mdb-select').material_select('destroy');
@@ -12,6 +55,7 @@ function loadJsonFileOntoVar(filename,type){
 	});
 }
 
+//Function to load modal and necessary files in case they haven't been loaded
 function loadFilesAndModal(){
 	//Only load json files once
 	if (!Vue.loaded) {
@@ -27,11 +71,8 @@ function loadFilesAndModal(){
 var data = {
 	estados: [],
 	municipios: [],
-	selected_estado: {
-		"id": 0,
-		"name": "Seleccione"
-	},
-	active_municipios: [],
+	selected_estado: {},
+	active_municipios: [], // Municipios seleted after 
 	loaded: false, // Variable to check that loading json data only happens once
 }
 
@@ -70,6 +111,12 @@ var Vue = new Vue({
 				//Because out of the scope of the methdo, it needs "Vue." reference instead of "this."
 				return el.state_id == Vue.selected_estado.id;
 			});
+		},
+		test(){
+		    user=$('input#usuario').val();
+		    pass=$('input#pass').val();
+		    ca=$('#g-recaptcha-response').val();
+			checkLogin(user,pass,ca)
 		}
 	},
 	data: data

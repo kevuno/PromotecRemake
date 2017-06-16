@@ -17,6 +17,7 @@ body{
     background: #2F007B;
     background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: contain;
 }
         
 .button-wrapper {
@@ -81,8 +82,6 @@ body{
     margin: 20px 0 20px 0;
 }
 .store-logo{
-    height: 40px;
-    width: 150px;
     margin: 20px;
 }
 
@@ -101,6 +100,19 @@ body{
 /* Responsive */
 
 @media (max-width: 320px) {
+    .banner_arriba{
+        position: absolute;
+        top: 0;
+        display: inline;
+        height: 4em;
+        width: 100%;
+        z-index: -1;
+
+        background: #2F007B;
+        background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background-size: contain;
+    }
     #promotec-nav {
         background: url("../img/Promotec-banner.png") no-repeat center top;
         background-size: 100% 100%;
@@ -144,7 +156,19 @@ body{
     .btn-responsive {
         line-height: 1;
     }
+    .banner_arriba{
+        position: absolute;
+        top: 0;
+        display: inline;
+        height: 6em;
+        width: 100%;
+        z-index: -1;
 
+        background: #2F007B;
+        background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background-size: contain;
+    }
     #promotec-nav {
         background: url("../img/Promotec-banner.png") no-repeat center top;
         background-size: 100% 100%;;

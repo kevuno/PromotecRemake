@@ -1,0 +1,19 @@
+{
+  "name": "promotec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevuno/PromotecRemake.git"
+  },
+  "author": "Kevin Bastian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevuno/PromotecRemake/issues"
+  },
+  "homepage": "https://github.com/kevuno/PromotecRemake#readme"
+}
