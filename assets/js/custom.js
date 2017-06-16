@@ -90,9 +90,11 @@ var Vue = new Vue({
 			$('#register_panel').removeClass("show active");			
 			$('#login_tab_link').addClass("active");
 			$('#login_panel').addClass("show active");
+			$('#login_panel').hide();
 			$('#login_tab').show();
 			$('#register_tab').hide();
-			$('#register_tab').hide();
+			$('#register_panel').hide();
+			$('#login_panel').show();
 			loadFilesAndModal();
 		},
 		//open the form in the register tab
@@ -101,7 +103,9 @@ var Vue = new Vue({
 			$('#login_panel').removeClass("show active");	
 			$('#register_tab_link').addClass("active");
 			$('#register_panel').addClass("show active");
+			$('#login_panel').hide();
 			$('#login_tab').hide();
+			$('#register_panel').show();
 			$('#register_tab').show();
 			loadFilesAndModal();			
 		},
@@ -112,11 +116,11 @@ var Vue = new Vue({
 				return el.state_id == Vue.selected_estado.id;
 			});
 		},
-		test(){
+		submitLogin(){
 		    user=$('input#usuario').val();
 		    pass=$('input#pass').val();
 		    ca=$('#g-recaptcha-response').val();
-			checkLogin(user,pass,ca)
+			checkLogin(user,pass,ca);
 		}
 	},
 	data: data

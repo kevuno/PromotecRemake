@@ -5,7 +5,7 @@
 */
 class CaptchaChecker{
 	private $secretKey;
-	public const $captchaAdress = "https://www.google.com/recaptcha/api/siteverify";
+	const CaptchaAdress = "https://www.google.com/recaptcha/api/siteverify";
 
 	function __construct($secretKey){
 		$this->secretKey = $secretKey;
@@ -22,9 +22,9 @@ class CaptchaChecker{
 		if ($ip) {
 			$ipcode = "&remoteip=".$ip;
 		}
-		$response=file_get_contents($captchaAdress."?secret=".$secretKey."&response=".$response.$ipcode);
+		$response=file_get_contents(self::CaptchaAdress."?secret=".$secretKey."&response=".$response.$ipcode);
 		$responseJson=json_decode($response,true);
-		return intval($responseJson["success"]) === 1 
+		return intval($responseJson["success"]) === 1;
 	}
 }
 

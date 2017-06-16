@@ -38,7 +38,8 @@ $captcha=$t2[2];
 $secretKey="6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if";
 $ip=$_SERVER['REMOTE_ADDR'];
 
-$captcha_check = new CaptchaChecker($secretKey)->validate($cp,$ip);
+$captcha_checker  = new CaptchaChecker($secretKey);
+$captcha_check = $captcha_checker->validate($cp,$ip);
 
 
 
