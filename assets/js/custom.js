@@ -1,4 +1,7 @@
 //Check login
+$(document).ready(function() {
+  $(".js-example-basic-single").select2({width: '70%'});
+});
 
 function checkLogin(user,pass,captcha){
     error="0";

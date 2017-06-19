@@ -150,6 +150,9 @@ body{
         height: 75px;
         width: 75px;
     }
+    #rc-imageselect, .g-recaptcha {
+        transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
+    }
 }
 
 @media  (min-width: 321px)  and (max-width: 768px) {
@@ -197,6 +200,9 @@ body{
     }      
     .footer, #micro-tec-logo {
         font-size: 10px;
+    }
+    #rc-imageselect, .g-recaptcha {
+        transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
     }
 }
 

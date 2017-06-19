@@ -18,6 +18,11 @@ function crearSessiones($portales, $sess_fields, $row){
 	}
 }
 
+
+function security($var){
+	return $var;
+}
+
 ini_set("session.cookie_lifetime","7200");
 ini_set("session.gc_maxlifetime","7200");
 
@@ -39,14 +44,14 @@ $secretKey="6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if";
 $ip=$_SERVER['REMOTE_ADDR'];
 
 $captcha_checker  = new CaptchaChecker($secretKey);
-$captcha_check = $captcha_checker->validate($cp,$ip);
+$captcha_check = $captcha_checker->validate($captcha,$ip);
 
 
 
 //revisamos el captcha
-if($captcha_check) {
+if(!$captcha_check){
 	// revisamos si existe el usuario y pass
-	$sql="select u.*, l.dis as suc, l.tipo, l.bloqp from canal.usuarios u left join canal.lista l on u.dis=l.user where u.user='".$us."' and u.pass=canal.crypto('".$us."','".$ps."')";
+	$sql="select u.*, l.dis as suc, l.tipo, l.bloqp from canal.usuarios u left join canal.lista l on u.dis=l.user where u.user='".$usuario."' and u.pass=canal.crypto('".$usuario."','".$pass."')";
 	$result = mysqli_query($link, $sql);
 	//Checar si usuario es miembro de la mesa administrativa
 	if ($row = mysqli_fetch_array($result)){
@@ -96,15 +101,15 @@ if($captcha_check) {
 			//creo token
 			$tk=md5($us);
 			$_SESSION['tk'] = $tk;
-			$sql_tk=mysqli_query($link, "INSERT INTO microtec.tokens (user, pass, token) VALUES ('$us', '$ps', '$tk')");
+			$sql_tk=mysqli_query($link, "INSERT INTO microtec.tokens (user, pass, token) VALUES ('$usuario', '$pass', '$tk')");
 
 			echo "UValid";
-		} else {
+		}else{
 			echo "Uinvalid";
 		}
 	}else{
 		//revisar en recargas.usuarios
-		$sql="select u.*, l.dis as suc, l.tipo, l.bloqp from recargas.usuarios u left join canal.lista l on u.dis=l.user where u.user='".$us."' and (u.pass=recargas.crypto('".$us."','".$ps."') or u.pass=md5('".$ps."'))";		
+		$sql="select u.*, l.dis as suc, l.tipo, l.bloqp from recargas.usuarios u left join canal.lista l on u.dis=l.user where u.user='".$usuario."' and (u.pass=recargas.crypto('".$usuario."','".$pass."') or u.pass=md5('".$pass."'))";		
 		$result = mysqli_query($link, $sql);
 		if ($row = mysqli_fetch_array($result)) {
 			$psw=$row['pass'];

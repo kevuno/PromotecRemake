@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="assets/css/mdb.min.css" rel="stylesheet">
     <!-- Personalized styles -->
     <link href="assets/css/style.css" rel="stylesheet">
 
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <!-- MDB core CSS -->
+    <link href="assets/css/mdb.min.css" rel="stylesheet" />
 
 
 </head>
@@ -84,6 +84,7 @@
                              <b><span>Descarga la App</span></b>
                              <br>
                              <br>
+
                              <a href=""><img src="assets/img/promotec-logo.jpg" alt="Entrar" class="logo"></a>
                         </div>
                     </div>
@@ -98,7 +99,7 @@
         </div>
         <!-- /Contenido -->
         <!--Modal-->
-        <div class="modal fade right" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade right" id="modalLRForm" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-full-height modal-right modal-lg " role="document">
                 <!--Content-->
                 <div class="modal-content">
@@ -181,19 +182,18 @@
                                                 <input type="text" id="email" class="form-control">
                                                 <label for="email">Tu email</label>
                                             </div>
-                                            <div class="form-group form-sm">
+                                            <div class="form-group form-lg">
 
                                                 <label for="estado">Estado</label>
-                                                <select id="estado" class="form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
+                                                <select id="estado" class="js-example-basic-single form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
                                                     <option value="" disabled selected>Seleccione</option>
                                                     <option v-bind:value="estado" v-for="estado in estados" v-bind:value="estado.id">{{estado.name}}</option>
                                                 </select>
-                                                
-                                            </div>
+                                            </div>                                                
                                             <div class="form-group form-sm">
 
                                                 <label for="municipio">Municipio</label>
-                                                <select id="municipio" class="form-control">
+                                                <select id="municipio" class="js-example-basic-single form-control">
                                                     <option value="" disabled selected>Seleccione</option>
                                                     <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
                                                 </select>
@@ -201,14 +201,14 @@
                                             </div>
                                             <div class="form-group form-sm">
                                                 <label for="municipio">Ciudad</label>
-                                                <select id="municipio" class="form-control">
+                                                <select id="municipio" class="js-example-basic-single form-control">
                                                     <option value="" disabled selected>Seleccione</option>
                                                     <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
                                                 </select>                                                
                                             </div>
                                             <div class="form-group form-sm">
                                                 <label for="municipio">Colonia</label>
-                                                <select id="municipio" class="form-control">
+                                                <select id="municipio" class="js-example-basic-single form-control">
                                                     <option value="" disabled selected>Seleccione</option>
                                                     <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
                                                 </select>                                                
@@ -288,10 +288,13 @@
         <script src="assets/js/custom.js"></script>
         <!-- Google captcha -->
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <!-- Wow animations -->
         <script src="assets/js/wow.js"></script>
         <!-- Wow animations initialization-->
         <script type="text/javascript">
-            new WOW().init();    
+            new WOW().init();
+            $(".js-example-basic-single").select2();
         </script>
     

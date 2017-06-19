@@ -17,12 +17,12 @@ class CaptchaChecker{
 	function validate($response,$ip = null){
 		echo "testing";
 		echo $response;
-		echo $this->key;
+		echo $this->secretKey;
 		$ipCode = "";
 		if ($ip) {
 			$ipcode = "&remoteip=".$ip;
 		}
-		$response=file_get_contents(self::CaptchaAdress."?secret=".$secretKey."&response=".$response.$ipcode);
+		$response=file_get_contents(self::CaptchaAdress."?secret=".$this->secretKey."&response=".$response.$ipcode);
 		$responseJson=json_decode($response,true);
 		return intval($responseJson["success"]) === 1;
 	}
