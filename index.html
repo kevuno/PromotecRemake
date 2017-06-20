@@ -187,6 +187,10 @@
                                                 <label for="estado">Estado</label>
                                                 <select id="estado" class="js-example-basic-single form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
                                                     <option value="" disabled selected>Seleccione</option>
+                                                    <option value="1" >Seleccione</option>
+                                                    <option value="2" >Seleccione</option>
+                                                    <option value="3" >Seleccione</option>
+
                                                     <option v-bind:value="estado" v-for="estado in estados" v-bind:value="estado.id">{{estado.name}}</option>
                                                 </select>
                                             </div>                                                
@@ -295,6 +299,5 @@
         <!-- Wow animations initialization-->
         <script type="text/javascript">
             new WOW().init();
-            $(".js-example-basic-single").select2();
         </script>
     

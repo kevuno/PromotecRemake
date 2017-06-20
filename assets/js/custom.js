@@ -1,7 +1,10 @@
 //Check login
 $(document).ready(function() {
-  $(".js-example-basic-single").select2({width: '70%'});
+  //var $eventSelect = $(".js-example-basic-single").select2({width: '70%'});
 });
+
+
+
 
 function checkLogin(user,pass,captcha){
     error="0";
@@ -114,6 +117,7 @@ var Vue = new Vue({
 		},
 		//Updates the list of municipios by filtering the ones that match the estado id
 		updateActiveMunicipios(){
+			console.log('waduspp');
 			this.active_municipios = this.municipios.filter(function(el){
 				//Because out of the scope of the methdo, it needs "Vue." reference instead of "this."
 				return el.state_id == Vue.selected_estado.id;
