@@ -15,7 +15,8 @@ class LoginMain{
 		}
 		//Construir el login correspondiente y ejecutar intento de login
 		$login = loginFactory($loginData->tipo);
-		return $login->login($loginData);
+		// Intentar hacer login, si se 
+		return $login->login();
 
 
 
