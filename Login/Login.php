@@ -1,4 +1,5 @@
 <? 
+require('Logins/LoginPromotor.php');
 abstract class Login {
 	/** El objecto LoginData usado para hacer login en el sistema **/
 	protected $loginData;
@@ -19,14 +20,23 @@ abstract class Login {
 	protected $response;
 
 
-	/** Object constructor **/
-	function __construct($login_db,$login_table,$fields_from_query,$session_vars){
+	/** Object constructor with optional parameters**/
+
+	function __construct($login_db,$login_table,$fields_from_query,$session_vars,LoginData $loginData = null){
 		$this->login_db = $login_db;
 		$this->login_table = $login_table;
 		$this->fields_from_query = $fields_from_query;
 		$this->session_vars = $session_vars;
+		//Optional
+		$this->loginData = $loginData;
 	}
-
+	/**
+	* Sets the Login data
+	* @param: The login data
+	**/
+	function setData(LoginData $loginData){
+		$this->loginData = $loginData;
+	}
 	/** 
 	* Funcion que realiza la llamada a la base de datos y checa si se pudo hacer login o no.
 	* @return: Un objecto de Error o un objecto de Respuesta sobre el resultado del intento de login y de inicialzacion   *	de las variables de session
@@ -34,17 +44,21 @@ abstract class Login {
 	function login(){
 		$user = $this->loginData->user;
 		$pass = $this->loginData->pass;
-		$sql="SELECT id FROM '$this->db'.'$this->login_table' WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
+		$sql="SELECT id FROM '$this->login_db'.'$this->login_table' WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
 		$result = mysqli_query($link, $sql);
 		if($row = mysqli_fetch_array($result)){
 			//Obtenemos las variables que seran de tipo $_SESSION
-			$session_data = $this->getSessionData();
-			//Checamos que si ya haya compeltado la consulta y se hayan construido el objecto con la informacion. 
-			 // Si no ocurrio ningun error, iniciamos las variables de session
-			return ($session_data instanceof Error) ? $session_data : $session_data->initializeSessions();
+			try{
+				$session_data = $this->getSessionData();	
+			}catch(Exception $e){
+				//Ocurrio algun error obteniendo la informacion de la session
+				throw new Exception($e->getMessage(), $e->getCode(), $e);
+			}			
+			//Iniciamos las variables de session
+			return $session_data->initializeSessions();
 			
 		}
-		return new Error("Inicio de session incorrecto, checar usuario y contraseña","Login.php->login()");
+		throw new Exception("Inicio de session incorrecto, checar usuario y contraseña");
 	}
 
 	/** 
@@ -74,7 +88,7 @@ abstract class Login {
 	public static function createArrayCombinations($prefjios, $sess_fields, $data){
 		$final_array = [];
 		foreach ($prefjios as $prefix){
-			foreach ($campos as $field-> $row_field){
+			foreach ($campos as $field => $row_field){
 				$final_array[] = $data[$row_field];
 			}				
 		}
@@ -138,11 +152,12 @@ class SessionData {
 			$_SESSION[$field] = $data;
 			//Testing that the variable session is working
 			if($_SESSION[$field] != $data){
-				return new Error("There was a problem initializing a session variable- variable name: ".$field." with value: ".$data,"Login.php -> initializeSessions()")
+				throw new Exception("Ocurrio un problema iniciando una variable de session - nombre del campo: ".$field." con valor: ".$data);
 			}
 		}
+		return new Response("Se han inicializado las variables de session. Login Completado");
 	}
-	return new Respose("Se han inicializado las variables de session. Login Completado");
+	
 }
 
 

@@ -36,7 +36,7 @@ class LoginPromotor extends Login{
 
 			return $sessionbj;
 		}else{
-			return new Error("Error al obtener datos para la session","loginPromotor->getSessionData()")
+			throw new Exception("Error al obtener datos para la session");
 		}
 	}
 }

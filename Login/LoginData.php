@@ -5,7 +5,7 @@ class LoginData{
 	public $pass;
 
 	/** El tipo de cliente de donde el login proviene **/
-	private $tipo;
+	public $tipo;
 
 	function __construct($user,$pass,$tipo){
 		$this->user = $user;
@@ -14,10 +14,10 @@ class LoginData{
 	}
 
 }
-
+require('CaptchaChecker.php');
 class CaptchaData{
 	/** La info del captcha que proviene del formulario que deben de ser verificados **/
-	private $captcha;
+	private $captcha_data;
 	
 	/** La key secreta para verificar captcha **/
 	private $captcha_key;
@@ -26,14 +26,17 @@ class CaptchaData{
 	private $ip;	
 
 
-	function __construct($captcha,$captcha_key,$ip){
-		$this->captcha = $captcha;
+	function __construct($captcha_data,$captcha_key,$ip){
+		$this->captcha_data = $captcha_data;
 		$this->captcha_key = $captcha_key;
 		$this->ip = $ip;
 	}
 
+	/**
+	* Validates the captcha
+	*/
 	function validate(){
-		return CaptchaChecker::validate($this->captcha_key, $this->captcha, $this->ip);
+		return CaptchaChecker::validate($this->captcha_data,$this->captcha_key,$this->ip);
 	}
 }
 

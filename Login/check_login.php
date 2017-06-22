@@ -4,24 +4,31 @@
 ini_set("session.cookie_lifetime","7200");
 ini_set("session.gc_maxlifetime","7200");
 session_start();
-require('seguro.php');
+//require('seguro.php');
 require('link.php');
-require('CaptchaChecker.php');
+
+require('LoginData.php');
 require('LoginMain.php');
-require('Login.php');
 
 //Recuperar datos
-$raw_data = security($_POST["login"]);
+$raw_data = $_POST["login"];
 $fields = explode(",",$raw_data);
+print_r($fields);
+$usuario = $fields[0];
+$pass = $fields[1];
+$provider = "promotec";
+$ip = $ip = "52.42.194.160"; //$_SERVER["serverdata"],
 
-$usuario = security($tfields[0]);
-$pass = $tfields[1];
-$provider = "promotec"
-
-$captcha = $tfields[2];
+$captcha = $fields[2];
 $secretKey = "6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if"; //Secret key for captcha
 
+/* Call al Main login center */
+$response;
+try{
+	$response = LoginMain::loginGeneral(new LoginData($usuario,$pass,$provider), new CaptchaData($captcha,$secretKey,$ip));
+}catch (Exception $e){
+	echo json_encode($e->getMessage());
+}
 
-return json_encode(LoginMain::loginGeneral(new LoginData($usuario,$pass,$provider), new CaptchaData($captcha,$secretKey,$ip)));
 
 ?>

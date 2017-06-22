@@ -1,4 +1,6 @@
 <?php
+require('Response.php');
+require('Login.php');
 class LoginMain{
 
 	/**
@@ -7,24 +9,30 @@ class LoginMain{
 	* @param: $LoginData: El objecto del login: Incluye user,pass,data del captcha e ip.
 	* @param: $LoginData: El objecto del captcha: Incluye captcha e ip.
 	*/
-	public static function loginGeneral($loginData,$captchaData){
+	public static function loginGeneral(LoginData $loginData, CaptchaData $captchaData){
 		//Validar captcha
-		$captcha_checker = new CaptchaChecker($loginData->secretKey);
-		if(!$captchaData->validate()){
-			return new Response("No se pudo validar el captcha");
+		$captcha_checker = $captchaData->validate();
+		//if(!$captchaData->validate()){
+		//	throw new Exception("No se pudo validar el captcha");
+		//}
+		try{
+			//Construir el login correspondiente y ejecutar intento de login
+			$login = self::loginFactory($loginData->tipo);
+			$login->setData($loginData);
+			// Intentar hacer login
+			return $response = $login->login();	
+		}catch (Exception $e){
+			throw new Exception($e->getMessage(), $e->getCode(), $e);
 		}
-		//Construir el login correspondiente y ejecutar intento de login
-		$login = loginFactory($loginData->tipo);
-		// Intentar hacer login, si se 
-		return $login->login();
-
-
-
 	}
 
+	/**
+	* Construlle el objeto de login dependiendo del tipo de login
+	* @param: $tipo_login: El tipo de login que se va a crear
+	**/
 	public static function loginFactory($tipo_login){
 		if($tipo_login === "promotec"){
-			return new PromotorLogin();
+			return new LoginPromotor("recargas","usuarios","fields","session_vars");
 
 		}else if($tipo_login === "microtae"){
 
@@ -32,6 +40,8 @@ class LoginMain{
 			
 		}else if($tipo_login === "login4"){
 			
+		}else{
+			throw new Exception("Tipo de login ".$tipo_login." no es valido.");
 		}
 	}
 }
