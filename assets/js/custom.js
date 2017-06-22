@@ -3,7 +3,9 @@ $(document).ready(function() {
   //var $eventSelect = $(".js-example-basic-single").select2({width: '70%'});
 });
 
+function hidePanelsOtherThan(){
 
+}
 
 
 function checkLogin(user,pass,captcha){
@@ -81,6 +83,22 @@ var data = {
 	selected_estado: {},
 	active_municipios: [], // Municipios seleted after 
 	loaded: false, // Variable to check that loading json data only happens once
+	panels: [
+		{
+			name: "login",
+			buttons: [],
+			isActive: false,
+		},{
+			name: "register",
+			buttons: [],
+			isActive: false,
+		},{
+			name: "forgot",
+			buttons: [],
+			isActive: false,
+		},
+
+	],
 }
 
 
@@ -107,7 +125,7 @@ var Vue = new Vue({
 		//open the form in the register tab
 		openRegister(){
 			$('#login_tab_link').removeClass("active");
-			$('#login_panel').removeClass("show active");	
+			$('#login_panel').removeClass("show active");
 			$('#register_tab_link').addClass("active");
 			$('#register_panel').addClass("show active");
 			$('#login_panel').hide();
@@ -128,6 +146,15 @@ var Vue = new Vue({
 		    pass=$('input#pass').val();
 		    ca=$('#g-recaptcha-response').val();
 			checkLogin(user,pass,ca);
+		},
+		forgot_panel(){
+			$('#login_panel').hide();
+			$('#login_panel').removeClass("show active");
+			$("#forgot_panel").show();
+			$('#forgot_panel').addClass("show active");
+		},
+		submitRecuperar(){
+
 		}
 	},
 	data: data

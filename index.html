@@ -139,8 +139,15 @@
                         </ul>
                         <!-- Tab panels -->
                         <div class="tab-content">
-                            <form v-on:submit.prevent>                              
-                                <!--Panel de Login-->
+                            <!-- Un div de respuesta temporal -->
+                            <div class="row">
+                                <div class="col">
+                                    <span id="respuesta" class="badge blue">
+                                    </span>                                
+                                </div>
+                            </div> 
+                            <!--Panel de Login-->
+                            <form v-on:submit.prevent>
                                 <div class="tab-pane fade in" id="login_panel" role="tabpanel">
                                     <!--Body-->
                                     <div class="modal-body mb-1">
@@ -163,17 +170,40 @@
                                                 <button @keyup.enter="submitLogin" @click="submitLogin" class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
                                             </div>
                                             <div class="col">
-                                                <button type="button" id="forgot_pass" class="btn btn-info">Olvido su contraseña? <i class="fa fa-question-circle ml-1"></i></button>
+                                                <button @keyup.enter="forgot_panel" @click="forgot_panel" type="button" id="forgot_pass" class="btn btn-info">Olvido su contraseña? <i class="fa fa-question-circle ml-1"></i></button>
                                             </div>
                                         </div>
                                     </div> 
                                     <!--/. Body del login -->
-                                    <div id="respuesta">
-                                        
-                                    </div>                                   
                                 </div>
-                                <!--/.Panel de login-->
                             </form>
+                            <!--/.Panel de login-->
+
+                            <!--Panel de Olvido su contraseña-->
+                            <form v-on:submit.prevent>
+                                <div class="tab-pane fade in" id="forgot_panel" role="tabpanel" style="display: none;">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h2>Recuperar contraseña con NIP</h2>
+                                        </div>
+                                    </div>
+                                    <!--Body-->
+                                    <div class="modal-body mb-1">
+                                        <div class="md-form form-sm">
+                                            <i class="fa fa-key prefix"></i>
+                                            <input type="text" id="nip" class="form-control">
+                                            <label for="nip">NIP</label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button @keyup.enter="submitRecuperar" @click="submitRecuperar" class="btn btn-info">Validar NIP <i class="fa fa-sign-in ml-1"></i></button>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <!--/. Body del login -->
+                                </div>
+                            </form>
+                            <!--/.Panel de login-->                            
 
                             <form action="check_login.php">
                                 <!--Panel de registro-->
