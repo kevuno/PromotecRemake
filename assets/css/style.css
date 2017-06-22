@@ -1,16 +1,15 @@
 /* CUSTOM STYLES */
+@import url("responsive_style.css");
 
+html {
+  position: relative;
+  min-height: 100%;
+}
 
 body{
     background: url("../img/fondo_promotec.png") no-repeat;
     background-size: cover;
-}
-
-
-/* Page container, useful for keeping the footer in the right place with the right width */
-#main_container{
-    min-height:100%;
-    position:relative;
+    margin-bottom: 100px;
 }
 
 /* Baner de color de fondo para el nav principal */
@@ -101,154 +100,19 @@ body{
     margin: 1em 0 1em 0;
 }
 
-.footer_content, #micro-tec-logo {
+.footer-content, #micro-tec-logo {
     font-size: 15px;
 }
 
 
 
-/* Responsive */
 
-@media (max-width: 320px) {
-    .banner_arriba{
-        position: absolute;
-        top: 0;
-        display: inline;
-        height: 4em;
-        width: 100%;
-        z-index: -1;
 
-        background: #2F007B;
-        background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background-size: contain;
-    }
-    #promotec-nav {
-        background: url("../img/Promotec-banner.png") no-repeat center top;
-        background-size: 100% 100%;
-        height: 4em;
-        padding-right: 2em;
-    }
-    .btn-responsive {
-        line-height: .5;
-        margin: 0px;
-    }
+/* Sticky footer styles
+-------------------------------------------------- */
 
-    #ganar_dinero-banner {
-        background-color: orange;
-        background-size: contain;
-        margin-top: 30px;
-        padding: 2% 0 2% 0;
-        text-align: center;
-    }
-
-    #ganar_dinero-banner span{
-        font-weight: 900;
-        font-size: 1em;
-        color: blue;
-        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    }
-    #descripcion p, #descripcion span{
-        color: white;
-        margin-top:20px;
-        font-size: 12px;
-    }
-    .footer_content, #micro-tec-logo {
-        font-size: 10px;
-    }
-    #micro-logo{
-        height: 75px;
-        width: 75px;
-    }
-    #rc-imageselect, .g-recaptcha {
-        transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
-    }
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
-
-@media  (min-width: 321px)  and (max-width: 768px) {
-    .btn-responsive {
-        line-height: 1;
-    }
-    .banner_arriba{
-        position: absolute;
-        top: 0;
-        display: inline;
-        height: 6em;
-        width: 100%;
-        z-index: -1;
-
-        background: #2F007B;
-        background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background-size: contain;
-    }
-    #promotec-nav {
-        background: url("../img/Promotec-banner.png") no-repeat center top;
-        background-size: 100% 100%;;
-        height: 6em;
-        padding-right: 2em;
-    }
-
-    #ganar_dinero-banner {
-        background-color: orange;
-        background-size: contain;
-        margin-top: 30px;
-        padding: 2% 0 2% 0;
-        text-align: center;
-    }
-
-    #ganar_dinero-banner span{
-        font-weight: 900;
-        font-size: 1.5em;
-        color: blue;
-        text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
-    }
-    #descripcion p, #descripcion span{
-        color: white;
-        margin-top:20px;
-        font-size: 15px;
-    }      
-    .footer_content, #micro-tec-logo {
-        font-size: 10px;
-    }
-    #rc-imageselect, .g-recaptcha {
-        transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 992px) {
-    .btn-responsive {
-        font-size:90%;
-        line-height: 1.2;
-    }
-    
-    #promotec-nav {
-        background: url("../img/Promotec-banner.png") no-repeat center top;
-        background-size: 100% 100%;
-        height: 8em;
-        padding-right: 2em;
-    }
-    #ganar_dinero-banner {
-        background-color: orange;
-        background-size: contain;
-        margin-top: 50px;
-        padding: 2% 0 2% 0;
-        text-align: center;
-    }
-
-    #ganar_dinero-banner span{
-        font-weight: 900;
-        font-size: 2.5em;
-        color: blue;
-        text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
-    }
-
-    #descripcion p, #descripcion span{
-        color: white;
-        margin-top:20px;
-        font-size: 25px;
-    }         
-
-}
-
-
