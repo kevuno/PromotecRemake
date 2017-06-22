@@ -6,8 +6,9 @@ ini_set("session.gc_maxlifetime","7200");
 session_start();
 require('seguro.php');
 require('link.php');
-require('CapthcaChecker.php');
-require('LoginData.php');
+require('CaptchaChecker.php');
+require('LoginMain.php');
+require('Login.php');
 
 //Recuperar datos
 $raw_data = security($_POST["login"]);
@@ -21,6 +22,6 @@ $captcha = $tfields[2];
 $secretKey = "6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if"; //Secret key for captcha
 
 
-return LoginMain::loginGeneral(new LoginData($usuario,$pass,$provider), new CaptchaData($captcha,$secretKey,$ip));
+return json_encode(LoginMain::loginGeneral(new LoginData($usuario,$pass,$provider), new CaptchaData($captcha,$secretKey,$ip)));
 
 ?>

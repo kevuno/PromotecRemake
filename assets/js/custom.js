@@ -8,11 +8,11 @@ $(document).ready(function() {
 
 function checkLogin(user,pass,captcha){
     error="0";
-    /*
+    
     if (ca.length=="") { error="Da Click en 'No soy un robot'"; acc=null; }
     if (pass.length<3 || pass==" " || pass=="") { error="Revise su contraseña"; acc=$('input#pass').focus(); }
-    if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
-	*/
+    if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#usuario').focus(); }
+	
     if (error=="0"){
 		var t3 = user+","+pass+","+captcha;
       	console.log(t3);
@@ -41,7 +41,7 @@ function checkLogin(user,pass,captcha){
       	})
     }else{
 		alert(error);
-		acc;
+		 ;
     }
 }
 
@@ -64,7 +64,7 @@ function loadJsonFileOntoVar(filename,type){
 //Function to load modal and necessary files in case they haven't been loaded
 function loadFilesAndModal(){
 	//Only load json files once
-	if (!Vue.loaded) {
+	if(!Vue.loaded) {
 		loadJsonFileOntoVar("assets/json/estados.json","estados");
 		loadJsonFileOntoVar("assets/json/municipios.json","municipios");
 		Vue.loaded = true;
@@ -87,7 +87,7 @@ var data = {
 
 //Vue instance
 var Vue = new Vue({
-	el: '#main_content',
+	el: '#main_container',
 
 	methods: {
 		//open the form in the login tab
