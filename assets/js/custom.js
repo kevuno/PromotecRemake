@@ -7,7 +7,7 @@ function hidePanelsOtherThan(){
 
 }
 
-
+/** Envia el intento de login **/
 function checkLogin(user,pass,captcha){
     error="0";
     
@@ -21,31 +21,17 @@ function checkLogin(user,pass,captcha){
       	$.post("Login/check_login.php",{login:t3},function(respuesta){
         	console.log("respuesta: "+respuesta);
         	$("#respuesta").html(respuesta);
-        	/*
-			if (respuesta.substring(0,2)==="UV") {
-			  window.location="/promotor";
-			}
-			else if (respuesta.substring(0,2)==="E2") {
-			$("#myModalPassword").modal('show');
-			grecaptcha.reset();
-			$('#msj').html('');
-			grecaptcha.reset();
-			} 
-			else if (respuesta.substring(0,2)==="EC") {
-			  grecaptcha.reset();
-			  alert("Codigo captcha invalido");
-			} else if(respuesta==="Uinvalid"){
-			   $('#myModalogin').modal('show');grecaptcha.reset();
-			} else {
-			  $("#msj").html("Usuario o contraseña invalido");
-			  alert("El usuario o la contraseña no son validos");grecaptcha.reset();
-			}
-			*/
+
+
       	})
     }else{
 		alert(error);
 		 ;
     }
+}
+
+function sendNip(user){
+
 }
 
 
@@ -76,27 +62,132 @@ function loadFilesAndModal(){
 	$('#modalLRForm').modal();
 }
 
+
+
+
+/**
+* Activates the panel of given id, and deactivates all other panels.
+* If not found, it just hides all panels. Sets prev panel to current panel.
+**/
+function activatePanel(panelID){
+	Vue.panels.forEach(function(panel){
+		panel.isActive = false;
+		if(panel.id == panelID){
+			panel.isActive = true;
+			Vue.panels.prevPanel = Vue.panels.currentPanel;
+			Vue.panels.currentPanel = panel;
+		}
+
+	});
+
+}
+
+
+
 // The model data
 var data = {
+	globalInputs:{
+		user: "",
+		pass: "",
+		captcha: "",
+		NIP: "",
+		phoneNumber: ""
+	},
 	estados: [],
 	municipios: [],
 	selected_estado: {},
-	active_municipios: [], // Municipios seleted after 
+	active_municipios: [], // Municipios activos despues de que se selecciono un estado
 	loaded: false, // Variable to check that loading json data only happens once
+	//Constantes de estilos
+	activeClass: "show active",
+	hiddenClass: "hiddenPanel",
+	currentPanel: null,
+	prevPanel: null,
 	panels: [
 		{
-			name: "login",
-			buttons: [],
-			isActive: false,
+			id: "login",
+			header: "Hacer login",
+			instructions: "",
+			inputs:[
+				{
+					iconClass: "fa-envelope",
+					vModel: "user",
+					id: "user",
+					label: "Usuario",
+				},
+				{
+					iconClass: "fa-lock",
+					vModel: "pass",
+					id: "pass",
+					label: "Contraseña",
+				}				
+			],
+			buttons: [
+				{
+					vueFunction: "submitLogin",
+					label: "Login"
+				},
+				{
+					vueFunction: "forgot_panel",
+					label: "Olvido su contraseña? "
+				}
+			],
+			isActive: true,
+			captcha: true
+			
 		},{
-			name: "register",
-			buttons: [],
-			isActive: false,
+			id: "forgot",
+			header: "Olvidó su Contraseña?",
+			instructions: "",
+			inputs:[
+				{
+					iconClass: "fa-user",
+					vModel: "user",
+					id: "user",
+					label: "Usuario",
+				}		
+			],
+			buttons: [
+				{
+					vueFunction: "sendNip",
+					label: "Enviar"
+				},
+				{
+					vueFunction: "goBack",
+					label: "Regresar"
+				}
+			],
+			isActive: true,
+			captcha: false
+			
 		},{
-			name: "forgot",
-			buttons: [],
-			isActive: false,
-		},
+			id: "sentNip",
+			header: "Insertar NIP",
+			instructions: "Se le ha enviado un nip al telefono <span>{{globalInputs.phoneNumber}}</span>",
+			phoneNumber: 0,
+			NIP: 0,
+			inputs:[
+				{
+					iconClass: "fa-key",
+					vModel: "nip",
+					id: "nip",
+					label: "NIP",
+				}		
+			],
+			buttons: [
+				{
+					vueFunction: "sendNip",
+					label: "Enviar"
+				},
+				{
+					vueFunction: "goBack",
+					label: "Regresar"
+				}
+			],
+			isActive: true,
+			captcha: false
+			
+		}
 
 	],
 }
@@ -121,6 +212,7 @@ var Vue = new Vue({
 			$('#register_panel').hide();
 			$('#login_panel').show();
 			loadFilesAndModal();
+			activatePanel("login");
 		},
 		//open the form in the register tab
 		openRegister(){
@@ -132,7 +224,8 @@ var Vue = new Vue({
 			$('#login_tab').hide();
 			$('#register_panel').show();
 			$('#register_tab').show();
-			loadFilesAndModal();			
+			loadFilesAndModal();
+			activatePanel("register");
 		},
 		//Updates the list of municipios by filtering the ones that match the estado id
 		updateActiveMunicipios(){
@@ -142,19 +235,23 @@ var Vue = new Vue({
 			});
 		},
 		submitLogin(){
-		    user=$('input#usuario').val();
-		    pass=$('input#pass').val();
-		    ca=$('#g-recaptcha-response').val();
-			checkLogin(user,pass,ca);
+			checkLogin(this.globalInputs.user,this.globalInputs.pass,this.globalInputs.ca);
 		},
 		forgot_panel(){
-			$('#login_panel').hide();
-			$('#login_panel').removeClass("show active");
-			$("#forgot_panel").show();
-			$('#forgot_panel').addClass("show active");
+			activatePanel("forgot");
 		},
-		submitRecuperar(){
+		forgot_submit(){
 
+		},
+		returnPrevPanel(){
+
+		},
+		sendNip(){
+
+		},
+		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), forgot_panel(), etc
+		call(vueFunction){
+			this[vueFunction]();
 		}
 	},
 	data: data

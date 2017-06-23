@@ -141,70 +141,54 @@
                         <div class="tab-content">
                             <!-- Un div de respuesta temporal -->
                             <div class="row">
-                                <div class="col">
-                                    <span id="respuesta" class="badge blue">
-                                    </span>                                
+                                <div class="col blue" id="respuesta">        
                                 </div>
-                            </div> 
-                            <!--Panel de Login-->
-                            <form v-on:submit.prevent>
-                                <div class="tab-pane fade in" id="login_panel" role="tabpanel">
-                                    <!--Body-->
-                                    <div class="modal-body mb-1">
-                                        <div class="md-form form-sm">
-                                            <i class="fa fa-envelope prefix"></i>
-                                            <input type="text" id="usuario" class="form-control">
-                                            <label for="usuario">Usuario</label>
-                                        </div>
-
-                                        <div class="md-form form-sm">
-                                            <i class="fa fa-lock prefix"></i>
-                                            <input type="password" id="pass" class="form-control">
-                                            <label for="pass">Contraseña</label>
-                                        </div>
-                                        <div class="md-form form-sm">
-                                            <div class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
-                                        </div>
-                                        <div class="row">
+                            </div>
+                            <!-- A template for the panels for login process -->
+                            <div v-for="panel in panels">
+                                <form v-on:submit.prevent>
+                                    <div class="tab-pane fade in" v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id" role="tabpanel">
+                                        <div class="row" id="header">
                                             <div class="col">
-                                                <button @keyup.enter="submitLogin" @click="submitLogin" class="btn btn-info">Log in <i class="fa fa-sign-in ml-1"></i></button>
-                                            </div>
-                                            <div class="col">
-                                                <button @keyup.enter="forgot_panel" @click="forgot_panel" type="button" id="forgot_pass" class="btn btn-info">Olvido su contraseña? <i class="fa fa-question-circle ml-1"></i></button>
+                                                <h2>{{panel.header}}</h2>
                                             </div>
                                         </div>
-                                    </div> 
-                                    <!--/. Body del login -->
-                                </div>
-                            </form>
-                            <!--/.Panel de login-->
-
-                            <!--Panel de Olvido su contraseña-->
-                            <form v-on:submit.prevent>
-                                <div class="tab-pane fade in" id="forgot_panel" role="tabpanel" style="display: none;">
-                                    <div class="row">
-                                        <div class="col">
-                                            <h2>Recuperar contraseña con NIP</h2>
+                                        <div class="row" id="response">
+                                            <div class="col">
+                                                <h3>{{panel.response}}</h3>
+                                            </div>
                                         </div>
+                                        <div class="row" id="instructions">
+                                            <div class="col">
+                                                <h3>{{panel.instructions}}</h3>
+                                            </div>
+                                        </div>
+
+                                        <!--Body-->
+                                        <div class="modal-body mb-1">
+                                            <div class="inputs">
+                                                <div v-for="input in panel.inputs" class="md-form form-sm">
+                                                    <i class="fa prefix" v-bind:class="input.iconClass"></i>
+                                                    <input type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
+                                                    <label :for="input.id">{{input.label}}</label>
+                                                </div>
+                                                <div v-if="panel.captcha" class="md-form form-sm">
+                                                    <div class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
+                                                </div> 
+                                            </div>
+                                            <div class="row buttons">
+                                                <div class="col" v-for="button in panel.buttons">
+                                                    <button @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" class="btn btn-info">{{button.label}}<i class="fa fa-sign-in ml-1"></i></button>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <!--/. Body del login -->
                                     </div>
-                                    <!--Body-->
-                                    <div class="modal-body mb-1">
-                                        <div class="md-form form-sm">
-                                            <i class="fa fa-key prefix"></i>
-                                            <input type="text" id="nip" class="form-control">
-                                            <label for="nip">NIP</label>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <button @keyup.enter="submitRecuperar" @click="submitRecuperar" class="btn btn-info">Validar NIP <i class="fa fa-sign-in ml-1"></i></button>
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    <!--/. Body del login -->
-                                </div>
-                            </form>
-                            <!--/.Panel de login-->                            
-
+                                </form>
+                                <!--/.Panel de login--> 
+                            </div>
+                            
+                           
                             <form action="check_login.php">
                                 <!--Panel de registro-->
                                 <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
