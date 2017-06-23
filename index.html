@@ -4,7 +4,7 @@
 <head>
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Promotec</title>
 
@@ -24,20 +24,19 @@
 
 <body>
     <div id="main_container">
-        <!-- Blue background for banner -->
-        <div class="banner_arriba">
-            <div class="container-fluid">
-                <div class="row">
-                </div>
-            </div>
-        </div>
-        <!-- /Blue background-->
 
         <!--Navbar-->
-        <div id="promotec-nav"  class="wow fadeIn">
-            <div class="float-right button-wrapper ">
-                <button class="btn btn-warning btn-responsive butonn" @click="openLogin">Login</button>
-            </div>    
+        <div class="container-fluid">
+            <div class="row banner">
+                <div class="col-8">
+                    <img src="assets/img/promotec-banner.png" class="promotec-img" alt="">
+                </div>
+                <div class="col-4">
+                    <div class="button-wrapper">           
+                        <button class="btn btn-warning btn-sm btn-responsive" @click="openLogin">Acceso</button>
+                    </div>            
+                </div>            
+            </div>
         </div>
         <!--/Navbar-->
 
@@ -50,6 +49,24 @@
                               <span>¿Buscas trabajo o cómo ganar dinero extra?</span>
                         </div>               
                 </div>
+            </div>
+            <!--/Ganar dinero-->
+            <!-- Floating social media buttons-->
+            <div class="sticky-container">
+                <ul class="sticky">
+                    <li>
+                        <img src="assets/img/pngs/Facebook.png" width="32" height="32">
+                        <p><a href="#" target="_blank">Microtec Oficial</p>
+                    </li>
+                    <li>
+                        <img src="assets/img/pngs/Twitter.png" width="32" height="32">
+                        <p><a href="#" target="_blank">@MicrotecOficial</p>
+                    </li>
+                    <li>
+                        <img src="assets/img/pngs/Skype.png" width="32" height="32">
+                        <p><a href="#" target="_blank">01 222478 05 Ext. 9</p>
+                    </li>
+                </ul>
             </div>
             <!--Descripcion-->
             <div class="wow fadeIn" id="descripcion">
@@ -84,7 +101,7 @@
                              <br>
                              <br>
 
-                             <a href=""><img src="assets/img/promotec-logo.jpg" alt="Entrar" class="logo"></a>
+                             <a href=""><img src="assets/img/promotec-logo.png" alt="Entrar" class="logo"></a>
                         </div>
                     </div>
                     <div class="row justify-content-center" id="store-logos-container">
@@ -99,13 +116,13 @@
         <!-- /Contenido -->
 
         <!-- Footer -->
-        <footer class="page-footer footer info-color-dark center-on-small-only opacity">
+        <footer class="page-footer footer center-on-small-only transparent">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col footer-content">
                         <ul>
-                            <li><a href="#!">@MicrotecOficial</a></li>
-                            <li><a href="#!">Microtec Oficial</a></li>
+                            <li><img src="assets/img/pngs/Twitter.png" width="16" height="16"><a href="#!">@MicrotecOficial</a></li>
+                            <li><img src="assets/img/pngs/Facebook.png" width="16" height="16"><a href="#!">Microtec Oficial</a></li>
                             <li><a href="#!">01 222478 05 Ext. 9</a></li>
                             <li><a href="#!">Avenida Juárez N° 2318, 1er piso, Edificio Diana Oficina 101</a></li>
                         </ul>

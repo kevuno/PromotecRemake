@@ -1,48 +1,40 @@
 
 /* Responsive */
 
-@media (max-width: 320px) {
+@media only screen and (max-width: 320px) {
 	/* Margin at bottom to keep the footer from overlaping the content*/
 	body{
 		margin-bottom: 220px !important;
 	}
-    .banner_arriba{
-        position: absolute;
-        top: 0;
-        display: inline;
-        height: 4em;
-        width: 100%;
-        z-index: -1;
+    .banner{
+        height: 60px !important;
+    }
 
-        background: #2F007B;
-        background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background-size: contain;
+    .promotec-img {
+        height: 60px !important;
     }
-    #promotec-nav {
-        background: url("../img/Promotec-banner.png") no-repeat center top;
-        background-size: 100% 100%;
-        height: 4em;
-        padding-right: 2em;
-    }
+    .button-wrapper {
+        height: 60px !important;
+        display: inline-block;
+
+    }    
     .btn-responsive {
-        line-height: .5;
-        margin: 0px;
+        line-height: 1;
+        font-size: 6px;
+        width: 70px !important;     
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+        height: 30px !important;
     }
 
     #ganar_dinero-banner {
-        background-color: orange;
-        background-size: contain;
         margin-top: 30px;
         padding: 2% 0 2% 0;
-        text-align: center;
     }
 
     #ganar_dinero-banner span{
         font-weight: 900;
         font-size: 1em;
-        color: blue;
-        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     }
     #descripcion p, #descripcion span{
         color: white;
@@ -55,6 +47,16 @@
     #rc-imageselect, .g-recaptcha {
         transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
     }
+    .sticky-container{
+        padding:0px;
+        margin:0px;
+        position:fixed;
+        right:-30px;
+        top:30px;
+        width:10px;
+        z-index: 1100;
+    }    
+
 }
 
 @media  (min-width: 321px)  and (max-width: 768px) {
@@ -62,42 +64,34 @@
 	body{
 		margin-bottom: 150px !important;
 	}
+    .banner{
+        height: 60px !important;
+    }
+
+    .promotec-img {
+        height: 60px !important;
+    }
+    .button-wrapper {
+        height: 60px !important;
+        display: inline-block;
+
+    }    
     .btn-responsive {
         line-height: 1;
-    }
-    .banner_arriba{
-        position: absolute;
-        top: 0;
-        display: inline;
-        height: 6em;
-        width: 100%;
-        z-index: -1;
-
-        background: #2F007B;
-        background: -webkit-linear-gradient(to right, #005BB9 50%, #2F007B 50%);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #005BB9 50%, #2F007B 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background-size: contain;
-    }
-    #promotec-nav {
-        background: url("../img/Promotec-banner.png") no-repeat center top;
-        background-size: 100% 100%;;
-        height: 6em;
-        padding-right: 2em;
+        font-size: 6px;
+        width: 90px;
+        padding-right: 0px !important;
+        padding-left: 0px !important;
     }
 
     #ganar_dinero-banner {
-        background-color: orange;
-        background-size: contain;
         margin-top: 30px;
         padding: 2% 0 2% 0;
-        text-align: center;
     }
 
     #ganar_dinero-banner span{
         font-weight: 900;
         font-size: 1.5em;
-        color: blue;
-        text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
     }
     #descripcion p, #descripcion span{
         color: white;
@@ -112,31 +106,24 @@
     }
 }
 
-@media (min-width: 769px) and (max-width: 992px) {
+@media (min-width: 769px) and (max-width: 1020) {
     .btn-responsive {
         font-size:90%;
         line-height: 1.2;
     }
     
     #promotec-nav {
-        background: url("../img/Promotec-banner.png") no-repeat center top;
-        background-size: 100% 100%;
         height: 8em;
         padding-right: 2em;
     }
     #ganar_dinero-banner {
-        background-color: orange;
-        background-size: contain;
         margin-top: 50px;
         padding: 2% 0 2% 0;
-        text-align: center;
     }
 
     #ganar_dinero-banner span{
         font-weight: 900;
         font-size: 2.5em;
-        color: blue;
-        text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
     }
 
     #descripcion p, #descripcion span{
