@@ -106,7 +106,7 @@ var data = {
 	panels: [
 		{
 			id: "login",
-			header: "Hacer login",
+			header: "Acceso",
 			instructions: "",
 			inputs:[
 				{
