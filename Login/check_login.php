@@ -13,7 +13,6 @@ require('LoginMain.php');
 //Recuperar datos
 $raw_data = $_POST["login"];
 $fields = explode(",",$raw_data);
-print_r($fields);
 $usuario = $fields[0];
 $pass = $fields[1];
 $provider = "promotec";
@@ -27,7 +26,8 @@ $response;
 try{
 	$response = LoginMain::loginGeneral(new LoginData($usuario,$pass,$provider), new CaptchaData($captcha,$secretKey,$ip));
 }catch (Exception $e){
-	echo json_encode($e->getMessage());
+	echo "asap";
+	echo json_encode("que hay de nuevo");
 }
 
 

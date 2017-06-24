@@ -2,15 +2,18 @@
     padding:0px;
     margin:0px;
     position:fixed;
-    right:-170px;
+    right:-150px;
     top:230px;
-    width:210px;
+    width:200px;
     z-index: 1100;
+
 }
 .sticky li{
     list-style-type:none;
     color:#efefef;
-    height:43px;
+    height:64px;
+    font-size: 12px;
+    line-height: 64px;
     padding:0px;
     border: 1px;
     border-radius: 2px;
@@ -23,7 +26,8 @@
     cursor:pointer;
 }
 .sticky li:hover{
-    margin-left:-100px;
+    margin-left:-120px;
+    width:170px;
 }
 .sticky li img{
     float:left;
@@ -36,10 +40,13 @@
     line-height:16px;
     font-size:11px;
 }
-.sticky li p a{
+.sticky li a{
     text-decoration:none;
     color:#fff;
 }
-.sticky li p a:hover{
-    text-decoration:underline;
+
+.sticky span{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
