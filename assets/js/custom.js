@@ -65,17 +65,18 @@ function loadFilesAndModal(){
 
 
 
+
 /**
-* Activates the panel of given id, and deactivates all other panels.
-* If not found, it just hides all panels. Sets prev panel to current panel.
+* Activates the panel of given id and it adds it to the stack of panels. It also deactivates all other panels.
+* If not found, it just hides all panels.
 **/
 function activatePanel(panelID){
 	Vue.panels.forEach(function(panel){
 		panel.isActive = false;
 		if(panel.id == panelID){
 			panel.isActive = true;
-			Vue.panels.prevPanel = Vue.panels.currentPanel;
-			Vue.panels.currentPanel = panel;
+			Vue.panelStack.push(Vue.currentPanel);
+			Vue.currentPanel = panel;
 		}
 
 	});
@@ -83,27 +84,38 @@ function activatePanel(panelID){
 }
 
 
+/**
+* Go to latest panel
+**/
+function goBackPanel(){
+	if(Vue.panelStack.length > 0){
+		Vue.currentPanel = Vue.panelStack.pop();	
+	}
+}
+
+
+
 
 // The model data
-var data = {
-	globalInputs:{
+var data = new function(){
+	this.globalInputs = {
 		user: "",
 		pass: "",
 		captcha: "",
 		NIP: "",
 		phoneNumber: ""
 	},
-	estados: [],
-	municipios: [],
-	selected_estado: {},
-	active_municipios: [], // Municipios activos despues de que se selecciono un estado
-	loaded: false, // Variable to check that loading json data only happens once
+	this.estados =  [],
+	this.municipios =  [],
+	this.selected_estado =  {},
+	this.active_municipios = [], // Municipios activos despues de que se selecciono un estado
+	this.loaded = false, // Variable to check that loading json data only happens once
 	//Constantes de estilos
-	activeClass: "show active",
-	hiddenClass: "hiddenPanel",
-	currentPanel: null,
-	prevPanel: null,
-	panels: [
+	this.activeClass =  "show active",
+	this.hiddenClass =  "hiddenPanel",
+	this.currentPanel =  null,
+	this.panelStack =  [],
+	this.panels = [
 		{
 			id: "login",
 			header: "Acceso",
@@ -149,11 +161,11 @@ var data = {
 			],
 			buttons: [
 				{
-					vueFunction: "sendNip",
+					vueFunction: "forgot_submit",
 					label: "Enviar"
 				},
 				{
-					vueFunction: "goBack",
+					vueFunction: "goBackPanel",
 					label: "Regresar"
 				}
 			],
@@ -161,9 +173,9 @@ var data = {
 			captcha: false
 			
 		},{
-			id: "sentNip",
+			id: "sendNip",
 			header: "Insertar NIP",
-			instructions: "Se le ha enviado un nip al telefono <span>{{globalInputs.phoneNumber}}</span>",
+			instructions: "Se le ha enviado un nip al telefono " + this.globalInputs.phoneNumber + ". Porfavor ingréselo a continuación</a>",
 			phoneNumber: 0,
 			NIP: 0,
 			inputs:[
@@ -180,7 +192,7 @@ var data = {
 					label: "Enviar"
 				},
 				{
-					vueFunction: "goBack",
+					vueFunction: "goBackPanel",
 					label: "Regresar"
 				}
 			],
@@ -189,8 +201,8 @@ var data = {
 			
 		}
 
-	],
-}
+	]
+};
 
 
 
@@ -202,16 +214,19 @@ var Vue = new Vue({
 	methods: {
 		//open the form in the login tab
 		openLogin(){
+			//Hide the register panel
 			$('#register_tab_link').removeClass("active");
 			$('#register_panel').removeClass("show active");			
 			$('#login_tab_link').addClass("active");
-			$('#login_panel').addClass("show active");
 			$('#login_panel').hide();
 			$('#login_tab').show();
 			$('#register_tab').hide();
 			$('#register_panel').hide();
 			$('#login_panel').show();
+			//Load json files
 			loadFilesAndModal();
+			//Restart panel stack and activate panel login
+			this.panelStack = [];
 			activatePanel("login");
 		},
 		//open the form in the register tab
@@ -224,7 +239,10 @@ var Vue = new Vue({
 			$('#login_tab').hide();
 			$('#register_panel').show();
 			$('#register_tab').show();
+			//Load json files
 			loadFilesAndModal();
+			//Restart panel stack and activate panel login
+			this.panelStack = [];
 			activatePanel("register");
 		},
 		//Updates the list of municipios by filtering the ones that match the estado id
@@ -241,10 +259,10 @@ var Vue = new Vue({
 			activatePanel("forgot");
 		},
 		forgot_submit(){
-
+			activatePanel("sendNip");
 		},
-		returnPrevPanel(){
-
+		goBackPanel(){
+			goBackPanel();
 		},
 		sendNip(){
 
