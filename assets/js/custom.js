@@ -1,45 +1,101 @@
-//Check login
-$(document).ready(function() {
-  //var $eventSelect = $(".js-example-basic-single").select2({width: '70%'});
-});
-
-
+/** Filters what is sent back to the view to only be of type errors or responses, no more php garbage **/
+function filterResponse(response){
+	var content = response.split("|");
+	if (content.length > 1){
+		return content[1];
+	}else{
+		return "Ocurrio un error interno";
+	}
+}
 /** Envia el intento de login **/
-function checkLogin(user,pass,captcha){
+function Login(user,pass,captcha){
     error="0";
     
     //if (ca.length=="") { error="Da Click en 'No soy un robot'"; acc=null; }
     if (pass.length<3 || pass==" " || pass=="") { error="Revise su contraseña"; acc=$('input#pass').focus(); }
-    if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#usuario').focus(); }
+    if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
 	
     if (error=="0"){
 		var t3 = user+","+pass+","+captcha;
       	console.log(t3);
       	$.post("Login/check_login.php",{login:t3},function(respuesta){
         	console.log("respuesta: "+respuesta);
-        	$("#respuesta").html(respuesta);
-
-
+        	Vue.currentPanel.response = filterResponse(respuesta);
       	})
     }else{
 		alert(error);
-		 ;
     }
 }
 
-function sendNip(user){
+/** Envia el registro **/
+function registrar(){
 
+var nombre = $("#nombre").val;
+var apaterno = $("#apaterno").val;
+var amaterno = $("#amaterno").val;
+var celular = $("#celular").val;
+var telefono = $("#telefono").val;
+var email = $("#email").val;
+var referido = $("#referido").val;
+var municipio = $("#municipio").val;
+var ciudad = $("#ciudad").val;
+var colonia = $("#colonia").val;
+var calle = $("#calle").val;
+var numext = $("#numext").val;
+var cp = $("#cp").val;
+
+var data = {
+	nom: nombre,
+	apa: apaterno,
+	ama: amaterno,
+	cel: celular,
+	tel: telefono,
+	correo: email,
+	referido: referido,
+	munic: municipio,
+	ciudad: ciudad,
+	colonia: colonia,
+	cp: cp,
+	calle: calle,
+	next: numext
+}
+    $.post("Registro/registro.php",data,function(respuesta){
+    	console.log("respuesta: "+respuesta);
+    	Vue.currentPanel.response = filterResponse(respuesta);
+  	})
 }
 
 
+/** Envia el formulario para crear nip y enviarlo al celular registrado **/
+function forgot_submit(user){
+	var error = "0";
+	if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
+	if (error=="0"){
+		if(confirm("Está seguro que quiere restaurar la contraseña del usuario " + user + ". Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.")){
+			var data = user;
+			activatePanel('enterNip');
+			Vue.currentPanel.loading = true;
+			$.post("Login/check_login.php",{nipData:data},function(respuesta){
 
-//Loading the json files with the estados and municipios and save the data
+				console.log(respuesta);
+	        	Vue.currentPanel.loading = false;
+	        	Vue.currentPanel.response = filterResponse(respuesta);
+
+
+	      	})
+		}
+	}else{
+		alert(error);
+	}
+
+}
+
+/** Loads the json files with the estados and municipios and save the data **/
 function loadJsonFileOntoVar(filename,type){
 	$('.mdb-select').material_select('destroy');
 	$.getJSON(filename, function(data){
 		// Save the response data to the corresponding data field (estado or municipio)
-		Vue[type] = data;
-		
+		Vue[type] = data;		
 		if (type == "estados"){
 			//Select first estado
 			Vue.selected_estado = Vue.estados[0];	
@@ -47,7 +103,7 @@ function loadJsonFileOntoVar(filename,type){
 	});
 }
 
-//Function to load modal and necessary files in case they haven't been loaded
+/**Function to load modal and necessary files in case they haven't been loaded **/
 function loadFilesAndModal(){
 	//Only load JSON files once
 	if(!Vue.loaded) {
@@ -60,12 +116,10 @@ function loadFilesAndModal(){
 }
 
 
-
-
-
 /**
 * Activates the panel of given id and it also deactivates all other panels.
 * If not found, it just hides all panels. If toStack is true, it adds it to the stack of panels.
+* @return: Whether panel activation was succesful
 **/
 function activatePanel(panelID,toStack=true){
 	Vue.panels.forEach(function(panel){
@@ -77,26 +131,11 @@ function activatePanel(panelID,toStack=true){
 				Vue.panelStack.push(Vue.currentPanel);	
 			}
 			Vue.currentPanel = panel;
+			return true;
 		}
-
 	});
-
+	return false;
 }
-
-
-/**
-* Go to latest panel
-**/
-function goBackPanel(){
-	if(Vue.panelStack.length > 0){
-
-		//Activate panel and deactivate all other panels
-		activatePanel(Vue.panelStack.pop().id,false);
-		console.log(Vue.panelStack);
-	}
-}
-
-
 
 
 // The model data
@@ -108,23 +147,29 @@ var data = new function(){
 		pass: "",
 		captcha: "",
 		NIP: "",
-		phoneNumber: ""
+		phoneNumber: "",
+		newPass: "",
+		newPassCheck: ""
 	},
 	this.estados =  [],
 	this.municipios =  [],
 	this.selected_estado =  {},
 	this.active_municipios = [], // Municipios activos despues de que se selecciono un estado
+	this.active_ciudades = [], // Ciudades activass despues de que se selecciono un municipio
+	this.active_colonias = [], // Colonias activass despues de que se selecciono una ciudad
 	this.loaded = false, // Variable to check that loading json data only happens once
 	//Constantes de estilos
 	this.activeClass =  "show active",
 	this.hiddenClass =  "hiddenPanel",
 	this.currentPanel =  null,
+	this.loadingPanel = false,
 	this.panelStack =  [],
 	this.panels = [
 		{
 			id: "login",
 			header: "Acceso",
 			instructions: "",
+			response: "",
 			inputs:[
 				{
 					iconClass: "fa-envelope",
@@ -149,13 +194,15 @@ var data = new function(){
 					label: "Olvido su contraseña? "
 				}
 			],
-			isActive: true,
+			isActive: false,
+			loading: false,
 			captcha: true
 			
 		},{
 			id: "forgot",
 			header: "Olvidó su Contraseña?",
 			instructions: "",
+			response: "",
 			inputs:[
 				{
 					iconClass: "fa-user",
@@ -174,13 +221,14 @@ var data = new function(){
 					label: "Regresar"
 				}
 			],
-			isActive: true,
-			captcha: false
+			isActive: false,
+			loading: false,
 			
 		},{
-			id: "sendNip",
+			id: "enterNip",
 			header: "Insertar NIP",
-			instructions: "Se le ha enviado un nip al telefono " + this.globalInputs.phoneNumber + ". Porfavor ingréselo a continuación</a>",
+			instructions: "Se le ha enviado un nip al telefono " + this.globalInputs.phoneNumber + ". Porfavor ingréselo a continuación",
+			response: "",
 			inputs:[
 				{
 					iconClass: "fa-key",
@@ -191,7 +239,7 @@ var data = new function(){
 			],
 			buttons: [
 				{
-					vueFunction: "sendNip",
+					vueFunction: "enterNipSubmit",
 					label: "Enviar"
 				},
 				{
@@ -199,40 +247,49 @@ var data = new function(){
 					label: "Regresar"
 				}
 			],
-			isActive: true,
-			captcha: false
+			isActive: false,
+			loading: false,
 			
 		},{
 			id: "newPass",
 			header: "Nueva contraseña",
-			instructions: "Para restaurar su contraseña, a continuacion escriba su nueva contraseña.",
+			instructions: "A continuacion escriba su nueva contraseña.",
+			response: "",
 			inputs:[
 				{
 					iconClass: "fa-lock",
-					vModel: "nip",
-					id: "nip",
-					label: "NIP",
+					vModel: "newPass",
+					id: "newPass",
+					label: "Nueva Contraseña",
+				},{
+					iconClass: "fa-lock",
+					vModel: "newPassCheck",
+					id: "newPassCheck",
+					label: "Repetir nueva contraseña",
 				}		
 			],
 			buttons: [
 				{
-					vueFunction: "sendNip",
-					label: "Enviar"
-				},
-				{
-					vueFunction: "goBackPanel",
-					label: "Regresar"
+					vueFunction: "restorePass",
+					label: "Restaurar contraseña"
 				}
 			],
-			isActive: true,
-			captcha: false
+			isActive: false,
+			loading: false,
+			
+		},{
+			id: "newPassResult",
+			header: "",
+			instructions: "Se ha restaurado su contraseña",
+			response: "",
+			inputs:[],
+			buttons: [],
+			isActive: false,
+			loading: false,
 			
 		}
-
 	]
 };
-
-
 
 
 //Vue instance
@@ -280,20 +337,32 @@ var Vue = new Vue({
 				return el.state_id == Vue.selected_estado.id;
 			});
 		},
+		goBackPanel(){
+			//Activates last viewed panel and removes it from the stack
+			if(this.panelStack.length > 0){
+				activatePanel(this.panelStack.pop().id,false);
+			}
+		},
 		submitLogin(){
-			checkLogin(this.globalInputs.user,this.globalInputs.pass,this.globalInputs.ca);
+			Login(this.globalInputs.user,this.globalInputs.pass,this.globalInputs.ca);
+		},
+		submitRegister(){
+			Register();
 		},
 		forgot_panel(){
 			activatePanel("forgot");
 		},
 		forgot_submit(){
-			activatePanel("sendNip");
+			forgot_submit(this.globalInputs.user);
 		},
-		goBackPanel(){
-			goBackPanel();
+		enterNip(){
+			activatePanel("enterNip");
 		},
-		sendNip(){
-
+		enterNipSubmit(){
+			activatePanel("newPass");
+		},
+		restorePass(){
+			activatePanel("newPassResult");
 		},
 		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), forgot_panel(), etc
 		call(vueFunction){

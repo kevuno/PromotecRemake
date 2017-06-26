@@ -161,28 +161,32 @@
                         </ul>
                         <!-- Tab panels -->
                         <div class="tab-content">
-                            <!-- Un div de respuesta temporal -->
-                            <div class="row">
-                                <div class="col" id="respuesta">        
-                                </div>
-                            </div>
                             <!-- A template for the panels for login process -->
                             <div v-for="panel in panels">
-                                <form v-on:submit.prevent>
+                                <!--Loading bar-->
+                                <div v-if="panel.loading" id="loading">
+                                    <h3> Cargando ... </h3>
+                                    <div class="progress primary-color-dark">
+                                        <div class="indeterminate"></div>
+                                    </div>
+                                </div>
+                                <form v-else-if="panel.isActive" v-on:submit.prevent>
                                     <div class="tab-pane fade in" v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id" role="tabpanel">
                                         <div class="row" id="header">
                                             <div class="col">
                                                 <h2>{{panel.header}}</h2>
                                             </div>
                                         </div>
-                                        <div class="row" id="response">
-                                            <div class="col">
-                                                <h3>{{panel.response}}</h3>
+                                        <div class="row" id="instructions">
+                                            <div class="col">                      
+                                                <h3>{{panel.instructions}}</h3>
                                             </div>
                                         </div>
-                                        <div class="row" id="instructions">
-                                            <div class="col">                                                
-                                                <span v-html="panel.instructions"> </span>
+
+                                        </div>
+                                        <div class="row" id="response">
+                                            <div class="col">
+                                                <span v-html="panel.response"></span>
                                             </div>
                                         </div>
 
@@ -214,7 +218,6 @@
                             <form action="check_login.php">
                                 <!--Panel de registro-->
                                 <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
-                                    <form action="check_login.php"></form>
                                         <!--Body-->
                                         <div class="modal-body">
                                             <div class="md-form form-sm">
@@ -244,6 +247,11 @@
                                                 <i class="fa fa-envelope prefix"></i>
                                                 <input type="text" id="email" class="form-control">
                                                 <label for="email">Tu email</label>
+                                            </div>                   
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-user prefix"></i>
+                                                <input type="text" id="referido" class="form-control">
+                                                <label for="referido">Referido por:</label>
                                             </div>
                                             <div class="form-group form-lg">
 
@@ -267,17 +275,17 @@
                                                 
                                             </div>
                                             <div class="form-group form-sm">
-                                                <label for="municipio">Ciudad</label>
-                                                <select id="municipio" class="js-example-basic-single form-control">
+                                                <label for="ciudad">Ciudad</label>
+                                                <select id="ciudad" class="js-example-basic-single form-control">
                                                     <option value="" disabled selected>Seleccione</option>
-                                                    <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                                    <option v-bind:value="ciudad" v-for="ciudad in active_ciudades" v-bind:value="ciudad.id">{{ciudad.name}}</option>
                                                 </select>                                                
                                             </div>
                                             <div class="form-group form-sm">
-                                                <label for="municipio">Colonia</label>
-                                                <select id="municipio" class="js-example-basic-single form-control">
+                                                <label for="colonia">Colonia</label>
+                                                <select id="colonia" class="js-example-basic-single form-control">
                                                     <option value="" disabled selected>Seleccione</option>
-                                                    <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                                    <option v-bind:value="municipio" v-for="colonia in active_colonias" v-bind:value="colonia.id">{{colonia.name}}</option>
                                                 </select>                                                
                                             </div>                   
                                             <div class="md-form form-sm">
@@ -296,7 +304,7 @@
                                                 <label for="cp">Código Postal</label>
                                             </div>
                                             <div class="text-center form-sm mt-2">
-                                                <button type="submit" class="btn btn-info">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-info">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
                                             </div>
 
                                         </div>

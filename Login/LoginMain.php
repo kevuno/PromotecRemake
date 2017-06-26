@@ -1,6 +1,7 @@
 <?php
 require('Response.php');
 require('Login.php');
+
 class LoginMain{
 
 	/**
@@ -45,4 +46,3 @@ class LoginMain{
 		}
 	}
 }
-
