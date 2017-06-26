@@ -33,7 +33,7 @@ class LoginMain{
 	**/
 	public static function loginFactory($tipo_login){
 		if($tipo_login === "promotec"){
-			return new LoginPromotor("recargas","usuarios","fields","session_vars");
+			return new LoginPromotor("recargas","usuarios");
 
 		}else if($tipo_login === "microtae"){
 

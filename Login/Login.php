@@ -10,23 +10,19 @@ abstract class Login {
 	/** La tabla del login**/
 	protected $login_table;
 
-	/** Los campos que deberan de ser seleccionados en la query de informacion**/
-	protected $fields_from_query;	
-
-	/** Las variables de session del objecto**/
-	protected $session_vars;
+	/** Intentos de login **/
+	public $login_tries;
 
 	/** Objecto de respuesta **/
 	protected $response;
 
 
-	/** Object constructor with optional parameters**/
 
-	function __construct($login_db,$login_table,$fields_from_query,$session_vars,LoginData $loginData = null){
+	/** Object constructor with optional parameters**/
+	function __construct($login_db,$login_table,LoginData $loginData = null){
 		$this->login_db = $login_db;
 		$this->login_table = $login_table;
-		$this->fields_from_query = $fields_from_query;
-		$this->session_vars = $session_vars;
+		$this->login_tries = $_SESSION["intentos"];
 		//Optional
 		$this->loginData = $loginData;
 	}
@@ -42,6 +38,13 @@ abstract class Login {
 	* @return: Un objecto de Error o un objecto de Respuesta sobre el resultado del intento de login y de inicialzacion   *	de las variables de session
 	**/
 	function login(){
+		// Bloquear cuenta despues de 5 intentos de hacer login
+		if($this->login_tries >= 5){
+			$message = $this->blockAccount();
+			throw new Exception("$message");
+		}
+
+
 		$user = $this->loginData->user;
 		$pass = $this->loginData->pass;
 		$sql="SELECT id FROM '$this->login_db'.'$this->login_table' WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
@@ -58,6 +61,7 @@ abstract class Login {
 			return $session_data->initializeSessions();
 			
 		}
+		$_SESSION["intentos"] += 1;
 		throw new Exception("Inicio de session incorrecto, checar usuario y contraseña");
 	}
 
@@ -96,6 +100,61 @@ abstract class Login {
 	}
 
 
+	/** 
+	* Bloquea la cuenta del usuario si es que existe y envia un NIP si no hay ninguno activo
+	* @return: Mensaje de respuesta dependiendo la situacion
+	**/
+	public function blockAccount(){
+		$us=$this->loginData->user;
+		//fecha
+		date_default_timezone_set('America/Mexico_City');
+		$fecha=date ("Y-m-d H:i:s");
+		$fecha2=date ("Y-m-d");
+
+		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'");
+
+		if ($row=mysqli_fetch_array($sql)){
+			$cel=$row['cel'];
+			if(!empty($cel)){
+			$checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
+			$result=mysqli_query($link, $checkNip);
+					if (mysqli_num_rows($result)>0) {
+					$row2=mysqli_fetch_array($result);
+					$nip=$row2['nip'];
+					}else{
+					function gen_nip($minimo=4, $maximo=4) {
+					  $num = "";
+					  $digitos = "0123456789";
+					  for ($i = 0; $i < rand($minimo, $maximo); $i++) {
+					    $num .= $digitos[rand(0, strlen($digitos) - 1)];
+					  }
+					  return $num;
+					}
+					$nip=gen_nip();
+
+					  //asigno pass
+					$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$us','$cel','$nip','$fecha','1','WiMO-Web')";
+					mysqli_query($link, $creaNip);
+					}
+					if(!empty($nip)){
+					$txt = "El NIP para recuperar la clave del usuario $us es $nip";
+
+					$messg = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
+					//echo $nip;
+					mysqli_query($link,$messg);
+					echo "S|Se creo NIP |cambio_contrasena|alert-success|regresar";
+					}else{
+					  echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
+					}
+					 
+
+			}else{
+			 echo "E2|Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.!|cambio_contrasena|alert-warning|Reintente"; 
+			}
+		 
+		}else{
+			echo "E2|El Usuario no existe!|cambio_contrasena|alert-danger|Reintente";
+		}
 
 }
 
