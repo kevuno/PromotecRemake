@@ -8,7 +8,7 @@ html {
 }
 
 body{
-    background: url("../img/fondo_promotec.png") no-repeat;
+    background: url("../img/promotec_bg.jpg") no-repeat;
     background-size: cover;
     margin-bottom: 100px;
 }

@@ -1,7 +1,19 @@
 <?php
-/*$link=mysql_connect($_SERVER["serverdata"],"samtec","sam33");
-mysql_set_charset('utf8',$link);*/
-$ip = $_SERVER["serverdata"];
-$link = new mysqli($ip,"samtec","sam33");
-$link->set_charset("utf8");
+
+/** Returns DB link or Error if failed **/
+
+class link{
+	static function getLink(){
+		try{
+			$ip = $_SERVER["serverdata"];
+			$link = new mysqli($ip,"samtec","sam33");	
+		}catch(Exception $e){
+			throw new Exception("Error intentando contectarse a la Base de datos");
+		}
+		$link->set_charset("utf8");
+		return $link;
+	}
+
+}
+
 ?>

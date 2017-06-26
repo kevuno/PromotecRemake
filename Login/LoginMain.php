@@ -1,6 +1,7 @@
 <?php
 require('Response.php');
 require('Login.php');
+require('../link.php');
 
 class LoginMain{
 
@@ -19,6 +20,7 @@ class LoginMain{
 		try{
 			//Construir el login correspondiente y ejecutar intento de login
 			$login = self::loginFactory($loginData->tipo);
+			$login->setLink(link::getLink());
 			$login->setData($loginData);
 			// Intentar hacer login
 			return $response = $login->login();	

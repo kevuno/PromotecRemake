@@ -3,13 +3,12 @@
 ini_set("session.cookie_lifetime","7200");
 ini_set("session.gc_maxlifetime","7200");
 session_start();
-//require('seguro.php');
-require('../link.php');
+require('../seguro.php');
 
 require('LoginData.php');
 require('LoginMain.php');
 //Recuperar datos
-$raw_data = $_POST["login"];
+$raw_data = security($_POST["login"]);
 $fields = explode(",",$raw_data);
 $usuario = $fields[0];
 $pass = $fields[1];

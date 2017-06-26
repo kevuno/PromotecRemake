@@ -16,16 +16,26 @@ abstract class Login {
 	/** Objecto de respuesta **/
 	protected $response;
 
+	/** Database connection link **/
+	protected $link;
 
 
 	/** Object constructor with optional parameters**/
-	function __construct($login_db,$login_table,LoginData $loginData = null){
+	function __construct($login_db,$login_table,LoginData $loginData = null, mysqli $link = null){
 		$this->login_db = $login_db;
 		$this->login_table = $login_table;
-		$this->login_tries = $_SESSION["intentos"];
+		// Crear variable de intentos si no existe
+		$_SESSION["tries"] = $_SESSION["tries"] ? $_SESSION["tries"] : 0;
+		$this->login_tries = $_SESSION["tries"];
 		//Optional
 		$this->loginData = $loginData;
+		$this->link = $link;
 	}
+
+	function setLink(mysqli $link){
+		$this->link = $link;
+	}
+
 	/**
 	* Sets the Login data
 	* @param: The login data
@@ -47,8 +57,8 @@ abstract class Login {
 
 		$user = $this->loginData->user;
 		$pass = $this->loginData->pass;
-		$sql="SELECT id FROM '$this->login_db'.'$this->login_table' WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
-		$result = mysqli_query($link, $sql);
+		$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
+		$result = mysqli_query($this->link, $sql);
 		if($row = mysqli_fetch_array($result)){
 			//Obtenemos las variables que seran de tipo $_SESSION
 			try{
@@ -61,7 +71,7 @@ abstract class Login {
 			return $session_data->initializeSessions();
 			
 		}
-		$_SESSION["intentos"] += 1;
+		$_SESSION["tries"] += 1;
 		throw new Exception("Inicio de session incorrecto, checar usuario y contraseña");
 	}
 
@@ -111,13 +121,13 @@ abstract class Login {
 		$fecha=date ("Y-m-d H:i:s");
 		$fecha2=date ("Y-m-d");
 
-		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'");
+		$sql=mysqli_query($this->link, "SELECT u.id, l.cel from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'");
 
 		if ($row=mysqli_fetch_array($sql)){
 			$cel=$row['cel'];
 			if(!empty($cel)){
 				$checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
-				$result=mysqli_query($link, $checkNip);
+				$result=mysqli_query($this->link, $checkNip);
 				if (mysqli_num_rows($result)>0) {
 					$row2=mysqli_fetch_array($result);
 					$nip=$row2['nip'];
@@ -134,14 +144,14 @@ abstract class Login {
 
 					  //asigno pass
 					$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$us','$cel','$nip','$fecha','1','WiMO-Web')";
-					mysqli_query($link, $creaNip);
+					mysqli_query($this->link, $creaNip);
 				}
 				if(!empty($nip)){
 					$txt = "El NIP para recuperar la clave del usuario $us es $nip";
 
 					$messg = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
 					//echo $nip;
-					mysqli_query($link,$messg);
+					mysqli_query($this->link,$messg);
 					echo "S|Se creo NIP |cambio_contrasena|alert-success|regresar";
 				}else{
 					echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
