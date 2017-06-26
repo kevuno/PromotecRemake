@@ -116,48 +116,44 @@ abstract class Login {
 		if ($row=mysqli_fetch_array($sql)){
 			$cel=$row['cel'];
 			if(!empty($cel)){
-			$checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
-			$result=mysqli_query($link, $checkNip);
-					if (mysqli_num_rows($result)>0) {
+				$checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
+				$result=mysqli_query($link, $checkNip);
+				if (mysqli_num_rows($result)>0) {
 					$row2=mysqli_fetch_array($result);
 					$nip=$row2['nip'];
-					}else{
+				}else{
 					function gen_nip($minimo=4, $maximo=4) {
-					  $num = "";
-					  $digitos = "0123456789";
-					  for ($i = 0; $i < rand($minimo, $maximo); $i++) {
-					    $num .= $digitos[rand(0, strlen($digitos) - 1)];
-					  }
-					  return $num;
-					}
+						$num = "";
+						$digitos = "0123456789";
+						for ($i = 0; $i < rand($minimo, $maximo); $i++) {
+							$num .= $digitos[rand(0, strlen($digitos) - 1)];
+						}
+						return $num;
+					}				
 					$nip=gen_nip();
 
 					  //asigno pass
 					$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$us','$cel','$nip','$fecha','1','WiMO-Web')";
 					mysqli_query($link, $creaNip);
-					}
-					if(!empty($nip)){
+				}
+				if(!empty($nip)){
 					$txt = "El NIP para recuperar la clave del usuario $us es $nip";
 
 					$messg = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
 					//echo $nip;
 					mysqli_query($link,$messg);
 					echo "S|Se creo NIP |cambio_contrasena|alert-success|regresar";
-					}else{
-					  echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
-					}
-					 
-
+				}else{
+					echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
+				}
 			}else{
 			 echo "E2|Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.!|cambio_contrasena|alert-warning|Reintente"; 
 			}
-		 
 		}else{
 			echo "E2|El Usuario no existe!|cambio_contrasena|alert-danger|Reintente";
 		}
-
+	}
 }
-
 
 /**
 * Una clase que representa toda la informacion que tendra las variables de session.
