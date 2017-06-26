@@ -57,6 +57,7 @@ function registrar(){
 		calle: calle,
 		next: numext
 	};
+	console.log(data);
     $.post("Registro/registro.php",data,function(respuesta){
     	console.log("respuesta: "+respuesta);
     	Vue.currentPanel.response = filterResponse(respuesta);
@@ -113,6 +114,20 @@ function loadFilesAndModal(){
 	$('#modalLRForm').modal();
 }
 
+/** Restores the values of the globalInputs field on the Vue instance
+ * @param: Exceptions: Which fields wont be restored
+ **/
+function restoreInputs(exceptions){
+	if(exceptions == null){
+		exceptions = [];
+	}
+	for(var key in Vue.globalInputs){
+		// If the key is an actual field in global input and is not in the exceptions
+		if (Vue.globalInputs.hasOwnProperty(key) && exceptions.indexOf(key) == -1) {
+			Vue.globalInputs[key] = "";
+		}
+	}
+}
 
 /**
 * Activates the panel of given id and it also deactivates all other panels.
@@ -120,6 +135,8 @@ function loadFilesAndModal(){
 * @return: Whether panel activation was succesful
 **/
 function activatePanel(panelID,toStack=true){
+	//Activate labels so that it doesn't overlap the code
+	console.log('activating panel');
 	Vue.panels.forEach(function(panel){
 		panel.isActive = false;
 		if(panel.id == panelID){
@@ -284,7 +301,12 @@ var data = new function(){
 			instructions: "Se ha restaurado su contraseña",
 			response: "",
 			inputs:[],
-			buttons: [],
+			buttons: [
+				{
+					vueFunction: "close",
+					label: "Terminar"
+				}
+			],
 			isActive: false,
 			loading: false,
 			
@@ -313,6 +335,7 @@ var Vue = new Vue({
 			loadFilesAndModal();
 			//Restart panel stack and activate panel login
 			this.panelStack = [];
+			restoreInputs(["user"]);
 			activatePanel("login");
 		},
 		//open the form in the register tab
@@ -390,7 +413,13 @@ var Vue = new Vue({
 			activatePanel("newPass");
 		},
 		restorePass(){
+			// Restore all inputs except for user
+			restoreInputs(["user"]);
 			activatePanel("newPassResult");
+		},
+		close(){
+			// Closes modal
+			$('#modalLRForm').modal('hide');
 		},
 		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), forgot_panel(), etc
 		call(vueFunction){

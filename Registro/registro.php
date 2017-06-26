@@ -157,18 +157,15 @@ include '../seguro.php';
           //enviar sms con user y pass
     $txt="Nueva alta PromoTec su usuario: ".$ugen." password: ".$pgen." y el portal: http://www.promotormicrotec.mx";
     mysqli_query($link, "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')");
-    echo "S|<div class='alert alert-success text-center'><span>Solicitud capturada correctamente</a></span></div>";
+    echo "R|Solicitud capturada correctamente";
         } else {
-          echo "E|<div class='alert alert-danger text-center'><span>No se creo el usuario, pongase en contacto con el area de sistemas MicroTec</a></span></div>";
-          exit();
+          exit("E|No se creo el usuario, pongase en contacto con el area de sistemas MicroTec");
         }
       } else {
-        echo "E|<div class='alert alert-danger text-center'><span>Hubo un error al crear tabla de descuento, pongase en contacto con el area de sistemas MicroTec</a></span></div>";
-        exit();
+        exit("E|Hubo un error al crear tabla de descuento, pongase en contacto con el area de sistemas MicroTec");
       }
     } else {
-      echo "E|<div class='alert alert-danger text-center'><span>No se creo el usuario, por favor reintente!</a></span></div>";
-      exit();
+      exit("E|No se creo el usuario, por favor reintente!");
     }
 
     if (isset($aplicado) && !empty($email)) {
@@ -178,27 +175,21 @@ include '../seguro.php';
       $tit="Bienvenido a PromoTec";
 
       // datos que no se mueven
-      require_once ('../../swift/lib/swift_required.php');
-      $transport = Swift_SmtpTransport::newInstance('mail1.micro-tec.com.mx', 112)
-        ->setUsername('avisos@micro-tec.com.mx')
-  ->setPassword('avisos23')
-      ;
-      $mailer = Swift_Mailer::newInstance($transport);
-      $message = Swift_Message::newInstance($tit)
-        ->setFrom(array("avisos@micro-tec.com.mx" => "Servidor Microtec"))
-        ->setTo(array($para => "Nueva alta PromoTec"))
-        ->setBody($mensaje,'text/html')
-      ;
-      $result = $mailer->send($message);
+        require_once ('../../swift/lib/swift_required.php');
+        $transport = Swift_SmtpTransport::newInstance('mail1.micro-tec.com.mx', 112)->setUsername('avisos@micro-tec.com.mx')->setPassword('avisos23');
+        $mailer = Swift_Mailer::newInstance($transport);
+        $message = Swift_Message::newInstance($tit)
+          ->setFrom(array("avisos@micro-tec.com.mx" => "Servidor Microtec"))
+          ->setTo(array($para => "Nueva alta PromoTec"))
+          ->setBody($mensaje,'text/html');
+        $result = $mailer->send($message);
       // fin de datos que no se mueven
-
-      
       exit();
     }
     
           
   } else {
-    echo "E|<div class='alert alert-danger text-center'><span>Faltan campos requeridos por rellenar.</a></span></div>";
+    exit("E|Faltan campos requeridos por rellenar.");
   }
 
 ?>

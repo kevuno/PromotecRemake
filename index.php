@@ -195,8 +195,8 @@
                                             <div class="inputs">
                                                 <div v-for="input in panel.inputs" class="md-form form-sm">
                                                     <i class="fa prefix" v-bind:class="input.iconClass"></i>
-                                                    <input type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
-                                                    <label :for="input.id">{{input.label}}</label>
+                                                    <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
+                                                    <label class="active" :for="input.id">{{input.label}}</label>
                                                 </div>
                                                 <div v-if="panel.captcha" class="md-form form-sm">
                                                     <div class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
@@ -221,22 +221,22 @@
                                         <!--Body-->
                                         <div class="modal-body">
                                             <div class="md-form form-sm">
-                                                <i class="fa fa-user prefix"></i>
+                                                <i class="fa fa-user prefix"></i>                                                
                                                 <input type="text" id="nombre" class="form-control">
-                                                <label for="nombre">Nombre</label>
+                                                <label for="nombre">Nombre <span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
                                                 <input type="text" id="apaterno" class="form-control">
-                                                <label for="form24">Apellido Paterno</label>
+                                                <label for="form24">Apellido Paterno <span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
                                                 <input type="text" id="amaterno" class="form-control">
-                                                <label for="nombre">Apellido Materno</label>
+                                                <label for="nombre">Apellido Materno <span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
                                                 <i class="fa fa-mobile prefix"></i>
                                                 <input type="text" max-length="10" id="celular" class="form-control">
-                                                <label for="celular">Celular</label>
+                                                <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
                                                 <i class="fa fa-mobile prefix"></i>
@@ -254,45 +254,35 @@
                                                 <label for="referido">Referido por:</label>
                                             </div>
                                             <div class="form-group form-lg">
-
-                                                <label for="estado">Estado</label>
+                                                <i class="fa fa-map-marker prefix"></i>
+                                                <label for="estado">Estado <span class="red-text">*</span></label>
                                                 <select id="estado" class="js-example-basic-single form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
                                                     <option value="" disabled selected>Seleccione</option>
                                                     <option v-for="estado in estados" v-bind:value="estado">{{estado.name}}</option>
                                                 </select>
                                             </div>                                                
                                             <div class="form-group form-sm">
-
-                                                <label for="municipio">Municipio</label>
+                                                <i class="fa fa-location-arrow prefix"></i>
+                                                <label for="municipio">Municipio <span class="red-text">*</span></label>
                                                 <select id="municipio" class="js-example-basic-single form-control" v-model="selected_municipio" v-on:change="updateActiveCiudades">
                                                     <option value="" disabled selected>Seleccione</option>
                                                     <option v-for="municipio in active_municipios" v-bind:value="municipio">{{municipio.name}}</option>
                                                 </select>
-                                                
                                             </div>
-                                            <div class="form-group form-sm">
-                                                <label for="ciudad">Ciudad</label>
-                                                <select id="ciudad" class="js-example-basic-single form-control" v-model="selected_ciudad" v-on:change="updateActiveColonias">
-                                                    <option value="" disabled selected>Seleccione</option>
-                                                    <option v-for="ciudad in active_ciudades" v-bind:value="ciudad">{{ciudad}}</option>
-                                                </select>                                                
-                                            </div>
-                                            <div class="form-group form-sm">
-                                                <label for="colonia">Colonia</label>
-                                                <select id="colonia" class="js-example-basic-single form-control" v-model="selected_colonia">
-                                                    <option value="" disabled selected>Seleccione</option>
-                                                    <option v-for="colonia in active_colonias" v-bind:value="colonia">{{colonia}}</option>
-                                                </select>                                                
-                                            </div>                   
                                             <div class="md-form form-sm">
-                                                <i class="fa fa-envelope prefix"></i>
+                                                <i class="fa fa-th-large prefix"></i>
+                                                <input type="text" id="colonia" class="form-control">
+                                                <label for="colonia">Colonia<span class="red-text">*</span></label>
+                                            </div>      
+                                            <div class="md-form form-sm">
+                                                <i class="fa fa-road prefix"></i>
                                                 <input type="text" id="calle" class="form-control">
-                                                <label for="calle">Calle</label>
+                                                <label for="calle">Calle<span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
-                                                <i class="fa fa-mobile prefix"></i>
+                                                <i class="fa fa-home prefix"></i>
                                                 <input type="number" id="numext" class="form-control">
-                                                <label for="numext">Número Exterior</label>
+                                                <label for="numext">Número Exterior<span class="red-text">*</span></label>
                                             </div>                   
                                             <div class="md-form form-sm">
                                                 <i class="fa fa-envelope prefix"></i>
@@ -300,7 +290,7 @@
                                                 <label for="cp">Código Postal</label>
                                             </div>
                                             <div class="text-center form-sm mt-2">
-                                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-info">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
                                             </div>
 
                                         </div>
