@@ -3,9 +3,6 @@ $(document).ready(function() {
   //var $eventSelect = $(".js-example-basic-single").select2({width: '70%'});
 });
 
-function hidePanelsOtherThan(){
-
-}
 
 /** Envia el intento de login **/
 function checkLogin(user,pass,captcha){
@@ -67,15 +64,18 @@ function loadFilesAndModal(){
 
 
 /**
-* Activates the panel of given id and it adds it to the stack of panels. It also deactivates all other panels.
-* If not found, it just hides all panels.
+* Activates the panel of given id and it also deactivates all other panels.
+* If not found, it just hides all panels. If toStack is true, it adds it to the stack of panels.
 **/
-function activatePanel(panelID){
+function activatePanel(panelID,toStack=true){
 	Vue.panels.forEach(function(panel){
 		panel.isActive = false;
 		if(panel.id == panelID){
 			panel.isActive = true;
-			Vue.panelStack.push(Vue.currentPanel);
+			//Add to stack if toStack is true
+			if(toStack){
+				Vue.panelStack.push(Vue.currentPanel);	
+			}
 			Vue.currentPanel = panel;
 		}
 
@@ -89,7 +89,10 @@ function activatePanel(panelID){
 **/
 function goBackPanel(){
 	if(Vue.panelStack.length > 0){
-		Vue.currentPanel = Vue.panelStack.pop();	
+
+		//Activate panel and deactivate all other panels
+		activatePanel(Vue.panelStack.pop().id,false);
+		console.log(Vue.panelStack);
 	}
 }
 
@@ -98,6 +101,8 @@ function goBackPanel(){
 
 // The model data
 var data = new function(){
+	// Cada input en el array de panels tiene una propiedead vModel, que apunta como una propiedad de 
+	// v-model al objecto globalInputs así: v-model="globalInputs[input.vModel]"
 	this.globalInputs = {
 		user: "",
 		pass: "",
@@ -176,11 +181,34 @@ var data = new function(){
 			id: "sendNip",
 			header: "Insertar NIP",
 			instructions: "Se le ha enviado un nip al telefono " + this.globalInputs.phoneNumber + ". Porfavor ingréselo a continuación</a>",
-			phoneNumber: 0,
-			NIP: 0,
 			inputs:[
 				{
 					iconClass: "fa-key",
+					vModel: "nip",
+					id: "nip",
+					label: "NIP",
+				}		
+			],
+			buttons: [
+				{
+					vueFunction: "sendNip",
+					label: "Enviar"
+				},
+				{
+					vueFunction: "goBackPanel",
+					label: "Regresar"
+				}
+			],
+			isActive: true,
+			captcha: false
+			
+		},{
+			id: "newPass",
+			header: "Nueva contraseña",
+			instructions: "Para restaurar su contraseña, a continuacion escriba su nueva contraseña.",
+			inputs:[
+				{
+					iconClass: "fa-lock",
 					vModel: "nip",
 					id: "nip",
 					label: "NIP",
