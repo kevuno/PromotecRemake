@@ -30,39 +30,37 @@ function Login(user,pass,captcha){
 /** Envia el registro **/
 function registrar(){
 
-var nombre = $("#nombre").val;
-var apaterno = $("#apaterno").val;
-var amaterno = $("#amaterno").val;
-var celular = $("#celular").val;
-var telefono = $("#telefono").val;
-var email = $("#email").val;
-var referido = $("#referido").val;
-var municipio = $("#municipio").val;
-var ciudad = $("#ciudad").val;
-var colonia = $("#colonia").val;
-var calle = $("#calle").val;
-var numext = $("#numext").val;
-var cp = $("#cp").val;
+	var nombre = $("#nombre").val;
+	var apaterno = $("#apaterno").val;
+	var amaterno = $("#amaterno").val;
+	var celular = $("#celular").val;
+	var telefono = $("#telefono").val;
+	var email = $("#email").val;
+	var referido = $("#referido").val;
+	var calle = $("#calle").val;
+	var numext = $("#numext").val;
+	var cp = $("#cp").val;
 
-var data = {
-	nom: nombre,
-	apa: apaterno,
-	ama: amaterno,
-	cel: celular,
-	tel: telefono,
-	correo: email,
-	referido: referido,
-	munic: municipio,
-	ciudad: ciudad,
-	colonia: colonia,
-	cp: cp,
-	calle: calle,
-	next: numext
-}
+	var data = {
+		nom: nombre,
+		apa: apaterno,
+		ama: amaterno,
+		cel: celular,
+		tel: telefono,
+		correo: email,
+		referido: referido,
+		edi: Vue.selected_estado.name,
+		munic: Vue.selected_municipio.name,
+		ciudad: Vue.selected_ciudad,
+		colonia: Vue.selected_colonia.name,
+		cp: cp,
+		calle: calle,
+		next: numext
+	};
     $.post("Registro/registro.php",data,function(respuesta){
     	console.log("respuesta: "+respuesta);
     	Vue.currentPanel.response = filterResponse(respuesta);
-  	})
+  	});
 }
 
 
@@ -97,8 +95,8 @@ function loadJsonFileOntoVar(filename,type){
 		// Save the response data to the corresponding data field (estado or municipio)
 		Vue[type] = data;		
 		if (type == "estados"){
-			//Select first estado
-			Vue.selected_estado = Vue.estados[0];	
+			// Select first estado
+			Vue.selected_estado = Vue.estados[0];
 		}
 	});
 }
@@ -106,10 +104,10 @@ function loadJsonFileOntoVar(filename,type){
 /**Function to load modal and necessary files in case they haven't been loaded **/
 function loadFilesAndModal(){
 	//Only load JSON files once
-	if(!Vue.loaded) {
+	if(!Vue.jsonLoaded) {
 		loadJsonFileOntoVar("assets/json/estados.json","estados");
 		loadJsonFileOntoVar("assets/json/municipios.json","municipios");
-		Vue.loaded = true;
+		Vue.jsonLoaded = true;
 	}
 	//Load modal
 	$('#modalLRForm').modal();
@@ -154,10 +152,13 @@ var data = new function(){
 	this.estados =  [],
 	this.municipios =  [],
 	this.selected_estado =  {},
-	this.active_municipios = [], // Municipios activos despues de que se selecciono un estado
-	this.active_ciudades = [], // Ciudades activass despues de que se selecciono un municipio
-	this.active_colonias = [], // Colonias activass despues de que se selecciono una ciudad
-	this.loaded = false, // Variable to check that loading json data only happens once
+	this.selected_municipio =  {},
+	this.selected_ciudad =  {},
+	this.selected_colonia =  {},
+	this.active_municipios = [], // Objectos de Municipios activos despues de que se selecciono un estado
+	this.active_ciudades = [], // Strings de ciudades activas despues de que se selecciono un municipio
+	this.active_colonias = [], // Objectos de colonias activas despues de que se selecciono una ciudad
+	this.jsonLoaded = false, // Variable to check that loading initial json data only happens once
 	//Constantes de estilos
 	this.activeClass =  "show active",
 	this.hiddenClass =  "hiddenPanel",
@@ -336,6 +337,33 @@ var Vue = new Vue({
 				//Because out of the scope of the methdo, it needs "Vue." reference instead of "this."
 				return el.state_id == Vue.selected_estado.id;
 			});
+		},
+		//Updates the list of ciudades by filtering depending on the selected estado and municipio
+		updateActiveCiudades(){
+			var data = {
+				e: this.selected_estado.name,
+				m: this.selected_municipio.name
+			}
+			// Call the bd to get the list of ciudades
+			$.post("form_sqls/ciudad.php",data,function(respuesta){
+	        	console.log("respuesta: "+respuesta);
+	        	var ciudades = JSON.parse(respuesta);
+	        	this.active_ciudades = ciudades;
+	      	});
+		},
+		//Updates the list of ciudades by filtering depending on the selected estado and municipio
+		updateActiveColonias(){
+			var data = {
+				e: this.selected_estado.name,
+				m: this.selected_municipio.name,
+				c: this.selected_ciudad
+			}
+			// Call the bd to get the list of colonias as JSON string
+			$.post("form_sqls/colonia.php",data,function(respuesta){
+	        	console.log("respuesta: "+respuesta);	        	
+	        	var colonias = JSON.parse(respuesta);
+	        	this.active_ciudades = colonias;
+	      	});
 		},
 		goBackPanel(){
 			//Activates last viewed panel and removes it from the stack

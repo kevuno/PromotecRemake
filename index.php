@@ -258,34 +258,30 @@
                                                 <label for="estado">Estado</label>
                                                 <select id="estado" class="js-example-basic-single form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
                                                     <option value="" disabled selected>Seleccione</option>
-                                                    <option value="1" >Seleccione</option>
-                                                    <option value="2" >Seleccione</option>
-                                                    <option value="3" >Seleccione</option>
-
-                                                    <option v-bind:value="estado" v-for="estado in estados" v-bind:value="estado.id">{{estado.name}}</option>
+                                                    <option v-for="estado in estados" v-bind:value="estado">{{estado.name}}</option>
                                                 </select>
                                             </div>                                                
                                             <div class="form-group form-sm">
 
                                                 <label for="municipio">Municipio</label>
-                                                <select id="municipio" class="js-example-basic-single form-control">
+                                                <select id="municipio" class="js-example-basic-single form-control" v-model="selected_municipio" v-on:change="updateActiveCiudades">
                                                     <option value="" disabled selected>Seleccione</option>
-                                                    <option v-bind:value="municipio" v-for="municipio in active_municipios" v-bind:value="municipio.id">{{municipio.name}}</option>
+                                                    <option v-for="municipio in active_municipios" v-bind:value="municipio">{{municipio.name}}</option>
                                                 </select>
                                                 
                                             </div>
                                             <div class="form-group form-sm">
                                                 <label for="ciudad">Ciudad</label>
-                                                <select id="ciudad" class="js-example-basic-single form-control">
+                                                <select id="ciudad" class="js-example-basic-single form-control" v-model="selected_ciudad" v-on:change="updateActiveColonias">
                                                     <option value="" disabled selected>Seleccione</option>
-                                                    <option v-bind:value="ciudad" v-for="ciudad in active_ciudades" v-bind:value="ciudad.id">{{ciudad.name}}</option>
+                                                    <option v-for="ciudad in active_ciudades" v-bind:value="ciudad">{{ciudad}}</option>
                                                 </select>                                                
                                             </div>
                                             <div class="form-group form-sm">
                                                 <label for="colonia">Colonia</label>
-                                                <select id="colonia" class="js-example-basic-single form-control">
+                                                <select id="colonia" class="js-example-basic-single form-control" v-model="selected_colonia">
                                                     <option value="" disabled selected>Seleccione</option>
-                                                    <option v-bind:value="municipio" v-for="colonia in active_colonias" v-bind:value="colonia.id">{{colonia.name}}</option>
+                                                    <option v-for="colonia in active_colonias" v-bind:value="colonia">{{colonia}}</option>
                                                 </select>                                                
                                             </div>                   
                                             <div class="md-form form-sm">
