@@ -18,6 +18,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <!-- MDB core CSS -->
     <link href="assets/css/mdb.min.css" rel="stylesheet" />
+    <!-- Google captcha -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 
 </head>
@@ -56,19 +58,19 @@
                 <ul class="sticky">
                     <li>
                         <span><img src="assets/img/facebook.png" width="48" height="48">
-                        </span><a href="#" target="_blank">Microtec Oficial</a>
+                        </span><a href="https://www.facebook.com/PromotorPromotec/" target="_blank">Promotec</a>
                     </li>
                     <li>
                         <span><img src="assets/img/twitter.png" width="48" height="48">
-                        </span><a href="#" target="_blank">@MicrotecOficial</a>
+                        </span><a href="https://twitter.com/microtecoficial" target="_blank">@MicrotecOficial</a>
                     </li>
                     <li>
                         <span><img src="assets/img/whats.png" width="48" height="48">
-                        </span><a href="#" target="_blank">01 222478 05 Ext. 9</a>
+                        </span><a href="#" target="_blank">2221123782</a>
                     </li>
                     <li>
                         <span><img src="assets/img/ubicacion.png" width="48" height="48">
-                        <a href="#" target="_blank">Avenida Juárez #2318, Edificio Diana Oficina 101</a></span>
+                        <a href="https://www.google.com.mx/maps/place/Edificio+Diana/@19.0516241,-98.217736,19.67z/data=!4m5!3m4!1s0x0:0x77f64b884757e625!8m2!3d19.051662!4d-98.2174898" target="_blank">Avenida Juárez #2318, Edificio Diana Oficina 101</a></span>
                     </li>
                 </ul>
             </div>
@@ -81,7 +83,7 @@
                             <b>Inicia tu propio negocio desde tu celular SIN INVERTIR EN INVENTARIO</b>
                             </p>
                             <p>
-                            Vende celulares Telce a crédito, al contados, Planes Tarifario, Renovaciones, Portabilidad, tiempo aire y pago de servicios
+                            Vende celulares Telce a crédito, al contado, Planes Tarifario, Renovaciones, Portabilidad, tiempo aire y pago de servicios
                             </p>
                             
                         </div>
@@ -125,10 +127,10 @@
                 <div class="row">
                     <div class="col footer-content">
                         <ul>
-                            <li><img src="assets/img/twitter.png" width="16" height="16"><a href="#!">@MicrotecOficial</a></li>
-                            <li><img src="assets/img/facebook.png" width="16" height="16"><a href="#!">Microtec Oficial</a></li>
-                            <li> <img src="assets/img/whats.png" width="16" height="16"> <a href="#!">01 222478 05 Ext. 9</a></li>
-                            <li><img src="assets/img/ubicacion.png" width="16" height="16"> <a href="#!">Avenida Juárez N° 2318, 1er piso, Edificio Diana Oficina 101</a></li>
+                            <li><img src="assets/img/twitter.png" width="16" height="16"><a href="https://twitter.com/microtecoficial">@MicrotecOficial</a></li>
+                            <li><img src="assets/img/facebook.png" width="16" height="16"><a href="https://www.facebook.com/PromotorPromotec/">Promotec</a></li>
+                            <li> <img src="assets/img/whats.png" width="16" height="16"> <a href="#!">2221123782</a></li>
+                            <li><img src="assets/img/ubicacion.png" width="16" height="16"> <a href="https://www.google.com.mx/maps/place/Edificio+Diana/@19.0516241,-98.217736,19.67z/data=!4m5!3m4!1s0x0:0x77f64b884757e625!8m2!3d19.051662!4d-98.2174898">Avenida Juárez N° 2318, 1er piso, Edificio Diana Oficina 101</a></li>
                         </ul>
                     </div>
                     <div class="col">
@@ -170,7 +172,7 @@
                                         <div class="indeterminate"></div>
                                     </div>
                                 </div>
-                                <form v-else-if="panel.isActive" v-on:submit.prevent>
+                                <form v-else v-on:submit.prevent>
                                     <div class="tab-pane fade in" v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id" role="tabpanel">
                                         <div class="row" id="header">
                                             <div class="col">
@@ -181,8 +183,6 @@
                                             <div class="col">                      
                                                 <h3>{{panel.instructions}}</h3>
                                             </div>
-                                        </div>
-
                                         </div>
                                         <div class="row" id="response">
                                             <div class="col">
@@ -198,13 +198,11 @@
                                                     <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
                                                     <label class="active" :for="input.id">{{input.label}}</label>
                                                 </div>
-                                                <div v-if="panel.captcha" class="md-form form-sm">
-                                                    <div class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
-                                                </div> 
                                             </div>
+                                            <div v-if="panel.captcha" class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
                                             <div class="row buttons">
                                                 <div class="col" v-for="button in panel.buttons">
-                                                    <button @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" class="btn btn-info">{{button.label}}<i class="fa fa-sign-in ml-1"></i></button>
+                                                    <button @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button>
                                                 </div>
                                             </div>
                                         </div> 
@@ -324,9 +322,7 @@
         <script src="assets/js/mdb.min.js"></script>
         <!-- Custom JavaScript -->
         <script src="assets/js/custom.js"></script>
-        <!-- Google captcha -->
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
+        <!-- Select2.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <!-- Wow animations -->
         <script src="assets/js/wow.js"></script>

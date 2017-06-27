@@ -72,10 +72,10 @@ function forgot_submit(user){
 	if (error=="0"){
 		if(confirm("Está seguro que quiere restaurar la contraseña del usuario " + user + ". Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.")){
 			var data = user;
-			activatePanel('enterNip');
 			Vue.currentPanel.loading = true;
 			$.post("Login/check_login.php",{nipData:data},function(respuesta){
-
+				// if success
+				//activatePanel('enterNip');
 				console.log(respuesta);
 	        	Vue.currentPanel.loading = false;
 	        	Vue.currentPanel.response = filterResponse(respuesta);
@@ -205,11 +205,15 @@ var data = new function(){
 			buttons: [
 				{
 					vueFunction: "submitLogin",
-					label: "Login"
+					label: "Login",
+					class: "btn btn-default",
+					icon: "fa-lock"
 				},
 				{
 					vueFunction: "forgot_panel",
-					label: "Olvido su contraseña? "
+					label: "Olvido su contraseña",
+					class: "btn btn-secondary",
+					icon: "fa-question"
 				}
 			],
 			isActive: false,
@@ -232,11 +236,15 @@ var data = new function(){
 			buttons: [
 				{
 					vueFunction: "forgot_submit",
-					label: "Enviar"
+					label: "Enviar",
+					class: "btn btn-success",
+					icon: "fa-question"
 				},
 				{
 					vueFunction: "goBackPanel",
-					label: "Regresar"
+					label: "Regresar",
+					class: "btn btn-info",
+					icon: "fa-backward"
 				}
 			],
 			isActive: false,
@@ -258,11 +266,15 @@ var data = new function(){
 			buttons: [
 				{
 					vueFunction: "enterNipSubmit",
-					label: "Enviar"
+					label: "Enviar",
+					class: "btn btn-success",
+					icon: "fa-paper-plane"
 				},
 				{
 					vueFunction: "goBackPanel",
-					label: "Regresar"
+					label: "Regresar",
+					class: "btn btn-info",
+					icon: "fa-backward"
 				}
 			],
 			isActive: false,
@@ -289,7 +301,14 @@ var data = new function(){
 			buttons: [
 				{
 					vueFunction: "restorePass",
-					label: "Restaurar contraseña"
+					label: "Restaurar contraseña",
+					class: "btn btn-primary",
+					icon: "fa-check"
+				},{
+					vueFunction: "restorePass",
+					label: "Restaurar contraseña",
+					class: "btn btn-danger",
+					icon: "fa-times"
 				}
 			],
 			isActive: false,
