@@ -53,8 +53,6 @@ abstract class Login {
 			$message = $this->blockAccount();
 			throw new Exception("$message");
 		}
-
-
 		$user = $this->loginData->user;
 		$pass = $this->loginData->pass;
 		$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
@@ -99,16 +97,23 @@ abstract class Login {
 	* key es el nombre del campo que tendra en el array final, y el value es el nombre del key en el array $data
 	* @param $data: Los datos en concreto que seran guardados en las variables de session 
 	**/
-	public static function createArrayCombinations($prefjios, $sess_fields, $data){
+	public static function createArrayCombinations($prefjios, $campos, $data){
 		$final_array = [];
 		foreach ($prefjios as $prefix){
 			foreach ($campos as $field => $row_field){
-				$final_array[] = $data[$row_field];
+				$final_array[$prefix.$field] = $data[$row_field];
 			}				
 		}
 		return $final_array;
 	}
 
+	public static function testCreateArrayCombinations(){
+		// TODO
+		$prefijos = Array("promotec" => "pt", "tarifario" => "tar","taf" => "taf","portabilidad" => "p");
+		$campos = Array("sess_nombre" => "Kevin","tipo" => "grande","lugar" => "casa");
+		$data = Array("nom" => "Kevin","tipo" => "grande","lugar" => "casa");
+		createArrayCombinations();
+	}
 
 	/** 
 	* Bloquea la cuenta del usuario si es que existe y envia un NIP si no hay ninguno activo
