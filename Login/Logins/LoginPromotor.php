@@ -22,8 +22,10 @@ class LoginPromotor extends Login{
 			$sessionObj->addArray($partial_data_for_sessions);
 			
 			//Finalmente añadir los campos restantes
-			
-			$aditional_session_vars_promotec = ["ptnom" => ucwords($row["nombre"]), "ptblock" => $row["bloqp"],"ptnivel" => "","ptmesa" => "","ptref" => $row['codigo'],"ptcod" => $row['referido'],"pt" => $row['C14'],"promolog" => $row['C14NC4'],"ptref" => $row['codigo']];
+				// TODO Checar campos ,"pt" => $row['C14'],"promolog" => $row['C14NC4']
+
+
+			$aditional_session_vars_promotec = ["ptnom" => ucwords($row["nombre"]), "ptblock" => $row["bloqp"],"ptnivel" => "","ptmesa" => "","ptref" => $row['codigo'],"ptcod" => $row['referido'],"ptref" => $row['codigo']];
 			$aditional_session_vars_tar = ["tartipo" => $row["tipo"],"tar" => md5("1c14nc4")];
 			$sessionObj->addArray($aditional_session_vars_tar);
 

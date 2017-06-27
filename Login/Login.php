@@ -1,5 +1,6 @@
 <? 
 require('Logins/LoginPromotor.php');
+require('BlockUserMiddleware.php');
 abstract class Login {
 	/** El objecto LoginData usado para hacer login en el sistema **/
 	protected $loginData;
@@ -10,64 +11,34 @@ abstract class Login {
 	/** La tabla del login**/
 	protected $login_table;
 
-	/** Intentos de login **/
-	public $login_tries;
-
 	/** Objecto de respuesta **/
 	protected $response;
 
 	/** Database connection link **/
 	protected $link;
 
+	/** Block Middleware **/
+	public $blockMiddleware;
+
 
 	/** Object constructor with optional parameters**/
-	function __construct($login_db,$login_table,LoginData $loginData = null, mysqli $link = null){
+	function __construct($login_db,$login_table){
 		$this->login_db = $login_db;
 		$this->login_table = $login_table;
-		// Crear variable de intentos si no existe
-		$_SESSION["tries"] = $_SESSION["tries"] ? $_SESSION["tries"] : 0;
-		$this->login_tries = $_SESSION["tries"];
-		//Optional
-		$this->loginData = $loginData;
-		$this->link = $link;
+		$this->blockMiddleware = new BlockUserMiddleware();
 	}
 
-	function setLink(mysqli $link){
-		$this->link = $link;
-	}
-
-	/**
-	* Sets the Login data
-	* @param: The login data
-	**/
-	function setData(LoginData $loginData){
-		$this->loginData = $loginData;
-	}
 	/** 
 	* Funcion que realiza la llamada a la base de datos y checa si se pudo hacer login o no.
 	* @return: Un objecto de Error o un objecto de Respuesta sobre el resultado del intento de login y de inicialzacion   *	de las variables de session
 	**/
 	function login(){
-		// Bloquear cuenta despues de 5 intentos de hacer login
-		if($this->login_tries >= 5){
-			$message = $this->blockAccount();
-			throw new Exception("$message");
-		}
 		$user = $this->loginData->user;
 		$pass = $this->loginData->pass;
 		$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
 		$result = mysqli_query($this->link, $sql);
 		if($row = mysqli_fetch_array($result)){
-			//Obtenemos las variables que seran de tipo $_SESSION
-			try{
-				$session_data = $this->getSessionData();	
-			}catch(Exception $e){
-				//Ocurrio algun error obteniendo la informacion de la session
-				throw new Exception($e->getMessage(), $e->getCode(), $e);
-			}			
-			//Iniciamos las variables de session
-			return $session_data->initializeSessions();
-			
+			return new Response("Login was successful");
 		}
 		$_SESSION["tries"] += 1;
 		throw new Exception("Inicio de session incorrecto, checar usuario y contraseña");
@@ -106,57 +77,32 @@ abstract class Login {
 		}
 		return $final_array;
 	}
-	/** 
-	* Bloquea la cuenta del usuario si es que existe y envia un NIP si no hay ninguno activo
-	* @return: Mensaje de respuesta dependiendo la situacion
+
+	/**
+	* Sets the mysqli link object to the login and to the middleware
+	* @param: The mysqli link object
 	**/
-	public function blockAccount(){
-		$us=$this->loginData->user;
-		//fecha
-		date_default_timezone_set('America/Mexico_City');
-		$fecha=date ("Y-m-d H:i:s");
-		$fecha2=date ("Y-m-d");
+	function setLink(mysqli $link){
+		$this->link = $link;
+		isset($this->blockMiddleware){
+			$this->blockMiddleware->setLink($link);
+		}
+	}
 
-		$sql=mysqli_query($this->link, "SELECT u.id, l.cel from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'");
+	/**
+	* Sets the Login data
+	* @param: The login data
+	**/
+	function setData(LoginData $loginData){
+		$this->loginData = $loginData;
+	}
 
-		if ($row=mysqli_fetch_array($sql)){
-			$cel=$row['cel'];
-			if(!empty($cel)){
-				$checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
-				$result=mysqli_query($this->link, $checkNip);
-				if (mysqli_num_rows($result)>0) {
-					$row2=mysqli_fetch_array($result);
-					$nip=$row2['nip'];
-				}else{
-					function gen_nip($minimo=4, $maximo=4) {
-						$num = "";
-						$digitos = "0123456789";
-						for ($i = 0; $i < rand($minimo, $maximo); $i++) {
-							$num .= $digitos[rand(0, strlen($digitos) - 1)];
-						}
-						return $num;
-					}				
-					$nip=gen_nip();
-
-					  //asigno pass
-					$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$us','$cel','$nip','$fecha','1','WiMO-Web')";
-					mysqli_query($this->link, $creaNip);
-				}
-				if(!empty($nip)){
-					$txt = "El NIP para recuperar la clave del usuario $us es $nip";
-
-					$messg = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
-					//echo $nip;
-					mysqli_query($this->link,$messg);
-					echo "S|Se creo NIP |cambio_contrasena|alert-success|regresar";
-				}else{
-					echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
-				}
-			}else{
-			 echo "E2|Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.!|cambio_contrasena|alert-warning|Reintente"; 
-			}
-		}else{
-			echo "E2|El Usuario no existe!|cambio_contrasena|alert-danger|Reintente";
+	function setMiddleware($middleware){
+		try{
+			$block = new BlockUserMiddleware($this->login_db,$this->login_table,$this->link);
+			$block->checkBlockAccount();
+		}catch(Exception $e){
+			throw new Exception($e->getMessage());
 		}
 	}
 }
@@ -183,6 +129,7 @@ class SessionData {
         static $inst = null;
         if ($inst === null) {
             $inst = new SessionData();
+            $inst-> sessionFieldsandData = array();
         }
         return $inst;
     }
@@ -197,19 +144,18 @@ class SessionData {
 	}
 	/**
 	* Añade al array de informacion
-	* @param $fieldName: El nombre del campo que tendrá la variable de session
-	* @param $data: El contenido para que contendra dicha variable de session
+	* @param $fieldName: El array con informacion de variables de session
 	**/
 	public function addArray($fieldName_data){
-		$this->sessionFieldsandData = $this->sessionFieldsandData + $fieldName_data;
+		$this->sessionFieldsandData = array_merge($this->sessionFieldsandData,$fieldName_data);
 	}
 
 	/**
 	* Inicializa las varibles de tipo $_SESSION de acuerdo a la informacion recopilada
 	* @return: Objector de respuesta final
 	**/
-	private function initializeSessions(){
-		foreach ($sessionFieldsandData as $field => $data) {
+	public function initializeSessions(){
+		foreach ($this->sessionFieldsandData as $field => $data) {
 			$_SESSION[$field] = $data;
 			//Testing that the variable session is working
 			if($_SESSION[$field] != $data){

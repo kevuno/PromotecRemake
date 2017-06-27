@@ -7,7 +7,7 @@ class Response{
 	/** Objecto de informacion de la respuesta - opcional**/
 	public $data;
 
-	function __construct($message,$data){
+	function __construct($message,$data = null){
 		$this->message = $message;
 		$this->data = $data;
 	}

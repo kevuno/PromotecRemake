@@ -14,16 +14,21 @@ class LoginMain{
 	public static function loginGeneral(LoginData $loginData, CaptchaData $captchaData){
 		//Validar captcha
 		$captcha_checker = $captchaData->validate();
-		//if(!$captchaData->validate()){
-		//	throw new Exception("No se pudo validar el captcha");
-		//}
+		if(!$captchaData->validate()){
+			throw new Exception("No se pudo validar el captcha");
+		}
 		try{
 			//Construir el login correspondiente y ejecutar intento de login
 			$login = self::loginFactory($loginData->tipo);
 			$login->setLink(link::getLink());
 			$login->setData($loginData);
+			$login->setMiddleWare(new BlockUserMiddleware());
 			// Intentar hacer login
-			return $response = $login->login();	
+			$login->login();
+			//Obtenemos las variables que seran de tipo $_SESSION
+			$session_data = $login->getSessionData();
+			//Iniciamos las variables de session
+			return $session_data->initializeSessions();
 		}catch (Exception $e){
 			throw new Exception($e->getMessage(), $e->getCode(), $e);
 		}
