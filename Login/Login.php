@@ -106,15 +106,6 @@ abstract class Login {
 		}
 		return $final_array;
 	}
-
-	public static function testCreateArrayCombinations(){
-		// TODO
-		$prefijos = Array("promotec" => "pt", "tarifario" => "tar","taf" => "taf","portabilidad" => "p");
-		$campos = Array("sess_nombre" => "Kevin","tipo" => "grande","lugar" => "casa");
-		$data = Array("nom" => "Kevin","tipo" => "grande","lugar" => "casa");
-		createArrayCombinations();
-	}
-
 	/** 
 	* Bloquea la cuenta del usuario si es que existe y envia un NIP si no hay ninguno activo
 	* @return: Mensaje de respuesta dependiendo la situacion
