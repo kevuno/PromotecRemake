@@ -1,8 +1,7 @@
 <?
 //include_once("imysql.php");
 function imysql_real_escape_string($cad){
- $mysqli = new mysqli($_SERVER["serverdata"], "samtec", "sam33", "test");
- $cad=$mysqli -> real_escape_string($cad);
+
  return $cad;
 }
 function security($cad) {

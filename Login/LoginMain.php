@@ -14,23 +14,29 @@ class LoginMain{
 	public static function loginGeneral(LoginData $loginData, CaptchaData $captchaData){
 		//Validar captcha
 		$captcha_checker = $captchaData->validate();
-		if(!$captchaData->validate()){
-			throw new Exception("No se pudo validar el captcha");
-		}
+		//if(!$captchaData->validate()){
+		//	throw new Exception("No se pudo validar el captcha");
+		//}
 		try{
 			//Construir el login correspondiente y ejecutar intento de login
 			$login = self::loginFactory($loginData->tipo);
+			// Asiganar objecto de link e informacion de usuario y pass al login
 			$login->setLink(link::getLink());
 			$login->setData($loginData);
-			$login->setMiddleWare(new BlockUserMiddleware());
 			// Intentar hacer login
-			$login->login();
-			//Obtenemos las variables que seran de tipo $_SESSION
-			$session_data = $login->getSessionData();
-			//Iniciamos las variables de session
-			return $session_data->initializeSessions();
+			$response = $login->login();
+			if($response->type == Response::SUCCESS){
+				//Obtenemos las variables que seran de tipo $_SESSION
+				//$session_data = $login->getSessionData();
+				//Iniciamos las variables de session
+				//$session_data->initializeSessions();
+				return new Response("Login satisfactorio.",Response::SUCCESS,self::generateToken());
+			}else if($response->type == Response::LOGIN_BLOCK || $response->type == Response::ERROR_LOGIN){
+				return $response;
+			}
+			return new Response("Login finalizado");
 		}catch (Exception $e){
-			throw new Exception($e->getMessage(), $e->getCode(), $e);
+			throw $e;
 		}
 	}
 
@@ -40,7 +46,7 @@ class LoginMain{
 	**/
 	public static function loginFactory($tipo_login){
 		if($tipo_login === "promotec"){
-			return new LoginPromotor("recargas","usuarios");
+			return new LoginPromotor();
 
 		}else if($tipo_login === "microtae"){
 
@@ -51,5 +57,11 @@ class LoginMain{
 		}else{
 			throw new Exception("Tipo de login ".$tipo_login." no es valido.");
 		}
+	}
+
+
+	private function generateToken(){
+		$length = 20;
+    	return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
 	}
 }

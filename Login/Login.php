@@ -30,18 +30,40 @@ abstract class Login {
 
 	/** 
 	* Funcion que realiza la llamada a la base de datos y checa si se pudo hacer login o no.
-	* @return: Un objecto de Error o un objecto de Respuesta sobre el resultado del intento de login y de inicialzacion   *	de las variables de session
+	* Antes de hacer login checa el estatus del bloqueo de la ip en la base de datos.
+	* Al finalizar el intento del login se actualiza el estado del bloqueo
+	* @return: Un objecto de Respuesta sobre el resultado del intento de login y chequeo de bloqueo.
 	**/
 	function login(){
-		$user = $this->loginData->user;
-		$pass = $this->loginData->pass;
-		$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
-		$result = mysqli_query($this->link, $sql);
-		if($row = mysqli_fetch_array($result)){
-			return new Response("Login was successful");
+		try{
+			// Checar el estado del bloqueo, si el usuario esta bloqueado, regresara una respuesta de tipo LOGIN_BLOCK y brincara el intento de login.
+			$check_response = $this->blockMiddleware->checkBlockIP();
+			if($check_response->type == RESPONSE::LOGIN_BLOCK){
+				return $check_response;
+			}
+
+			// No esta bloqueado el usuario asi que continua
+			$user = $this->loginData->user;
+			$pass = $this->loginData->pass;
+			$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND pass='$pass'";
+			$result = mysqli_query($this->link, $sql);	
+			if($row = mysqli_fetch_array($result)){
+				// Login logrado, actualizar estado de bloqueo, se ignoran los intentos restantes
+				$tries_left = $this->blockMiddleware->updateBlockIP(true);
+				return new Response("Login was successful",Response::SUCCESS);
+			}
+		} catch(Exception $e){
+			throw $e;
 		}
-		$_SESSION["tries"] += 1;
-		throw new Exception("Inicio de session incorrecto, checar usuario y contraseña");
+
+		// Login no fue logrado entonces se actualiza el objeto de bloqueo
+		$tries_left = $this->blockMiddleware->updateBlockIP(false);
+
+		// Si el numero de intentos es 0 enviar un mensaje de bloqueo
+		if ($tries_left == 0){
+			return new Response("Cuenta actualmente bloqueada por superar numero de intentos",Response::LOGIN_BLOCK);
+		}
+		return new Response("Inicio de session incorrecto, checar usuario y contraseña", RESPONSE::ERROR_LOGIN,$tries_left);
 	}
 
 	/** 
@@ -84,7 +106,7 @@ abstract class Login {
 	**/
 	function setLink(mysqli $link){
 		$this->link = $link;
-		isset($this->blockMiddleware){
+		if(isset($this->blockMiddleware)){
 			$this->blockMiddleware->setLink($link);
 		}
 	}
@@ -95,15 +117,6 @@ abstract class Login {
 	**/
 	function setData(LoginData $loginData){
 		$this->loginData = $loginData;
-	}
-
-	function setMiddleware($middleware){
-		try{
-			$block = new BlockUserMiddleware($this->login_db,$this->login_table,$this->link);
-			$block->checkBlockAccount();
-		}catch(Exception $e){
-			throw new Exception($e->getMessage());
-		}
 	}
 }
 
@@ -162,7 +175,7 @@ class SessionData {
 				throw new Exception("Ocurrio un problema iniciando una variable de session - nombre del campo: ".$field." con valor: ".$data);
 			}
 		}
-		return new Response("Se han inicializado las variables de session. Login Completado");
+		return new Response("Se han inicializado las variables de session. Login Completado",Response::SUCCESS);
 	}
 	
 }
