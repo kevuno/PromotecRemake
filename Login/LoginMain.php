@@ -25,16 +25,17 @@ class LoginMain{
 			$login->setData($loginData);
 			// Intentar hacer login
 			$response = $login->login();
+
+			// Si el login tuvo exito se obtienen las variables de session y el token
 			if($response->type == Response::SUCCESS){
 				//Obtenemos las variables que seran de tipo $_SESSION
 				//$session_data = $login->getSessionData();
 				//Iniciamos las variables de session
 				//$session_data->initializeSessions();
 				return new Response("Login satisfactorio.",Response::SUCCESS,self::generateToken());
-			}else if($response->type == Response::LOGIN_BLOCK || $response->type == Response::ERROR_LOGIN){
-				return $response;
 			}
-			return new Response("Login finalizado");
+			// Si no solo se regresa la respuesta
+			return $response;
 		}catch (Exception $e){
 			throw $e;
 		}
