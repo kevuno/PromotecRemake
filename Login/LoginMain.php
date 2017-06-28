@@ -30,8 +30,11 @@ class LoginMain{
 			if($response->type == Response::SUCCESS){
 				//Obtenemos las variables que seran de tipo $_SESSION
 				//$session_data = $login->getSessionData();
+
 				//Iniciamos las variables de session
 				//$session_data->initializeSessions();
+
+				// FIN
 				return new Response("Login satisfactorio.",Response::SUCCESS,self::generateToken());
 			}
 			// Si no solo se regresa la respuesta

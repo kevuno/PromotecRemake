@@ -12,8 +12,12 @@ class LoginPromotor extends Login{
 	public function getSessionData(){
 		$user = $this->loginData->user;
 		$sql="SELECT u.*, l.dis AS suc, l.tipo, l.bloqp from recargas.usuarios AS u left join canal.lista AS l on u.dis=l.user WHERE u.user='$user'";
+		if(!$result = mysqli_query($this->link, $sql)){
+			throw new Exception("Error al ejecutar consulta mysql ".$sql);
+		}
+		
 
-		$result = mysqli_query($this->link, $sql);
+
 		if ($row = mysqli_fetch_array($result)) {
 			//Crear objeto de session, solo puede existir uno por cada clase, por eso se llama a la funcion Instance
 			$sessionObj = SessionData::Instance();
