@@ -1,5 +1,5 @@
 <?php
-require('Response.php');
+require('../Response.php');
 require('Login.php');
 require('../link.php');
 
@@ -29,10 +29,10 @@ class LoginMain{
 			// Si el login tuvo exito se obtienen las variables de session y el token
 			if($response->type == Response::SUCCESS){
 				//Obtenemos las variables que seran de tipo $_SESSION
-				$session_data = $login->getSessionData();
+				//$session_data = $login->getSessionData();
 
 				//Iniciamos las variables de session
-				$session_data->initializeSessions();
+				//$session_data->initializeSessions();
 
 				// FIN
 				return new Response("Login satisfactorio.",Response::SUCCESS,self::generateToken());

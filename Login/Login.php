@@ -51,8 +51,8 @@ abstract class Login {
 			// No esta bloqueado el usuario asi que continua
 			$user = $this->loginData->user;
 			$pass = $this->loginData->pass;
-			//$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND pass='$pass'";
-			$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
+			$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND pass='$pass'";
+			//$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
 			$result = mysqli_query($this->link, $sql);	
 			if($row = mysqli_fetch_array($result)){
 				// Login logrado, actualizar estado de bloqueo, se ignoran los intentos restantes que devuelve updateBlockIP()
