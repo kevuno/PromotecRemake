@@ -10,7 +10,7 @@ $user = security($_POST["user"]);
 try{
 
 	// 1. Generar un nip con el usuario dado.
-	$response = Nip::genNewNipFromUser($user);
+	$response = Nip::genNewNipFromUser($user,link::getLink());
 
 	// Si el usuario es valido entonces el nip estara en el campo data del objecto de respuesta
 	$nip = $response->data;

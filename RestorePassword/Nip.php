@@ -16,20 +16,29 @@ class Nip{
 	/** Numero telefonico del usuario si es que tiene alguno al cual enviar un nip **/
 	public $userPhoneNumber;
 
+	/** Objecto de mysqli link para hacer llamadas a la BD **/
+	private $link;
 
 	/** Construye un nuevo nip ya generado**/
-	function __construct($username,$nipNumber, $userPhoneNumber){
+	function __construct($username,$nipNumber, $userPhoneNumber, $link){
 		$this->username = $username;
 		$this->nipNumber = $nipNumber;
 		$this->userPhoneNumber = $userPhoneNumber;
+		$this->link = $link;
 	}
 
 
-	static function genNewNipFromUser($username){
+	static function genNewNipFromUser($username,$link){
 		// Todo
 		$nipNumber = self::genNip();
+
+		//$sql="SELECT user,phoneNumber,nip FROM table.stuff WHERE user='$username'";
+		//$result = mysqli_query($this->link, $sql);	
+		//if($row = mysqli_fetch_array($result)){
+			//Stuff
+		//}
 		$userPhoneNumber = "2221174640";
-		$nip = new Nip($username,$nipNumber,$userPhoneNumber);
+		$nip = new Nip($username,$nipNumber,$userPhoneNumber, $link);
 		if(true){
 			return new Response("Nip generado con exito",Response::SUCCESS,$nip);	
 		}else if(false){

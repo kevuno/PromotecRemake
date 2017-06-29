@@ -18,23 +18,22 @@ class LoginMain{
 		//	throw new Exception("No se pudo validar el captcha");
 		//}
 		try{
-			//Construir el login correspondiente y ejecutar intento de login
+			// Construir el login correspondiente y asiganar objecto de link e informacion de usuario y pass
 			$login = self::loginFactory($loginData->tipo);
-			// Asiganar objecto de link e informacion de usuario y pass al login
 			$login->setLink(link::getLink());
 			$login->setData($loginData);
+
 			// Intentar hacer login
 			$response = $login->login();
 
 			// Si el login tuvo exito se obtienen las variables de session y el token
 			if($response->getStatus() == Response::SUCCESS){
-				//Obtenemos las variables que seran de tipo $_SESSION
+				//Obtenemos las variables que seran de $_SESSION (diferentes para cada tipo de login)
 				//$session_data = $login->getSessionData();
 
 				//Iniciamos las variables de session
 				//$session_data->initializeSessions();
 
-				// FIN
 				return new Response("Login satisfactorio.",Response::SUCCESS,self::generateToken());
 			}
 			// Si no solo se regresa la respuesta

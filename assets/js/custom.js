@@ -1,20 +1,4 @@
-/** Filters the json_response gotten from the Ajax call and returns a parsed json object **/
-
-function assertResponse(json_response){
-	try{
-		var response = JSON.parse(json_response);
-		if(response.status == Vue.responseTypes.ERROR){
-			console.log(response);
-			return {message:"Error interno del sistema."};
-		}
-		return response;
-	}catch (e){
-		// json_response was not json formatted so we display whats going on
-		console.log(json_response);
-		return {message: "Error interno del sistema, error de programación."};
-	}
-}
-
+/******* ENVIOS DE FORULARIOS POR AJAX ************/
 
 /** Envia el intento de login **/
 function Login(user,pass,captcha){
@@ -25,14 +9,27 @@ function Login(user,pass,captcha){
     if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
 	
     if (error=="0"){
-		var t3 = user+","+pass+","+captcha;
-      	console.log(t3);
-      	$.post("Login/LoginEntryPoint.php",{login:t3},function(json_response){
-        	var response = JSON.parse(json_response);
-        	console.log(response);
-        	if(response.status != Vue.responseTypes.ERROR){
-	        	Vue.currentPanel.response = response.message;
-			}
+		var data = {
+			user:user,
+			pass:pass,
+			captcha:captcha
+		};
+      	Vue.currentPanel.loading = true;
+      	$.post("Login/LoginEntryPoint.php",data,function(json_response){
+			// Close loading bar
+			Vue.currentPanel.loading = false;
+			// Get response object
+			var response = assertResponse(json_response);
+			// Display response in console and in response div
+			console.log(response);
+			Vue.currentPanel.response = response.message;
+
+    		if(response.status == Vue.responseTypes.LOGINBLOCK)
+    			activatePanel("restore");
+    			Vue.currentPanel.instructions = response.message;
+
+	        	
+			
       	})
     }else{
 		alert(error);
@@ -77,9 +74,6 @@ function registrar(){
   	});
 }
 
-
-
-
 /** Envia el formulario para crear nip y enviarlo al celular registrado **/
 function restore_submit(user){
 	var error = "0";
@@ -112,6 +106,7 @@ function restore_submit(user){
 
 }
 
+/** Envia el formulario para crear una nueva contraseña temporaria la envia al celular registrado **/
 function enterNipSubmit(nip){
 	var error = "0";
 	if (nip==" " || nip=="" || nip==null) { error="Revise NIP"; acc=$('input#nip').focus(); }
@@ -138,6 +133,24 @@ function enterNipSubmit(nip){
 		
 	}else{
 		alert(error);
+	}
+}
+
+/*************** FUNCIONES DE AYUDA **************/
+
+/** Filters the json_response gotten from the Ajax call and returns a parsed json object **/
+function assertResponse(json_response){
+	try{
+		var response = JSON.parse(json_response);
+		if(response.status == Vue.responseTypes.ERROR){
+			console.log(response);
+			return {message:"Error interno del sistema."};
+		}
+		return response;
+	}catch (e){
+		// json_response was not json formatted so we display whats going on
+		console.log(json_response);
+		return {message: "Error interno del sistema, error de programación."};
 	}
 }
 
@@ -183,7 +196,8 @@ function restoreInputs(exceptions){
 
 /**
 * Activates the panel of given id and it also deactivates all other panels.
-* If not found, it just hides all panels. If toStack is true, it adds it to the stack of panels.
+* If not found, it just hides all panels. If toStack is true, it adds it to the stack of panels,
+* it will usually be set to false when going back to the previous pannel.
 * @return: Whether panel activation was succesful
 **/
 function activatePanel(panelID,toStack=true){
@@ -338,9 +352,9 @@ var data = new function(){
 			loading: false,
 			
 		},{
-			id: "newPassResult",
-			header: "",
-			instructions: "Se ha restaurado su contraseña",
+			id: "restorePassResult",
+			header: "Se ha restaurado su contraseña",
+			instructions: "",
 			response: "",
 			inputs:[],
 			buttons: [
