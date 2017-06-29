@@ -12,21 +12,23 @@ function Login(user,pass,captcha){
 		var data = {
 			user:user,
 			pass:pass,
-			captcha:captcha
+			captcha:"stuff"
 		};
       	Vue.currentPanel.loading = true;
       	$.post("Login/LoginEntryPoint.php",data,function(json_response){
+			console.log(Vue.currentPanel.instructions);
 			// Close loading bar
 			Vue.currentPanel.loading = false;
 			// Get response object
 			var response = assertResponse(json_response);
 			// Display response in console and in response div
-			console.log(response);
 			Vue.currentPanel.response = response.message;
 
-    		if(response.status == Vue.responseTypes.LOGINBLOCK)
+    		if(response.status == Vue.responseTypes.LOGINBLOCK){
     			activatePanel("restore");
     			Vue.currentPanel.instructions = response.message;
+    		}
+    			
 
 	        	
 			
