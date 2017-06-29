@@ -24,7 +24,7 @@ class Response{
 	public $data;
 
 	/** Construye el objecto con un mensaje, una constante de tipo Response:: , y informacion opcional **/
-	function __construct($message,$type,$data = null){
+	function __construct($message,$type = self::NEUTRAL,$data = null){
 		$this->message = $message;
 		$this->type = $type;
 		$this->data = $data;

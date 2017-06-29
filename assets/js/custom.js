@@ -18,7 +18,7 @@ function Login(user,pass,captcha){
     if (error=="0"){
 		var t3 = user+","+pass+","+captcha;
       	console.log(t3);
-      	$.post("Login/check_login.php",{login:t3},function(respuesta){
+      	$.post("Login/LoginEntryPoint.php",{login:t3},function(respuesta){
         	console.log("respuesta: "+respuesta);
         	Vue.currentPanel.response = filterResponse(respuesta);
       	})
@@ -66,14 +66,14 @@ function registrar(){
 
 
 /** Envia el formulario para crear nip y enviarlo al celular registrado **/
-function forgot_submit(user){
+function restore_submit(user){
 	var error = "0";
 	if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
 	if (error=="0"){
 		if(confirm("Está seguro que quiere restaurar la contraseña del usuario " + user + ". Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.")){
 			var data = user;
 			Vue.currentPanel.loading = true;
-			$.post("Login/check_login.php",{nipData:data},function(respuesta){
+			$.post("RestorePassword/GenNipEntryPoint.php",{user:user},function(respuesta){
 				// if success
 				//activatePanel('enterNip');
 				console.log(respuesta);
@@ -210,8 +210,8 @@ var data = new function(){
 					icon: "fa-lock"
 				},
 				{
-					vueFunction: "forgot_panel",
-					label: "Olvido su contraseña",
+					vueFunction: "restore_panel",
+					label: "Restaurar contraseña",
 					class: "btn btn-secondary",
 					icon: "fa-question"
 				}
@@ -221,8 +221,8 @@ var data = new function(){
 			captcha: true
 			
 		},{
-			id: "forgot",
-			header: "Olvidó su Contraseña?",
+			id: "restore",
+			header: "Restaurar contraseña",
 			instructions: "",
 			response: "",
 			inputs:[
@@ -235,7 +235,7 @@ var data = new function(){
 			],
 			buttons: [
 				{
-					vueFunction: "forgot_submit",
+					vueFunction: "restore_submit",
 					label: "Enviar",
 					class: "btn btn-success",
 					icon: "fa-question"
@@ -419,11 +419,11 @@ var Vue = new Vue({
 		submitRegister(){
 			Register();
 		},
-		forgot_panel(){
-			activatePanel("forgot");
+		restore_panel(){
+			activatePanel("restore");
 		},
-		forgot_submit(){
-			forgot_submit(this.globalInputs.user);
+		restore_submit(){
+			restore_submit(this.globalInputs.user);
 		},
 		enterNip(){
 			activatePanel("enterNip");
@@ -440,7 +440,7 @@ var Vue = new Vue({
 			// Closes modal
 			$('#modalLRForm').modal('hide');
 		},
-		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), forgot_panel(), etc
+		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), restore_panel(), etc
 		call(vueFunction){
 			this[vueFunction]();
 		}
