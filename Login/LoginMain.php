@@ -27,7 +27,7 @@ class LoginMain{
 			$response = $login->login();
 
 			// Si el login tuvo exito se obtienen las variables de session y el token
-			if($response->type == Response::SUCCESS){
+			if($response->getStatus() == Response::SUCCESS){
 				//Obtenemos las variables que seran de tipo $_SESSION
 				//$session_data = $login->getSessionData();
 

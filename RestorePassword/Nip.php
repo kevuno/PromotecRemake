@@ -61,7 +61,7 @@ class Nip{
 	public function sendToUser(){
 		// TODO: Enviar SMS al usuario
 		if(true){
-			return new Response("NIP ha sido enviado al numero");	
+			return new Response("NIP ha sido enviado al numero",Response::SUCCESS,$this->userPhoneNumber);	
 		}
 		
 	}

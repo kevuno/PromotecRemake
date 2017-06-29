@@ -18,15 +18,15 @@ class Response{
 	const ERROR_LOGIN = 3;	
 
 	/** Tipo de respuesta**/
-	public $type;
+	public $status;
 
 	/** Objecto de informacion de la respuesta - opcional**/
 	public $data;
 
 	/** Construye el objecto con un mensaje, una constante de tipo Response:: , y informacion opcional **/
-	function __construct($message,$type = self::NEUTRAL,$data = null){
+	function __construct($message,$status = self::NEUTRAL,$data = null){
 		$this->message = $message;
-		$this->type = $type;
+		$this->status = $status;
 		$this->data = $data;
 	}
 
@@ -34,5 +34,16 @@ class Response{
 	function addData($data){
 		$this->data = $data;
 	}
+
+	/** Gets the response status"**/
+	public function getStatus(){
+		return $this->status;
+	}
+
+	/** To string function **/
+
+	public function __toString(){
+        return "R|".$this->message."|".$this->status."|".$this->data;
+    }
 
 }
