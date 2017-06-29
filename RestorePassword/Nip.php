@@ -42,9 +42,21 @@ class Nip{
 		
 	}
 
+	/**
+	* Activates the nip in the db
+	**/
 	public function activateNip(){
 		// TODO: Guardar Nuevo Nip en la bd
 		return new Response("Se ha activado el Nip");
+
+	}
+
+	/**
+	* Deactivates the nip in the db
+	**/
+	public function deactivate(){
+		// TODO: Guardar Nuevo Nip en la bd
+		return new Response("Se ha desactivado el Nip");
 
 	}
 
@@ -73,7 +85,7 @@ class Nip{
 	* @param: The phoneNumber
 	* @return: The coded phone number
 	**/
-	private static function codePhoneNumber(String $phoneNumber){
+	public static function codePhoneNumber(String $phoneNumber){
 		// Make sure the length of the string is at least 4 digits long
 		if(isset($phoneNumber[3])){
 			$last_four_index = strlen($phoneNumber)-4;
@@ -94,7 +106,8 @@ class Nip{
 	function validateNip($nipNumber){
 		//Todo: Call db and check
 		$username = "kev";
-		return new Response("Nip valido",new Nip($username,$nipNumber));
+		$userPhoneNumber = "222123123";
+		return new Response("Nip valido",Response::SUCCESS,new Nip($username,$nipNumber,$userPhoneNumber));
 	}
 
 

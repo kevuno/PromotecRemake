@@ -1,12 +1,16 @@
+/** Filters the json_response gotten from the Ajax call and returns a parsed json object **/
+
 function assertResponse(json_response){
 	try{
 		var response = JSON.parse(json_response);
 		if(response.status == Vue.responseTypes.ERROR){
-			console.log(response.status);
+			console.log(response);
 			return {message:"Error interno del sistema."};
 		}
 		return response;
 	}catch (e){
+		// json_response was not json formatted so we display whats going on
+		console.log(json_response);
 		return {message: "Error interno del sistema, error de programación."};
 	}
 }
@@ -82,7 +86,6 @@ function restore_submit(user){
 	if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
 	if (error=="0"){
 		if(confirm("Está seguro que quiere restaurar la contraseña del usuario " + user + ". Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.")){
-			var data = user;
 			Vue.currentPanel.loading = true;
 			$.post("RestorePassword/GenNipEntryPoint.php",{user:user},function(json_response){
 				// Close loading bar
@@ -107,6 +110,35 @@ function restore_submit(user){
 		alert(error);
 	}
 
+}
+
+function enterNipSubmit(nip){
+	var error = "0";
+	if (nip==" " || nip=="" || nip==null) { error="Revise NIP"; acc=$('input#nip').focus(); }
+	if (error=="0"){
+		Vue.currentPanel.loading = true;
+		$.post("RestorePassword/PassResetEntryPoint.php",{nip:nip},function(json_response){
+			// Close loading bar
+			Vue.currentPanel.loading = false;
+			// Get response object
+			var response = assertResponse(json_response);
+			// Display response in console and in response div
+			console.log(response);
+			Vue.currentPanel.response = response.message;
+
+			// Only if success sending NIP display next panel
+			if(response.status == Vue.responseTypes.SUCCESS){
+				// If Response was of type success, then data contains the phonenumber to 
+				// which the NIP was sent
+				// Load EnterNip Panel
+				activatePanel('enterNip');
+				Vue.currentPanel.instructions = response.message;
+			}
+      	});
+		
+	}else{
+		alert(error);
+	}
 }
 
 /** Loads the json files with the estados and municipios and save the data **/
@@ -181,7 +213,7 @@ var data = new function(){
 		user: "",
 		pass: "",
 		captcha: "",
-		NIP: "",
+		nip: "",
 	},
 	this.responseTypes = {
 		ERROR: -1,
@@ -420,7 +452,7 @@ var Vue = new Vue({
 			activatePanel("enterNip");
 		},
 		enterNipSubmit(){
-			activatePanel("newPass");
+			enterNipSubmit(this.globalInputs.nip);
 		},
 		restorePass(){
 			// Restore all inputs except for user
