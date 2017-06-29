@@ -1,12 +1,17 @@
-/** Filters what is sent back to the view to only be of type errors or responses, no more php garbage **/
-function filterResponse(response){
-	var content = response.split("|");
-	if (content.length > 1){
-		return content[1];
-	}else{
-		return "Ocurrio un error interno";
+function assertResponse(json_response){
+	try{
+		var response = JSON.parse(json_response);
+		if(response.status == Vue.responseTypes.ERROR){
+			console.log(response.status);
+			return {message:"Error interno del sistema."};
+		}
+		return response;
+	}catch (e){
+		return {message: "Error interno del sistema, error de programación."};
 	}
 }
+
+
 /** Envia el intento de login **/
 function Login(user,pass,captcha){
     error="0";
@@ -18,9 +23,12 @@ function Login(user,pass,captcha){
     if (error=="0"){
 		var t3 = user+","+pass+","+captcha;
       	console.log(t3);
-      	$.post("Login/LoginEntryPoint.php",{login:t3},function(respuesta){
-        	console.log("respuesta: "+respuesta);
-        	Vue.currentPanel.response = filterResponse(respuesta);
+      	$.post("Login/LoginEntryPoint.php",{login:t3},function(json_response){
+        	var response = JSON.parse(json_response);
+        	console.log(response);
+        	if(response.status != Vue.responseTypes.ERROR){
+	        	Vue.currentPanel.response = response.message;
+			}
       	})
     }else{
 		alert(error);
@@ -58,11 +66,14 @@ function registrar(){
 		next: numext
 	};
 	console.log(data);
-    $.post("Registro/registro.php",data,function(respuesta){
-    	console.log("respuesta: "+respuesta);
-    	Vue.currentPanel.response = filterResponse(respuesta);
+    $.post("Registro/registro.php",data,function(json_response){
+    	var response = JSON.parse(json_response);
+		console.log(response);
+    	Vue.currentPanel.response = response.message;
   	});
 }
+
+
 
 
 /** Envia el formulario para crear nip y enviarlo al celular registrado **/
@@ -73,14 +84,23 @@ function restore_submit(user){
 		if(confirm("Está seguro que quiere restaurar la contraseña del usuario " + user + ". Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.")){
 			var data = user;
 			Vue.currentPanel.loading = true;
-			$.post("RestorePassword/GenNipEntryPoint.php",{user:user},function(respuesta){
-				// if success
-				//activatePanel('enterNip');
-				console.log(respuesta);
-	        	Vue.currentPanel.loading = false;
-	        	Vue.currentPanel.response = filterResponse(respuesta);
+			$.post("RestorePassword/GenNipEntryPoint.php",{user:user},function(json_response){
+				// Close loading bar
+				Vue.currentPanel.loading = false;
+				// Get response object
+				var response = assertResponse(json_response);
+				// Display response in console and in response div
+				console.log(response);
+				Vue.currentPanel.response = response.message;
 
-
+				// Only if success sending NIP display next panel
+				if(response.status == Vue.responseTypes.SUCCESS){
+					// If Response was of type success, then data contains the phonenumber to 
+					// which the NIP was sent
+					// Load EnterNip Panel
+					activatePanel('enterNip');
+					Vue.currentPanel.instructions = response.message;
+				}
 	      	})
 		}
 	}else{
@@ -162,10 +182,15 @@ var data = new function(){
 		pass: "",
 		captcha: "",
 		NIP: "",
-		phoneNumber: "",
-		newPass: "",
-		newPassCheck: ""
 	},
+	this.responseTypes = {
+		ERROR: -1,
+		NEUTRAL: 0,
+		SUCCESS: 1,
+		LOGINBLOCK: 2,
+		LOGINERROR: 3
+	},
+	this.mensaje_error_backend = "Ocurrió un error interno en el sistema...",
 	this.estados =  [],
 	this.municipios =  [],
 	this.selected_estado =  {},
@@ -253,7 +278,7 @@ var data = new function(){
 		},{
 			id: "enterNip",
 			header: "Insertar NIP",
-			instructions: "Se le ha enviado un nip al telefono " + this.globalInputs.phoneNumber + ". Porfavor ingréselo a continuación",
+			instructions: "",
 			response: "",
 			inputs:[
 				{
@@ -275,40 +300,6 @@ var data = new function(){
 					label: "Regresar",
 					class: "btn btn-info",
 					icon: "fa-backward"
-				}
-			],
-			isActive: false,
-			loading: false,
-			
-		},{
-			id: "newPass",
-			header: "Nueva contraseña",
-			instructions: "A continuacion escriba su nueva contraseña.",
-			response: "",
-			inputs:[
-				{
-					iconClass: "fa-lock",
-					vModel: "newPass",
-					id: "newPass",
-					label: "Nueva Contraseña",
-				},{
-					iconClass: "fa-lock",
-					vModel: "newPassCheck",
-					id: "newPassCheck",
-					label: "Repetir nueva contraseña",
-				}		
-			],
-			buttons: [
-				{
-					vueFunction: "restorePass",
-					label: "Restaurar contraseña",
-					class: "btn btn-primary",
-					icon: "fa-check"
-				},{
-					vueFunction: "restorePass",
-					label: "Restaurar contraseña",
-					class: "btn btn-danger",
-					icon: "fa-times"
 				}
 			],
 			isActive: false,

@@ -8,6 +8,7 @@ require('Nip.php');
 $user = security($_POST["user"]);
 
 try{
+
 	// 1. Generar un nip con el usuario dado.
 	$response = Nip::genNewNipFromUser($user);
 

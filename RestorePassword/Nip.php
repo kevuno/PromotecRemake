@@ -60,12 +60,31 @@ class Nip{
 	/** Envia el Nip al usuario **/
 	public function sendToUser(){
 		// TODO: Enviar SMS al usuario
+		$codedPhoneNum = self::codePhoneNumber($this->userPhoneNumber);
 		if(true){
-			return new Response("NIP ha sido enviado al numero",Response::SUCCESS,$this->userPhoneNumber);	
+			return new Response("Un NIP ha sido enviado al número: ".$codedPhoneNum.". Porfavor, introdúzcalo a continuación." ,Response::SUCCESS,$codedPhoneNum);	
 		}
 		
 	}
 
+	/** 
+	* Returns a string with only the last four digits of the given phone number string, and 
+	* the rest of the numbers hidden by a " * "" character
+	* @param: The phoneNumber
+	* @return: The coded phone number
+	**/
+	private static function codePhoneNumber(String $phoneNumber){
+		// Make sure the length of the string is at least 4 digits long
+		if(isset($phoneNumber[3])){
+			$last_four_index = strlen($phoneNumber)-4;
+			for ($i = 0; $i < $last_four_index; $i++){
+				$phoneNumber[$i] = "*";
+			}
+			return $phoneNumber;	
+		}
+		throw new Exception("Error, numero telefonico es menor de 4 digitos");
+		
+	}
 	/**
 	* Validates a given Nip and returns the associated user
 	* @param: Nip number
