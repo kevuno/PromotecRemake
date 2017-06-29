@@ -23,10 +23,10 @@ try{
 		return "R|".$response->message."|".$response->data;
 	}else{
 		// Si el nip es invalido puede ser por ser incorrecto o expirado
-		echo "R|".$response->message;
+		echo $response->toJson();
 	}
 }catch(Exception $e){
-		echo "E|".$e;
+		echo Response::errorResponseFromException($e)->toJson();
 }
 
 ?>

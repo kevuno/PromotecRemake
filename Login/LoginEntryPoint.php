@@ -19,9 +19,9 @@ $secretKey = "6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if"; //Secret key for captch
 $response;
 try{
 	$response = LoginMain::loginGeneral(new LoginData($usuario,$pass,$provider), new CaptchaData($captcha,$secretKey,$ip));
-	echo "R|".$response->message."|".$response->data;
+	echo $response->toJson();
 }catch (Exception $e){
-	echo "E|".$e->getMessage()."|";
+	echo Response::errorResponseFromException($e)->toJson();
 
 }
 

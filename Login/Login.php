@@ -44,7 +44,7 @@ abstract class Login {
 		try{
 			// Checar el estado del bloqueo, si el usuario esta bloqueado, regresara una respuesta de tipo LOGIN_BLOCK y brincara el intento de login.
 			$check_response = $this->blockMiddleware->checkBlockIP();
-			if($check_response->type == RESPONSE::LOGIN_BLOCK){
+			if($check_response->status == RESPONSE::LOGIN_BLOCK){
 				return $check_response;
 			}
 
