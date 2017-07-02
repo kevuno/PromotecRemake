@@ -29,52 +29,35 @@ class Nip{
 
 
 	static function genNewNipFromUser($username,$link){
-		//fecha
+		// fecha
 		date_default_timezone_set('America/Mexico_City');
-		$fecha=date ("Y-m-d H:i:s");
-		$fecha2=date ("Y-m-d");
-
-		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'");
-
+		$today = date ("Y-m-d");
+		// sql
+		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios AS u LEFT JOIN canal.lista AS l on u.dis=l.user where u.user='$username'");
 		if ($row=mysqli_fetch_array($sql)) {
-		$cel=$row['cel'];
-		if(!empty($cel)){
-		    $checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
-		    $result=mysqli_query($link, $checkNip);
-		    if (mysqli_num_rows($result)>0) {
-		      $row2=mysqli_fetch_array($result);
-		      $nip=$row2['nip'];
-		    }else{
-		    	// No hay ningun nip ya registrado y activo asi que se genera uno nuevo
-		      $newNip = self::genNip();
-		    }
-		    if(!empty($nip)){
-		        $txt = "El NIP para recuperar la clave del usuario $us es $nip";
+			$userPhoneNumber = $row['cel'];
+			// Checar que se tenga un registro del celular para poder enviar el NIP
+			if(!empty($userPhoneNumber)){
+				// Checar si hay algun NIP activo
+			    $checkNip="SELECT nip from multi.nips where user='$username' and status='1' and fecha like '$today%'";
+			    $result=mysqli_query($link, $checkNip);
+			    // Checar si hay algun nip activo con la fecha de hoy
+			    if (mysqli_num_rows($result)>0) {
+					return new Response("Ya se ha enviado un NIP al celular de éste usuario, porfavor ingréselo a continuacion o espere un máximo de 24 horas para poder volver a enviar un nuevo NIP",Response::SUCCESS);
+			    }
+				// No hay ningun nip ya registrado y activo asi que se genera uno nuevo
+				$newNip = self::genNip();			    
+			    $nip = new Nip($username,$nipNumber,$userPhoneNumber, $link);
+				return new Response("Nip generado con exito",Response::SUCCESS,$nip);
+			} else {
+				return new Response("Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.");
+			}
+		} else {
+			return new Response("El usuario no existe!");
+		}
 
-		        $messg = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
-		        //echo $nip;
-		        mysqli_query($link,$messg);
-		        echo "S|Se creo NIP |cambio_contrasena|alert-success|regresar";
-		    }else{
-		      echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
-		    }
-		} else {
-		  echo "E2|Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.!|cambio_contrasena|alert-warning|Reintente"; 
-		}
-		} else {
-		echo "E2|El Usuario no existe!|cambio_contrasena|alert-danger|Reintente";
-		}
-		$userPhoneNumber = "2221174640";
-		$nip = new Nip($username,$nipNumber,$userPhoneNumber, $link);
-		if(true){
-			return new Response("Nip generado con exito",Response::SUCCESS,$nip);	
-		}else if(false){
-			return new Response("El usuario no tiene un numero telefonico");
-		}else if(false){
-			return new Response("Ya existe un Nip activo con el usuario");
-		}else{
-			return new Response("Usuario no existe");
-		}
+
+
 		
 	}
 
@@ -82,7 +65,8 @@ class Nip{
 	* Activates the nip in the db
 	**/
 	public function activateNip(){
-		$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$this->username','$this->userPhoneNumber','$this->nipNumber','$fecha','1','WiMO-Web')";
+		$now = date ("Y-m-d H:i:s");
+		$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$this->username','$this->userPhoneNumber','$this->nipNumber','$now','1','WiMO-Web')";
 		mysqli_query($this->link, $creaNip);
 		return new Response("Se ha activado el Nip");
 	}
@@ -91,7 +75,7 @@ class Nip{
 	* Deactivates the nip in the db
 	**/
 	public function deactivate(){
-		// TODO: Guardar Nuevo Nip en la bd
+		// TODO: Descativar un NIP activo de la base de datos
 		return new Response("Se ha desactivado el Nip");
 
 	}
@@ -107,9 +91,10 @@ class Nip{
 
 	/** Envia el Nip al usuario **/
 	public function sendToUser(){
-		// TODO: Enviar SMS al usuario
-		$codedPhoneNum = self::codePhoneNumber($this->userPhoneNumber);
-		if(true){
+ 		$txt = "El NIP para recuperar la clave del usuario $us es $nip";
+		$query = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$$this->userPhoneNumber','$txt')";
+		if(mysqli_query($this->link,$query)){
+			$codedPhoneNum = self::codePhoneNumber($this->userPhoneNumber);
 			return new Response("Un NIP ha sido enviado al número: ".$codedPhoneNum.". Porfavor, introdúzcalo a continuación." ,Response::SUCCESS,$codedPhoneNum);	
 		}
 		

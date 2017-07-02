@@ -101,5 +101,5 @@ if ($tipo=="recu_contra"){
     }else {
         echo "E|Faltan datos para enviar su solicitud!|login|danger|Reintente";
     }
-    return self::genPass();
+    return self::genPass();git 
 }
