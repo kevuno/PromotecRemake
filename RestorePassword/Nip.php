@@ -5,7 +5,7 @@ class Nip{
 	const SupportNum = "2222211111";
 
 	/** Nips length **/
-	const NipLength = 6;
+	const NipLength = 4;
 
 	/** Username for Nip **/
 	public $username;
@@ -29,14 +29,41 @@ class Nip{
 
 
 	static function genNewNipFromUser($username,$link){
-		// Todo
-		$nipNumber = self::genNip();
+		//fecha
+		date_default_timezone_set('America/Mexico_City');
+		$fecha=date ("Y-m-d H:i:s");
+		$fecha2=date ("Y-m-d");
 
-		//$sql="SELECT user,phoneNumber,nip FROM table.stuff WHERE user='$username'";
-		//$result = mysqli_query($this->link, $sql);	
-		//if($row = mysqli_fetch_array($result)){
-			//Stuff
-		//}
+		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'");
+
+		if ($row=mysqli_fetch_array($sql)) {
+		$cel=$row['cel'];
+		if(!empty($cel)){
+		    $checkNip="SELECT nip from multi.nips where user='$us' and status='1' and fecha like '$fecha2%'";
+		    $result=mysqli_query($link, $checkNip);
+		    if (mysqli_num_rows($result)>0) {
+		      $row2=mysqli_fetch_array($result);
+		      $nip=$row2['nip'];
+		    }else{
+		    	// No hay ningun nip ya registrado y activo asi que se genera uno nuevo
+		      $newNip = self::genNip();
+		    }
+		    if(!empty($nip)){
+		        $txt = "El NIP para recuperar la clave del usuario $us es $nip";
+
+		        $messg = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
+		        //echo $nip;
+		        mysqli_query($link,$messg);
+		        echo "S|Se creo NIP |cambio_contrasena|alert-success|regresar";
+		    }else{
+		      echo "E2|Ocurrio un error al generar NIP!|cambio_contrasena|alert-danger|Reintente";
+		    }
+		} else {
+		  echo "E2|Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.!|cambio_contrasena|alert-warning|Reintente"; 
+		}
+		} else {
+		echo "E2|El Usuario no existe!|cambio_contrasena|alert-danger|Reintente";
+		}
 		$userPhoneNumber = "2221174640";
 		$nip = new Nip($username,$nipNumber,$userPhoneNumber, $link);
 		if(true){
@@ -55,9 +82,9 @@ class Nip{
 	* Activates the nip in the db
 	**/
 	public function activateNip(){
-		// TODO: Guardar Nuevo Nip en la bd
+		$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$this->username','$this->userPhoneNumber','$this->nipNumber','$fecha','1','WiMO-Web')";
+		mysqli_query($this->link, $creaNip);
 		return new Response("Se ha activado el Nip");
-
 	}
 
 	/**
@@ -116,7 +143,7 @@ class Nip{
 		//Todo: Call db and check
 		$username = "kev";
 		$userPhoneNumber = "222123123";
-		return new Response("Nip valido",Response::SUCCESS,new Nip($username,$nipNumber,$userPhoneNumber));
+		return new Response("Nip valido",Response::SUCCESS,new Nip($username,$nipNumber,$userPhoneNumber,link::getLink()));
 	}
 
 

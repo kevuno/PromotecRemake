@@ -2,6 +2,7 @@
 session_start();
 require('../seguro.php');
 require('../Response.php');
+require('../link.php');
 require('Nip.php');
 
 //Recuperar datos
