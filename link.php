@@ -5,9 +5,9 @@
 class link{
 	static function getLink(){
 		try{
-			//$ip = $_SERVER["serverdata"];
-			//$link = new mysqli($ip,"samtec","sam33");	
-			$link = new mysqli("localhost","root","Bacardi12312300");
+			$ip = $_SERVER["serverdata"];
+			$link = new mysqli($ip,"samtec","sam33");	
+			//$link = new mysqli("localhost","root","Bacardi12312300");
 			if ($link->connect_error) {
 			    die('Connect Error (' . $link->connect_errno . ') '
 			            . $link->connect_error);
