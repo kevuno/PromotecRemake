@@ -12,10 +12,10 @@ abstract class Login {
 	protected $loginData;
 
 	/** La base de datos del login**/
-	protected $login_db;
+	public $db;
 
 	/** La tabla del login**/
-	protected $login_table;
+	public $table;
 
 	/** Objecto de respuesta **/
 	protected $response;
@@ -28,9 +28,9 @@ abstract class Login {
 
 
 	/** Object constructor with optional parameters**/
-	function __construct($login_db,$login_table){
-		$this->login_db = $login_db;
-		$this->login_table = $login_table;
+	function __construct($db,$table){
+		$this->db = $db;
+		$this->table = $table;
 		$this->blockMiddleware = new BlockUserMiddleware();
 	}
 
@@ -51,13 +51,13 @@ abstract class Login {
 			// No esta bloqueado el usuario asi que continua
 			$user = $this->loginData->user;
 			$pass = $this->loginData->pass;
-			//$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND pass='$pass'";
-			$sql="SELECT id FROM $this->login_db.$this->login_table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
+			//$sql="SELECT id FROM $this->db.$this->table WHERE user='$user' AND pass='$pass'";
+			$sql="SELECT id FROM $this->db.$this->table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
 			$result = mysqli_query($this->link, $sql);	
 			if($row = mysqli_fetch_array($result)){
 				// Login logrado, actualizar estado de bloqueo, se ignoran los intentos restantes que devuelve updateBlockIP()
 				$this->blockMiddleware->updateBlockIP(true);
-				return new Response("Login was successful",Response::SUCCESS);
+				return new Response("Login basico fue exitoso",Response::SUCCESS);
 			}
 		} catch(Exception $e){
 			throw $e;

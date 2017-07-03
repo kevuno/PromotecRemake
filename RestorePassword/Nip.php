@@ -33,14 +33,19 @@ class Nip{
 		$this->idRest = $idRest;
 		$this->link = $link;
 	}
+	/**
+	* Generates a Nip object from an username and login data
+	* @param: Username
+	* @param: Link data to database
+	* @param: Login data of where to look for the user
+	**/
 
-
-	static function genNipFromUser($username,$link){
+	static function genNipFromUser($username,$link,$login){
 		// fecha
 		date_default_timezone_set('America/Mexico_City');
 		$today = date ("Y-m-d");
 		// sql
-		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios AS u LEFT JOIN canal.lista AS l on u.dis=l.user where u.user='$username'");
+		$sql=mysqli_query($link, "SELECT u.id, l.cel from $login->db.$login->table AS u LEFT JOIN canal.lista AS l on u.dis=l.user where u.user='$username'");
 		if ($row=mysqli_fetch_array($sql)) {
 			// Guardar datos del celular y de la tabla donde se restaura el celular
 			$userPhoneNumber = $row['cel'];
@@ -52,7 +57,7 @@ class Nip{
 			    $result=mysqli_query($link, $checkNip);
 			    // Checar si hay algun nip activo con la fecha de hoy
 			    // Si si hay entonces prodrá ser usado para el proceso de Pass Reset
-			    if ($row=mysqli_fetch_array($sql)) {
+			    if ($row=mysqli_fetch_array($result)) {
 			    	$nip = new Nip($username,$row['nip'],$userPhoneNumber, $idRest, $link);
 			    	$nip->sent = true;
 					return new Response("Ya se ha enviado un NIP al celular de éste usuario, porfavor ingréselo a continuacion o espere un máximo de 24 horas para poder volver a enviar un nuevo NIP",Response::SUCCESS,$nip);
@@ -99,7 +104,7 @@ class Nip{
 
 	/** Envia el Nip al usuario **/
 	public function sendToUser(){
- 		$txt = "El NIP para recuperar la clave del usuario $us es $nip";
+ 		$txt = "El NIP para recuperar la clave del usuario $this->username es $this->nipNumber";
 		$query = "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$$this->userPhoneNumber','$txt')";
 		if(mysqli_query($this->link,$query)){
 			$codedPhoneNum = self::codePhoneNumber($this->userPhoneNumber);

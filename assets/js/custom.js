@@ -22,6 +22,7 @@ function Login(user,pass,captcha){
 			// Get response object
 			var response = assertResponse(json_response);
 			// Display response in console and in response div
+			console.log(response);
 			Vue.currentPanel.response = response.message;
 
     		if(response.status == Vue.responseTypes.LOGINBLOCK){
@@ -359,7 +360,7 @@ var data = new function(){
 			loading: false,
 			
 		},{
-			id: "restorePassResult",
+			id: "enterNipSubmit",
 			header: "Se ha restaurado su contraseña",
 			instructions: "",
 			response: "",

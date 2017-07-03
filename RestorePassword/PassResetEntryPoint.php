@@ -11,9 +11,10 @@ $nip = security($_POST["nip"]);
 $username = security($_POST["username"]);
 
 try{
-
+	// Obtener objecto login
+	$login = LoginMain::loginFactory("promotec");
 	// 1. Checar si el nip es valido y obtener el objecto de restauracion
-	$response = PassReset::validateNip($nip,$username,link::getLink());
+	$response = PassReset::validateNip($nip,$username,link::getLink(),$login);
 
 	// Si el nip es valido entonces tendra al objecto de PassReset en el campo data de la respuesta
 	$passReset = $response->data;

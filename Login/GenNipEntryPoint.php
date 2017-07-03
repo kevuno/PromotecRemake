@@ -13,7 +13,7 @@ $user = security($_POST["user"]);
 try{
 	// 1. Generar un nip con el usuario dado.
 		// Obtener objecto login
-		$login = LoginMain::loginFactory("promotec");
+		$login = LoginMain::loginFactory("promotor");
 		$response = Nip::genNipFromUser($user,link::getLink(),$login);
 
 		// Si el usuario es valido y tiene un NIP valido para enviar entonces el nip estara en el campo data del objecto de respuesta

@@ -1,7 +1,5 @@
 <?php
-require('../Response.php');
 require('Login.php');
-require('../link.php');
 
 class LoginMain{
 

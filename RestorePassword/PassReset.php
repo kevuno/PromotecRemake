@@ -76,10 +76,11 @@ class PassReset {
 
 	/**
 	* Validates a given Nip and returns a PassReset object
-	* @param: Nip number
+	* @param: Nip number, username, link for connection
+	* @param: login object with information of where to valdate the data
 	* @return: A Pass Reset object with all the information needed
 	**/
-	public static function validateNip($nipNumber,$username,$link){
+	public static function validateNip($nipNumber,$username,$link,$login){
 		// fecha
 		date_default_timezone_set('America/Mexico_City');
 		$today = date ("Y-m-d");
@@ -88,7 +89,7 @@ class PassReset {
 	    $result=mysqli_query($link, $checkNip);
 	    if (mysqli_num_rows($result)>0) {
 	    	// Get an nip object with all the data
-	    	$response = genNewNipFromUser($username,$link);
+	    	$response = genNipFromUser($username,$link$login);
 	    	$nip = $response->data;
 	    	if($nip){
 	    		return new PassReset($nip);
