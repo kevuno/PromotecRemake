@@ -110,17 +110,17 @@ function restore_submit(user){
 }
 
 /** Envia el formulario para crear una nueva contraseña temporal, y la envia al celular registrado **/
-function enterNipSubmit(nip,username){
+function enterNipSubmit(nip,user){
 	var error = "0";
-	if (username==" " || username=="" || username==null ){ 
-		activatePanel('restore_panel');
+	if (user==" " || user=="" || user==null ){ 
+		activatePanel('restore');
 		Vue.currentPanel.response = "Debe ingresar un nombre de usuario primero.";
 		return null;
 	}
 	if (nip==" " || nip=="" || nip==null) { error="Revise NIP"; acc=$('input#nip').focus(); }
 	if (error=="0"){
 		Vue.currentPanel.loading = true;
-		$.post("RestorePassword/PassResetEntryPoint.php",{nip: nip, username: username},function(json_response){
+		$.post("RestorePassword/PassResetEntryPoint.php",{nip: nip, user: user},function(json_response){
 			// Close loading bar
 			Vue.currentPanel.loading = false;
 			// Get response object
@@ -152,7 +152,7 @@ function assertResponse(json_response){
 		var response = JSON.parse(json_response);
 		if(response.status == Vue.responseTypes.ERROR){
 			console.log(response);
-			return {message:"Error interno del sistema."};
+			return response;
 		}
 		return response;
 	}catch (e){
@@ -289,7 +289,7 @@ var data = new function(){
 					icon: "fa-lock"
 				},
 				{
-					vueFunction: "restore_panel",
+					vueFunction: "restore",
 					label: "Restaurar contraseña",
 					class: "btn btn-secondary",
 					icon: "fa-question"
@@ -464,7 +464,7 @@ var Vue = new Vue({
 		submitRegister(){
 			Register();
 		},
-		restore_panel(){
+		restore(){
 			activatePanel("restore");
 		},
 		restore_submit(){
@@ -474,7 +474,8 @@ var Vue = new Vue({
 			activatePanel("enterNip");
 		},
 		enterNipSubmit(){
-			enterNipSubmit(this.globalInputs.nip);
+			activatePanel
+			enterNipSubmit(this.globalInputs.nip,this.globalInputs.user);
 		},
 		restorePass(){
 			// Restore all inputs except for user
@@ -485,7 +486,7 @@ var Vue = new Vue({
 			// Closes modal
 			$('#modalLRForm').modal('hide');
 		},
-		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), restore_panel(), etc
+		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), restore(), etc
 		call(vueFunction){
 			this[vueFunction]();
 		}

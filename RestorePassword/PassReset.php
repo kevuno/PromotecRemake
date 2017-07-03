@@ -89,7 +89,7 @@ class PassReset {
 	    $result=mysqli_query($link, $checkNip);
 	    if (mysqli_num_rows($result)>0) {
 	    	// Get an nip object with all the data
-	    	$response = genNipFromUser($username,$link$login);
+	    	$response = genNipFromUser($username,$link,$login);
 	    	$nip = $response->data;
 	    	if($nip){
 	    		return new PassReset($nip);
