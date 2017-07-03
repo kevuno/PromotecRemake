@@ -14,7 +14,7 @@ try{
 	// 1. Generar un nip con el usuario dado.
 		// Obtener objecto login
 		$login = LoginMain::loginFactory("promotec");
-		$response = Nip::genNipFromUser($user,link::getLink(),$login);
+		$response = Nip::getNipFromUser($user,link::getLink(),$login);
 
 		// Si el usuario es valido y tiene un NIP valido para enviar entonces el nip estara en el campo data del objecto de respuesta
 		$nip = $response->data;

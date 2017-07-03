@@ -3,12 +3,13 @@ session_start();
 require('../seguro.php');
 require('../Response.php');
 require('../link.php');
+require('../Login/LoginMain.php');
 require('Nip.php');
 require('PassReset.php');
 
 //Recuperar datos
 $nip = security($_POST["nip"]);
-$username = security($_POST["username"]);
+$username = security($_POST["user"]);
 
 try{
 	// Obtener objecto login

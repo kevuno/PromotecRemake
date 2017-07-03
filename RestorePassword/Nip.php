@@ -40,7 +40,7 @@ class Nip{
 	* @param: Login data of where to look for the user
 	**/
 
-	static function genNipFromUser($username,$link,$login){
+	static function getNipFromUser($username,$link,$login){
 		// fecha
 		date_default_timezone_set('America/Mexico_City');
 		$today = date ("Y-m-d");
