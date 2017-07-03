@@ -3,7 +3,23 @@ class PassReset {
 
 	/** Temp pasword length **/
 	const temp_pass_length = 8;
+	
+	/** The NIP object obtained from the username**/
+	public $nip;
 
+	/** Numero telefonico del usuario si es que tiene alguno al cual enviar un nip **/
+	public $userPhoneNumber;
+
+	/** Objecto de mysqli link para hacer llamadas a la BD **/
+	private $link;
+
+	/** Construye un nuevo nip ya generado**/
+	function __construct($username,$nipNumber, $userPhoneNumber, $link){
+		$this->username = $username;
+		$this->nipNumber = $nipNumber;
+		$this->userPhoneNumber = $userPhoneNumber;
+		$this->link = $link;
+	}
 	/**
 	* Generates a temporary password for the given user and saves it on the DB
 	* @param: username given to generate a temp pass for
@@ -74,10 +90,10 @@ class PassReset {
 
 	/** 
 	* Generates a random string to work as a password
+	* @param: Length of password to be created
 	* @return: String of random generated password
 	**/
-	static function genPass(){
-		$length = self::temp_pass_length;
+	static function genPass($length){
     	return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
 	}
 }

@@ -14,18 +14,18 @@ try{
 	// 1. Checar si el nip es valido y obtener el usuario asociado con el nip
 	$response = Nip::validateNip($nip);
 
-	// Si el nip es valido entonces tendra al objecto nip en el campo data de la respuesta
-	$nip = $response->data;
-	if($nip){
+	// Si el nip es valido entonces tendra al objecto de PassReset en el campo data de la respuesta
+	$passReset = $response->data;
+	if($passReset){
 		// 2. Se desactiva el nip y se genera un nuevo pass temporal para el usuario
-		$nip->deactivate();
-		$tempPass = PassReset::getTempPass($nip->username);
-
-		// 3. Enviar SMS al usuario con su nuevo pass temporal
-		$response = PassReset::sendNewTempPass($tempPass,$nip->username);
+		$passReset->nip->deactivate();
+		$tempPass = $passReset->getTempPass();
+		// 3. Guardar nuevo pass temporal en la bd
+		$tempPass->save();
+		// 4. Enviar SMS al usuario con su nuevo pass temporal
+		$response = $tempPass->sendPass();
 		echo $response->toJson();
 	}else{
-		echo "wadup2";
 		// Si el nip es invalido puede ser por ser incorrecto o expirado
 		echo $response->toJson();
 	}
