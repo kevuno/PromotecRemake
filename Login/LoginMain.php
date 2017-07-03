@@ -14,7 +14,7 @@ class LoginMain{
 	public static function loginGeneral(LoginData $loginData, CaptchaData $captchaData){
 		//Validar captcha
 		$captcha_checker = $captchaData->validate();
-		if(!$captchaData->validate()){
+		if($captchaData->validate()){
 			throw new Exception("No se pudo validar el captcha");
 		}
 		try{
