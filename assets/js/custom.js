@@ -108,13 +108,18 @@ function restore_submit(user){
 
 }
 
-/** Envia el formulario para crear una nueva contraseña temporaria la envia al celular registrado **/
-function enterNipSubmit(nip){
+/** Envia el formulario para crear una nueva contraseña temporal, y la envia al celular registrado **/
+function enterNipSubmit(nip,username){
 	var error = "0";
+	if (username==" " || username=="" || username==null ){ 
+		activatePanel('restore_panel');
+		Vue.currentPanel.response = "Debe ingresar un nombre de usuario primero.";
+		return null;
+	}
 	if (nip==" " || nip=="" || nip==null) { error="Revise NIP"; acc=$('input#nip').focus(); }
 	if (error=="0"){
 		Vue.currentPanel.loading = true;
-		$.post("RestorePassword/PassResetEntryPoint.php",{nip:nip},function(json_response){
+		$.post("RestorePassword/PassResetEntryPoint.php",{nip: nip, username: username},function(json_response){
 			// Close loading bar
 			Vue.currentPanel.loading = false;
 			// Get response object

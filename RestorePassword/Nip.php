@@ -16,49 +16,57 @@ class Nip{
 	/** Numero telefonico del usuario si es que tiene alguno al cual enviar un nip **/
 	public $userPhoneNumber;
 
+	/** ID de restauracion **/
+	public $idRest;
+
+	/** Boolean checando si ya se envio el nip al usuario**/
+	public $sent = false;
+
 	/** Objecto de mysqli link para hacer llamadas a la BD **/
 	private $link;
 
 	/** Construye un nuevo nip ya generado**/
-	function __construct($username,$nipNumber, $userPhoneNumber, $link){
+	function __construct($username,$nipNumber, $userPhoneNumber, $idRest, $link){
 		$this->username = $username;
 		$this->nipNumber = $nipNumber;
 		$this->userPhoneNumber = $userPhoneNumber;
+		$this->idRest = $idRest;
 		$this->link = $link;
 	}
 
 
-	static function genNewNipFromUser($username,$link){
+	static function genNipFromUser($username,$link){
 		// fecha
 		date_default_timezone_set('America/Mexico_City');
 		$today = date ("Y-m-d");
 		// sql
 		$sql=mysqli_query($link, "SELECT u.id, l.cel from multi.usuarios AS u LEFT JOIN canal.lista AS l on u.dis=l.user where u.user='$username'");
 		if ($row=mysqli_fetch_array($sql)) {
+			// Guardar datos del celular y de la tabla donde se restaura el celular
 			$userPhoneNumber = $row['cel'];
+			$idRest = $row['id'];
 			// Checar que se tenga un registro del celular para poder enviar el NIP
 			if(!empty($userPhoneNumber)){
 				// Checar si hay algun NIP activo
 			    $checkNip="SELECT nip from multi.nips where user='$username' and status='1' and fecha like '$today%'";
 			    $result=mysqli_query($link, $checkNip);
 			    // Checar si hay algun nip activo con la fecha de hoy
-			    if (mysqli_num_rows($result)>0) {
-					return new Response("Ya se ha enviado un NIP al celular de éste usuario, porfavor ingréselo a continuacion o espere un máximo de 24 horas para poder volver a enviar un nuevo NIP",Response::SUCCESS);
+			    // Si si hay entonces prodrá ser usado para el proceso de Pass Reset
+			    if ($row=mysqli_fetch_array($sql)) {
+			    	$nip = new Nip($username,$row['nip'],$userPhoneNumber, $idRest, $link);
+			    	$nip->sent = true;
+					return new Response("Ya se ha enviado un NIP al celular de éste usuario, porfavor ingréselo a continuacion o espere un máximo de 24 horas para poder volver a enviar un nuevo NIP",Response::SUCCESS,$nip);
 			    }
 				// No hay ningun nip ya registrado y activo asi que se genera uno nuevo
-				$newNip = self::genNip();			    
-			    $nip = new Nip($username,$nipNumber,$userPhoneNumber, $link);
-				return new Response("Nip generado con exito",Response::SUCCESS,$nip);
+				$nipNumber = self::genNip();
+				$newNip = new Nip($username,$nipNumber,$userPhoneNumber, $idRest, $link);
+				return new Response("Nip generado con exito",Response::SUCCESS,$newNip);
 			} else {
-				return new Response("Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.");
+				return new Response("Su usuario no cuenta con algún número celular, por favor póngase en contacto al: 2227927811 con el área de soporte para poder actualizar su número celular.",Response::ERROR);
 			}
 		} else {
-			return new Response("El usuario no existe!");
+			return new Response("El usuario no existe!",Response::ERROR);
 		}
-
-
-
-		
 	}
 
 	/**
@@ -118,18 +126,7 @@ class Nip{
 		throw new Exception("Error, numero telefonico es menor de 4 digitos");
 		
 	}
-	/**
-	* Validates a given Nip and returns the associated user
-	* @param: Nip number
-	* @return: Nip's username string
-	**/
 
-	function validateNip($nipNumber){
-		//Todo: Call db and check
-		$username = "kev";
-		$userPhoneNumber = "222123123";
-		return new Response("Nip valido",Response::SUCCESS,new Nip($username,$nipNumber,$userPhoneNumber,link::getLink()));
-	}
 
 
 }

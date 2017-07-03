@@ -7,87 +7,96 @@ class PassReset {
 	/** The NIP object obtained from the username**/
 	public $nip;
 
-	/** Numero telefonico del usuario si es que tiene alguno al cual enviar un nip **/
-	public $userPhoneNumber;
+	/** Pass temporal **/
+	private $tempPass;
 
 	/** Objecto de mysqli link para hacer llamadas a la BD **/
 	private $link;
 
-	/** Construye un nuevo nip ya generado**/
-	function __construct($username,$nipNumber, $userPhoneNumber, $link){
-		$this->username = $username;
-		$this->nipNumber = $nipNumber;
-		$this->userPhoneNumber = $userPhoneNumber;
-		$this->link = $link;
+	/** Construye un nuevo objecto de PassResset**/
+	function __construct($nip){
+		$this->nip = $nip;
+		$this->link = $nip->link;
 	}
 	/**
 	* Generates a temporary password for the given user and saves it on the DB
 	* @param: username given to generate a temp pass for
 	* @return: The new temporary password if nothing failed.
 	**/
-	public static function getTempPass($username){
-		$us=security($k[1]);
-		$nip=security($k[2]);
-		$password=newps();
+	public function getTempPass(){
+		$this->tempPass = genPass(self::temp_pass_length);
+		if(!$this->tempPass){
+			throw new Exception("Error al momento de generar nuevo pass");
+		}
+	}
+	/** 
+	* Updates the new generated password into the database and Updastes NIP data
+	**/
+	public function save(){
+		// Datos
+		$username = $this->nip->username;
+		$nipNumber = $this->nip->nipNumber;
+		$cel = $this->nip->userPhoneNumber;
+		// Fecha
 		date_default_timezone_set('America/Mexico_City');
 		$fecha=date ("Y-m-d H:i:s");
-		$fecha2=date ("Y-m-d");
+		$today=date ("Y-m-d");
+		// Actualizar contraseña
+		$idRest = $this->nip->idRest;
+		$query="call multi.cryptoc('$idRest','$this->tempPass')";
+		$result=mysqli_query($this->link, $query);
+		// Crear nuevo registro de NIP de que ya quedo usado
+		$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$username','$cel','$nipNumber','$fecha','2','WiMO-Web')";
+		mysqli_query($link, $creaNip);
+		// Actualiza registro de NIP
+		$upNip="UPDATE multi.nips set status='3' where user='$username' and status='1' and nip='$nipNumber' and fecha like '$today%'";
+		mysqli_query($link, $upNip);
+	}
 
-		if (!empty($us) && !empty($nip)) {
-		  //recupero celular
-		  $sql="SELECT l.cel, u.id from multi.usuarios u left join canal.lista l on u.dis=l.user where u.user='$us'";
-		  $result=mysqli_query($link, $sql);
-		  $row=mysqli_fetch_array($result);
-		  $id=$row['id'];
-		  $cel=$row['cel'];
+	/**
+	* Sends the password to the user's phone, accesed through the NIP's object data
+	**/
+	public function sendPass(){
+		// Datos
+		$cel = $this->nip->userPhoneNumber;
+		$txt="Su clave WiMO temporal es: $this->tempPass Si Ud. No solicito cambio de clave, por favor comuníquese al 2222084123.";
+		$sms="INSERT into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
 
-		  if (empty($cel)) {
-		    echo "E|Error, no tiene registrado un numero para la recuperacion de password|login|danger|Reintente";
-		    exit();
-		  }
-		  $checkNip="SELECT nip from multi.nips where user='$us' and status='1' and nip='$nip' and fecha like '$fecha2%'";
-		  $result=mysqli_query($link, $checkNip);
-		  if (mysqli_num_rows($result)>0) {
-		    //actualizo password
-		    $link_call=mysqli_connect($_SERVER["serverdata"],"samtec","sam33");
-		    $query="call multi.cryptoc('$id','$password')";
-		    //echo $id."|".$password."|".$query."|".$nip;
-		    $result=mysqli_query($link_call, $query);
-		    //mysqli_free_result($result);
-		    mysqli_close($link_call);
-		    $txt="Su clave WiMO temporal es: $password Si Ud. No solicito cambio de clave, por favor comuníquese al 2222084123.";
-		    //envio mensaje
-		    $sms="INSERT into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
-
-		    //creo nuevo registro
-		    $creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$us','$cel','$nip','$fecha','2','WiMO-Web')";
-		    mysqli_query($link, $creaNip);
-		    $upNip="UPDATE multi.nips set status='3' where user='$us' and status='1' and nip='$nip' and fecha like '$fecha2%'";
-		    mysqli_query($link, $upNip);
-		    // Si se logro enviar el msm enviar mensaje
-		    if (mysqli_query($link, $sms)) {
-		      echo "S|Su Contrase&ntilde;a fue enviada, En caso de que el usuario sea correcto usted <br>recibirá un mensaje de txt a su celular con su clave provisional.!|login|success|regresar";
-		    } else {
-		      echo "E|Ocurrio un error al cambiar su Contrase&ntilde;a!|login|warning|Reintente";
-		    }
-
-		  }else{
-		   echo "E|NIP incorrecto, por favor Reintente!|cambio_contrasena|alert-danger|Reintente"; 
-		  }
-		}else {
-		    echo "E|Faltan datos para enviar su solicitud!|login|danger|Reintente";
+		// Si se logro enviar el msm enviar mensaje
+		if (mysqli_query($link, $sms)) {
+			// Codificar numero telefonico
+			$codePhoneNum = Nip::codePhoneNumber($cel);
+			return new Response("Contraseña temporal enviada como SMS al numero: ".$codePhoneNum.".",Response::SUCCESS,$codePhoneNum);		
+		} else {
+			throw new Exception("Error al enviar mensaje de sms");
 		}
-		return self::genPass();
-	}
-	
-	public static function sendNewTempPass($tempPass,$user){
-		$phoneNum = "1223124123";
-		$codePhoneNum = Nip::codePhoneNumber($phoneNum);
 		
-		return new Response("Contraseña temporal enviada como SMS al numero: ".$codePhoneNum.".",Response::SUCCESS,$codePhoneNum);
+		
 	}
 
-
+	/**
+	* Validates a given Nip and returns a PassReset object
+	* @param: Nip number
+	* @return: A Pass Reset object with all the information needed
+	**/
+	public static function validateNip($nipNumber,$username,$link){
+		// fecha
+		date_default_timezone_set('America/Mexico_City');
+		$today = date ("Y-m-d");
+		// Checar si hay algun nip activo con la fecha de hoy
+	    $checkNip="SELECT user from multi.nips where user='$username' and status='1' and nip='$nipNumber' and status='1' and fecha like '$today%'";
+	    $result=mysqli_query($link, $checkNip);
+	    if (mysqli_num_rows($result)>0) {
+	    	// Get an nip object with all the data
+	    	$response = genNewNipFromUser($username,$link);
+	    	$nip = $response->data;
+	    	if($nip){
+	    		return new PassReset($nip);
+	    	}
+	    	return $response;
+	    }
+		return new Response("Nip no valido!",Response::ERROR);
+	}
 	/** 
 	* Generates a random string to work as a password
 	* @param: Length of password to be created
