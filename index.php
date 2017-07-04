@@ -123,28 +123,31 @@
         <footer class="page-footer footer center-on-small-only transparent">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col footer-content">
-                        <div id="micro-tec-logo">
-                            <div class="col">
-                                <img src="assets/img/telcel_logo.png" id="micro-logo">
+                    <div class="col-md-2">
+                        <div class="float-left">
+                            <div class="vertical_align_child">
+                                <img src="assets/img/telcel_logo.jpg" class="footer-logo-telcel">
                             </div>
                         </div>
                     </div>
-                                        <hr>
-                    <div class=" justify-content-center franquicia white">
-                    
-                        <p class="orange-text">
-                        O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
-                        </p>
-                        <a href="https://www.micro-tec.com.mx/pagina/microtec/franquicias.html">
-                            <button class="btn btn-warning btn-sm btn-responsive"> Entrar</button>
-                        </a>
-                        
+                    <div class="col justify-content-center franquicia ">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <p class="orange-text">
+                                    O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="https://www.micro-tec.com.mx/pagina/microtec/franquicias.html">
+                                <button class="btn btn-success btn-rounded btn-sm btn-responsive"> Información</button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col">
-                        <div class="float-right" id="micro-tec-logo">
+                    <div class="col-md-2">
+                        <div class="float-right">
                             <div class="col">
-                                Un programa de <img src="assets/img/micro-logo.png" id="micro-logo">
+                                Un programa de <img src="assets/img/micro-logo.png" class="footer-logo-microtec">
                             </div>
                         </div>
                     </div>
