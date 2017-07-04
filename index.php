@@ -48,7 +48,7 @@
             <div class="wow fadeIn" id="ganar_dinero-banner">
                 <div class="container">
                         <div class="row justify-content-center">
-                              <span>¿Buscas trabajo o cómo ganar dinero extra?</span>
+                              <span>¡INICIA TU PROPIO NEGOCIO!</span>
                         </div>               
                 </div>
             </div>
@@ -79,21 +79,14 @@
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-md-8">
-                            <p>
-                            <b>Inicia tu propio negocio desde tu celular SIN INVERTIR EN INVENTARIO</b>
-                            </p>
-                            <p>
-                            Vende celulares Telce a crédito, al contado, Planes Tarifario, Renovaciones, Portabilidad, tiempo aire y pago de servicios
-                            </p>
-                            
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/VNeStPWHfzk?ecver=1" frameborder="0" allowfullscreen></iframe>
                         </div>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-6">
 
                              <img src="assets/img/arrow.png" alt="Entrar"> 
-                             <!-- Button trigger modal -->
-                                                       
+                             <!-- Button trigger modal -->                   
                         </div>
                     </div>
                     <div class="row justify-content-center">
@@ -106,7 +99,6 @@
                              <b><span>Descarga la App</span></b>
                              <br>
                              <br>
-
                              <a href=""><img src="assets/img/promotec-logo.png" alt="Entrar" class="logo"></a>
                         </div>
                     </div>
@@ -115,7 +107,13 @@
                              <a href="#"><img src="assets/img/ios.png" alt="Entrar" class="store-logo"></a>
                              <a href="#"><img src="assets/img/android.png" alt="Entrar" class="store-logo"></a>
                         </div>
-                    </div>                    
+                    </div>
+                    <div class="row justify-content-center">
+                        <span>
+                            <a href=""><img src="assets/img/franquicias.png" alt="Entrar" class="promotec-img"></a>
+                        </span>
+                    </div>
+                                                
                 </div>
             </div>
         </div>
@@ -126,12 +124,22 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col footer-content">
-                        <ul>
-                            <li><img src="assets/img/twitter.png" width="16" height="16"><a href="https://twitter.com/microtecoficial">@MicrotecOficial</a></li>
-                            <li><img src="assets/img/facebook.png" width="16" height="16"><a href="https://www.facebook.com/PromotorPromotec/">Promotec</a></li>
-                            <li> <img src="assets/img/whats.png" width="16" height="16"> <a href="#!">2221123782</a></li>
-                            <li><img src="assets/img/ubicacion.png" width="16" height="16"> <a href="https://www.google.com.mx/maps/place/Edificio+Diana/@19.0516241,-98.217736,19.67z/data=!4m5!3m4!1s0x0:0x77f64b884757e625!8m2!3d19.051662!4d-98.2174898">Avenida Juárez N° 2318, 1er piso, Edificio Diana Oficina 101</a></li>
-                        </ul>
+                        <div id="micro-tec-logo">
+                            <div class="col">
+                                <img src="assets/img/micro-logo.png" id="micro-logo">
+                            </div>
+                        </div>
+                    </div>
+                                        <hr>
+                    <div class=" justify-content-center franquicia white">
+                    
+                        <p class="orange-text">
+                        O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
+                        </p>
+                        <a href="https://www.micro-tec.com.mx/pagina/microtec/franquicias.html">
+                            <button class="btn btn-warning btn-sm btn-responsive"> Entrar</button>
+                        </a>
+                        
                     </div>
                     <div class="col">
                         <div class="float-right" id="micro-tec-logo">
