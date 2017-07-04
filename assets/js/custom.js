@@ -4,7 +4,7 @@
 function Login(user,pass,captcha){
     error="0";
     
-    //if (ca.length=="") { error="Da Click en 'No soy un robot'"; acc=null; }
+    if (ca.length=="") { error="Da Click en 'No soy un robot'"; acc=null; }
     if (pass.length<3 || pass==" " || pass=="") { error="Revise su contraseña"; acc=$('input#pass').focus(); }
     if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
 	
@@ -12,11 +12,10 @@ function Login(user,pass,captcha){
 		var data = {
 			user:user,
 			pass:pass,
-			captcha:"stuff"
+			captcha:captcha
 		};
       	Vue.currentPanel.loading = true;
       	$.post("Login/LoginEntryPoint.php",data,function(json_response){
-			console.log(Vue.currentPanel.instructions);
 			// Close loading bar
 			Vue.currentPanel.loading = false;
 			// Get response object

@@ -2,9 +2,10 @@
 session_start();
 require('../seguro.php');
 require('../link.php');
+require('../Response.php');
 require('Nip.php');
 require('../Login/LoginMain.php');
-require('../Response.php');
+
 
 //Recuperar datos
 $user = security($_POST["user"]);

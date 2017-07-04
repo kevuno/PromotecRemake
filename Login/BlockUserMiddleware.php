@@ -1,4 +1,5 @@
 <?
+require_once('../Response.php');
 class BlockUserMiddleware {
 
 	/** Maximo numero de intentos permitidos**/
@@ -50,11 +51,15 @@ class BlockUserMiddleware {
 	**/
 	public function checkBlockIP(){
 		$sql="SELECT ip, intentos, ultimo_intento from $this->db.$this->table WHERE ip='$this->user_ip'";
+		if(!mysqli_query($this->link, $sql)){
+			throw new Exception("Error al ejecutar SQL: ".$sql);
+		}
 		$result = mysqli_query($this->link, $sql);
 		// 1. checar si hay algun registro de la ip del usuario
 		if ($row = mysqli_fetch_array($result)) {
 			$this->user_exists_in_records = True;
 			$this->login_tries = $row["intentos"];
+			
 			// 2. Checar que fecha-hora de ultimo intento, si menor a 600 seguira bloquearlo
 			date_default_timezone_set('America/Mexico_City');
 
@@ -86,7 +91,7 @@ class BlockUserMiddleware {
 		}
 		// Si el usuario ya existe en la bd se hace un update, sino se inserta
 		if($this->user_exists_in_records){
-			$sql="UPDATE $this->db.$this->table SET intentos='$this->login_tries', ultimo_intento=null WHERE ip='$this->user_ip'";
+			$sql="UPDATE $this->db.$this->table SET intentos='$this->login_tries' WHERE ip='$this->user_ip'";
 			if(!mysqli_query($this->link, $sql)){
 				throw new Exception("Error al ejecutar SQL: ".$sql);
 			}

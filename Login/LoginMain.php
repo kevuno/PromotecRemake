@@ -1,4 +1,5 @@
 <?php
+require_once('../link.php');
 require('Login.php');
 
 class LoginMain{

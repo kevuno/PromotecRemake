@@ -1,10 +1,11 @@
 <?php
 session_start();
 require('../seguro.php');
+require('../link.php');
+require('../Response.php');
 require('LoginData.php');
 require('LoginMain.php');
-require('../Response.php');
-require('../link.php');
+
 
 //Recuperar datos
 $user = security($_POST["user"]);

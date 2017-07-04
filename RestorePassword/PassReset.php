@@ -24,7 +24,7 @@ class PassReset {
 	* @return: The new temporary password if nothing failed.
 	**/
 	public function getTempPass(){
-		$this->tempPass = genPass(self::temp_pass_length);
+		$this->tempPass = self::genPass(self::temp_pass_length);
 		if(!$this->tempPass){
 			throw new Exception("Error al momento de generar nuevo pass");
 		}
@@ -39,18 +39,27 @@ class PassReset {
 		$cel = $this->nip->userPhoneNumber;
 		// Fecha
 		date_default_timezone_set('America/Mexico_City');
-		$fecha=date ("Y-m-d H:i:s");
-		$today=date ("Y-m-d");
+		$fecha = date("Y-m-d H:i:s");
+		$today = date("Y-m-d");
 		// Actualizar contraseña
 		$idRest = $this->nip->idRest;
-		$query="call multi.cryptoc('$idRest','$this->tempPass')";
-		$result=mysqli_query($this->link, $query);
-		// Crear nuevo registro de NIP de que ya quedo usado
-		$creaNip="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$username','$cel','$nipNumber','$fecha','2','WiMO-Web')";
-		mysqli_query($link, $creaNip);
+		$passResetQuery="call multi.cryptoc('$idRest','$this->tempPass')";
+		
+		// Crear nuevo registro de NIP de que el nip ya quedo usado
+		$nipRegisterUpdate="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$username','$cel','$nipNumber','$fecha','2','WiMO-Web')";
+		
 		// Actualiza registro de NIP
-		$upNip="UPDATE multi.nips set status='3' where user='$username' and status='1' and nip='$nipNumber' and fecha like '$today%'";
-		mysqli_query($link, $upNip);
+		$updateNip="UPDATE multi.nips set status='3' where user='$username' and status='1' and nip='$nipNumber' and fecha like '$today%'";
+
+		if (!mysqli_query($this->link, $passResetQuery)){
+			throw new Exception("Error al resetear Contraseña");
+		}
+		if (!mysqli_query($this->link, $nipRegisterUpdate)){
+			throw new Exception("Error al registrar cambio de NIP");
+		}
+		if (!mysqli_query($this->link, $updateNip)){
+			throw new Exception("Error al actualizar registro de NIP");
+		}
 	}
 
 	/**
@@ -63,7 +72,7 @@ class PassReset {
 		$sms="INSERT into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
 
 		// Si se logro enviar el msm enviar mensaje
-		if (mysqli_query($link, $sms)) {
+		if (mysqli_query($this->link, $sms)) {
 			// Codificar numero telefonico
 			$codePhoneNum = Nip::codePhoneNumber($cel);
 			return new Response("Contraseña temporal enviada como SMS al numero: ".$codePhoneNum.".",Response::SUCCESS,$codePhoneNum);		
@@ -92,7 +101,8 @@ class PassReset {
 	    	$response = Nip::getNipFromUser($username,$link,$login);
 	    	$nip = $response->data;
 	    	if($nip){
-	    		return new PassReset($nip);
+	    		$passReset = new PassReset($nip);
+	    		return new Response("El NIP ha sido verificado y es valido para poder restaurar la contraseña",Response::SUCCESS,$passReset);
 	    	}
 	    	return $response;
 	    }

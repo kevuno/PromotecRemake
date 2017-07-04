@@ -23,7 +23,7 @@ class Nip{
 	public $sent = false;
 
 	/** Objecto de mysqli link para hacer llamadas a la BD **/
-	private $link;
+	public $link;
 
 	/** Construye un nuevo nip ya generado**/
 	function __construct($username,$nipNumber, $userPhoneNumber, $idRest, $link){
