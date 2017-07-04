@@ -126,7 +126,7 @@
                     <div class="col footer-content">
                         <div id="micro-tec-logo">
                             <div class="col">
-                                <img src="assets/img/micro-logo.png" id="micro-logo">
+                                <img src="assets/img/telcel_logo.png" id="micro-logo">
                             </div>
                         </div>
                     </div>
