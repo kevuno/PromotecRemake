@@ -119,9 +119,9 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-9 vertical-center-text">
-                            <p>
-                                O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
-                            </p>
+                            <a><p>
+                                    O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
+                            </p></a>
                         </div>
                         <div class="col-md-3">
                         <a href=""><img src="assets/img/franquicias.png" alt="Entrar" class="promotec-img"></a>
@@ -165,7 +165,7 @@
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tabs-2 light-blue darken-3" role="tablist">
                             <li class="nav-item" id="login_tab">
-                                <a id="login_tab_link" class="nav-link" data-toggle="tab" href="#login_panel" role="tab"><i class="fa fa-user mr-1"></i> Login</a>
+                                <a id="login_tab_link" class="nav-link" data-toggle="tab" href="#login_panel" role="tab"><i class="fa fa-user mr-1"></i> Acceso</a>
                             </li>
                             <li class="nav-item" id="register_tab">
                                 <a id="register_tab_link" class="nav-link active" data-toggle="tab" href="#register_panel" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
@@ -186,17 +186,17 @@
                                     <div class="tab-pane fade in" v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id" role="tabpanel">
                                         <div class="row" id="header">
                                             <div class="col">
-                                                <h2>{{panel.header}}</h2>
+                                                <h2 style="text-align: center;">{{panel.header}}</h2>
                                             </div>
                                         </div>
                                         <div class="row" id="instructions">
                                             <div class="col">                      
-                                                <h3>{{panel.instructions}}</h3>
+                                                <h3 class="red-text">{{panel.instructions}}</h3>
                                             </div>
                                         </div>
                                         <div class="row" id="response">
                                             <div class="col">
-                                                <span v-html="panel.response"></span>
+                                                <span class="red-text" v-html="panel.response"></span>
                                             </div>
                                         </div>
 
@@ -226,18 +226,24 @@
                             <form action="check_login.php">
                                 <!--Panel de registro-->
                                 <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
+
                                         <!--Body-->
                                         <div class="modal-body">
+                                            <div class="registro_instrucciones">
+                                                <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
+                                            </div>
                                             <div class="md-form form-sm">
-                                                <i class="fa fa-user prefix"></i>                                                
+                                                <i class="fa fa-user prefix"></i>                
                                                 <input type="text" id="nombre" class="form-control">
                                                 <label for="nombre">Nombre <span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
+                                                <i class="fa fa-none prefix"></i>
                                                 <input type="text" id="apaterno" class="form-control">
                                                 <label for="form24">Apellido Paterno <span class="red-text">*</span></label>
                                             </div>
                                             <div class="md-form form-sm">
+                                                <i class="fa fa-none prefix"></i>
                                                 <input type="text" id="amaterno" class="form-control">
                                                 <label for="nombre">Apellido Materno <span class="red-text">*</span></label>
                                             </div>
@@ -246,57 +252,7 @@
                                                 <input type="text" max-length="10" id="celular" class="form-control">
                                                 <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
                                             </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-mobile prefix"></i>
-                                                <input type="text" max-length="10" id="celular" class="form-control">
-                                                <label for="celular">Telefono de casa</label>
-                                            </div>                   
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-envelope prefix"></i>
-                                                <input type="text" id="email" class="form-control">
-                                                <label for="email">Tu email</label>
-                                            </div>                   
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-user prefix"></i>
-                                                <input type="text" id="referido" class="form-control">
-                                                <label for="referido">Referido por:</label>
-                                            </div>
-                                            <div class="form-group form-lg">
-                                                <i class="fa fa-map-marker prefix"></i>
-                                                <label for="estado">Estado <span class="red-text">*</span></label>
-                                                <select id="estado" class="js-example-basic-single form-control" v-model="selected_estado" v-on:change="updateActiveMunicipios">
-                                                    <option value="" disabled selected>Seleccione</option>
-                                                    <option v-for="estado in estados" v-bind:value="estado">{{estado.name}}</option>
-                                                </select>
-                                            </div>                                                
-                                            <div class="form-group form-sm">
-                                                <i class="fa fa-location-arrow prefix"></i>
-                                                <label for="municipio">Municipio <span class="red-text">*</span></label>
-                                                <select id="municipio" class="js-example-basic-single form-control" v-model="selected_municipio" v-on:change="updateActiveCiudades">
-                                                    <option value="" disabled selected>Seleccione</option>
-                                                    <option v-for="municipio in active_municipios" v-bind:value="municipio">{{municipio.name}}</option>
-                                                </select>
-                                            </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-th-large prefix"></i>
-                                                <input type="text" id="colonia" class="form-control">
-                                                <label for="colonia">Colonia<span class="red-text">*</span></label>
-                                            </div>      
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-road prefix"></i>
-                                                <input type="text" id="calle" class="form-control">
-                                                <label for="calle">Calle<span class="red-text">*</span></label>
-                                            </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-home prefix"></i>
-                                                <input type="number" id="numext" class="form-control">
-                                                <label for="numext">Número Exterior<span class="red-text">*</span></label>
-                                            </div>                   
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-envelope prefix"></i>
-                                                <input type="text" id="cp" class="form-control">
-                                                <label for="cp">Código Postal</label>
-                                            </div>
+
                                             <div class="text-center form-sm mt-2">
                                                 <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
                                             </div>

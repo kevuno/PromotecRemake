@@ -263,7 +263,7 @@ var data = new function(){
 	this.panels = [
 		{
 			id: "login",
-			header: "Acceso",
+			header: "",
 			instructions: "",
 			response: "",
 			inputs:[
