@@ -29,7 +29,7 @@
 
         <!--Navbar-->
         <div class="container-fluid">
-            <div class="row banner">
+            <div class="row navbar-promotec">
                 <div class="col-8">
                     <img src="assets/img/promotec-banner.png" class="promotec-img" alt="">
                 </div>
@@ -79,9 +79,12 @@
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-md-8">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/VNeStPWHfzk?ecver=1" frameborder="0" allowfullscreen></iframe>
+                            <div class="videoWrapper">
+                                <iframe width="560" height="349" src="https://www.youtube.com/embed/VNeStPWHfzk?ecver=1" frameborder="0" allowfullscreen></iframe>
+                            </div>
                         </div>
                     </div>
+                    <hr>
                     <div class="row justify-content-center">
                         <div class="col-md-6">
 
@@ -107,44 +110,40 @@
                              <a href="#"><img src="assets/img/ios.png" alt="Entrar" class="store-logo"></a>
                              <a href="#"><img src="assets/img/android.png" alt="Entrar" class="store-logo"></a>
                         </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <span>
-                            <a href=""><img src="assets/img/franquicias.png" alt="Entrar" class="promotec-img"></a>
-                        </span>
-                    </div>
-                                                
+                    </div>                                                
                 </div>
             </div>
+            <!--/ Descripcion -->
+            <!--Ganar dinero-->
+            <div class="wow bounceInUp" id="franquicias-banner">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-9 vertical-center-text">
+                            <p>
+                                O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
+                            </p>
+                        </div>
+                        <div class="col-md-3">
+                        <a href=""><img src="assets/img/franquicias.png" alt="Entrar" class="promotec-img"></a>
+                        </div>
+                    </div>               
+                </div>
+            </div>
+            <!--/ Ganar dinero -->
         </div>
+
         <!-- /Contenido -->
 
         <!-- Footer -->
         <footer class="page-footer footer center-on-small-only transparent">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-2">
-                        <div class="float-left">
-                            <div class="vertical_align_child">
-                                <img src="assets/img/telcel_logo.jpg" class="footer-logo-telcel">
-                            </div>
+                    <div class="col-md-3">
+                        <div class="float-left vertical-center">
+                            <img src="assets/img/telcel_logo.png" class="footer-logo-telcel">
                         </div>
                     </div>
-                    <div class="col justify-content-center franquicia ">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <p class="orange-text">
-                                    O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
-                                </p>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="https://www.micro-tec.com.mx/pagina/microtec/franquicias.html">
-                                <button class="btn btn-success btn-rounded btn-sm btn-responsive"> Información</button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
+                    <div class="col">
                         <div class="float-right">
                             <div class="col">
                                 Un programa de <img src="assets/img/micro-logo.png" class="footer-logo-microtec">
