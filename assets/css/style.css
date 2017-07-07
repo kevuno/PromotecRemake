@@ -1,5 +1,4 @@
 /* CUSTOM STYLES */
-@import url("responsive_style.css");
 @import url("sticky-social-buttons.css");
 
 html {
@@ -16,7 +15,6 @@ body{
 /** Navbar **/
 
 .navbar-promotec{
-    height: 120px;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 }
 
@@ -96,7 +94,12 @@ body{
 
 #franquicias-banner p{
     font-size: 1.6em;
-    color:white;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.franquicias-img {
+    width: 100%;
 }
 
 /** Clases para logos **/
@@ -111,7 +114,7 @@ body{
   width: 100px;
 }
 .footer-logo-telcel{
-  width: 100%;
+  width: 250px;
   height: 80px;
 }
 

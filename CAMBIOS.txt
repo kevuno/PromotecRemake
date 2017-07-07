@@ -1,6 +1,6 @@
 CAMBIOS:
 
-1- Hacer el panel mas pequeño!!!
+1- Hacer el panel mas pequeño!!! - DONE
 
 2- Agregar instrucciones en el panel de registro - DONE
 

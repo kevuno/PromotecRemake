@@ -14,6 +14,8 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <!-- Personalized styles -->
     <link href="assets/css/style.css" rel="stylesheet">
+    <!-- Responsive styles -->
+    <link href="assets/css/responsive_style.css" rel="stylesheet">
     <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <!-- MDB core CSS -->
@@ -124,30 +126,27 @@
                             </p></a>
                         </div>
                         <div class="col-md-3">
-                        <a href=""><img src="assets/img/franquicias.png" alt="Entrar" class="promotec-img"></a>
+                        <a href=""><img src="assets/img/franquicias.png" alt="Más información" class="franquicias-img"></a>
                         </div>
                     </div>               
                 </div>
             </div>
             <!--/ Ganar dinero -->
         </div>
-
         <!-- /Contenido -->
 
         <!-- Footer -->
         <footer class="page-footer footer center-on-small-only transparent">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-6">
                         <div class="float-left vertical-center">
-                            <img src="assets/img/telcel_logo.png" class="footer-logo-telcel">
+                                <img src="assets/img/telcel_logo.png" class="footer-logo-telcel">
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-6">
                         <div class="float-right">
-                            <div class="col">
                                 Un programa de <img src="assets/img/micro-logo.png" class="footer-logo-microtec">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,8 +155,8 @@
         <!-- /Footer -->
 
         <!--Modals-->
-        <div class="modal fade right" id="modalLRForm" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-full-height modal-right modal-lg " role="document">
+        <div class="modal small fade right" id="modalLRForm" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-full-height modal-right modal-md " role="document">
                 <!--Content-->
                 <div class="modal-content">
                     <!--Modal cascading tabs-->
