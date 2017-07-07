@@ -2,29 +2,25 @@
 /* Responsive */
 
 @media only screen and (max-width: 320px) {
-	/* Margin at bottom to keep the footer from overlaping the content*/
 	body{
-		margin-bottom: 220px !important;
+        /* Margin at bottom to keep the footer from overlaping the content*/
+		margin-bottom: 220px;
 	}
-    .banner{
-        height: 60px !important;
-    }
-
     .promotec-img {
-        height: 60px !important;
+        height: 50px;
     }
     .button-wrapper {
-        height: 60px !important;
+        height: 60px;
         display: inline-block;
 
     }    
     .btn-responsive {
         line-height: 1;
         font-size: 6px;
-        width: 70px !important;     
-        padding-right: 0px !important;
-        padding-left: 0px !important;
-        height: 30px !important;
+        width: 70px;     
+        padding-right: 0px;
+        padding-left: 0px;
+        height: 30px;
     }
 
     #ganar_dinero-banner {
@@ -41,9 +37,24 @@
         margin-top: 20px;
         font-size: 12px;
     }
-    .footer-content, #micro-tec-logo {
-        font-size: 12px !important;
+
+    #franquicias-banner p{
+        font-size: .7em;
     }
+
+    .franquicias-img {
+        height: 60px;
+    }
+
+    .footer-content{
+        font-size: 12px;
+    }
+    .footer-logo-telcel{
+      width: 150px;
+      height: 60px;
+      margin: 5px;
+    }
+
     #rc-imageselect, .g-recaptcha {
         transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
     }
@@ -62,17 +73,17 @@
 @media  (min-width: 321px)  and (max-width: 768px) {
 	/* Margin at bottom to keep the footer from overlaping the content*/
 	body{
-		margin-bottom: 150px !important;
+		margin-bottom: 200px;
 	}
     .banner{
-        height: 60px !important;
+        height: 60px;
     }
 
     .promotec-img {
-        height: 60px !important;
+        height: 70px;
     }
     .button-wrapper {
-        height: 60px !important;
+        height: 60px;
         display: inline-block;
 
     }    
@@ -80,8 +91,8 @@
         line-height: 1;
         font-size: 6px;
         width: 90px;
-        padding-right: 0px !important;
-        padding-left: 0px !important;
+        padding-right: 0px;
+        padding-left: 0px;
     }
 
     #ganar_dinero-banner {
@@ -98,15 +109,25 @@
         margin-top:20px;
         font-size: 15px;
     }      
-    .footer-content, #micro-tec-logo {
+    #franquicias-banner p{
+        font-size: 1.2em;
+    }
+    .franquicias-img {
+        width: 170px;
+    }    
+    .footer-content{
         font-size: 10px;
+    }
+    .footer-logo-telcel{
+      width: 150px;
+      height: 60px;
+      margin: 5px;
     }
     #rc-imageselect, .g-recaptcha {
         transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;
     }
 }
-
-@media (min-width: 769px) and (max-width: 1020) {
+@media (min-width: 769px) and (max-width: 1024px) {
     .btn-responsive {
         font-size:90%;
         line-height: 1.2;
@@ -130,6 +151,12 @@
         color: white;
         margin-top:20px;
         font-size: 25px;
-    }         
+    }
 
+    #franquicias-banner p{
+        font-size: 1.2em;
+    }
+    .franquicias-img {
+        width: 200px;
+    }
 }
