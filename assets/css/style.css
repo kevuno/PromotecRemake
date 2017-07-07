@@ -137,6 +137,9 @@ body{
 .hiddenPanel {
     display: none;
 }
+.padding-top{
+  padding-top: 15px;
+}
 
 
 

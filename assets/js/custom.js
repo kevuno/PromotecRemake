@@ -1,12 +1,13 @@
+
 /******* ENVIOS DE FORULARIOS POR AJAX ************/
 
 /** Envia el intento de login **/
 function Login(user,pass,captcha){
     error="0";
     
-    if (ca.length=="") { error="Da Click en 'No soy un robot'"; acc=null; }
-    if (pass.length<3 || pass==" " || pass=="") { error="Revise su contraseña"; acc=$('input#pass').focus(); }
-    if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
+    if (captcha == null || captcha.length=="" || captcha==" " || captcha=="")  { error="Da Click en 'No soy un robot'"; acc=null; }
+    if (pass == null || pass.length<3 || pass==" " || pass=="" ) { error="Revise su contraseña"; }
+    if (user == null ||  user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; }
 	
     if (error=="0"){
 		var data = {
@@ -39,37 +40,28 @@ function Login(user,pass,captcha){
 }
 
 /** Envia el registro **/
-function registrar(){
-
-	var nombre = $("#nombre").val;
-	var apaterno = $("#apaterno").val;
-	var amaterno = $("#amaterno").val;
-	var celular = $("#celular").val;
-	var telefono = $("#telefono").val;
-	var email = $("#email").val;
-	var referido = $("#referido").val;
-	var calle = $("#calle").val;
-	var numext = $("#numext").val;
-	var cp = $("#cp").val;
+function Register(){
+	var nombre = $("#nombre").val();
+	var apaterno = $("#apaterno").val();
+	var amaterno = $("#amaterno").val();
+	var celular = $("#celular").val();
+	if(!(nameCheck(nombre) && nameCheck(apaterno) && nameCheck(amaterno))){
+		alert('Checar Nombre o Apellidos');
+		return null;
+	}
+	if(!phoneCheck(celular)){
+		alert('Checar número de celular');
+		return null;
+	}
 
 	var data = {
-		nom: nombre,
-		apa: apaterno,
-		ama: amaterno,
+		nombre: nombre,
+		apaterno: apaterno,
+		amaterno: amaterno,
 		cel: celular,
-		tel: telefono,
-		correo: email,
-		referido: referido,
-		edi: Vue.selected_estado.name,
-		munic: Vue.selected_municipio.name,
-		ciudad: Vue.selected_ciudad,
-		colonia: Vue.selected_colonia.name,
-		cp: cp,
-		calle: calle,
-		next: numext
 	};
-	console.log(data);
-    $.post("Registro/registro.php",data,function(json_response){
+    $.post("Registro/RegistroEntryPoint.php",data,function(json_response){
+    	console.log(json_response);
     	var response = JSON.parse(json_response);
 		console.log(response);
     	Vue.currentPanel.response = response.message;
@@ -161,30 +153,6 @@ function assertResponse(json_response){
 	}
 }
 
-/** Loads the json files with the estados and municipios and save the data **/
-function loadJsonFileOntoVar(filename,type){
-	$('.mdb-select').material_select('destroy');
-	$.getJSON(filename, function(data){
-		// Save the response data to the corresponding data field (estado or municipio)
-		Vue[type] = data;		
-		if (type == "estados"){
-			// Select first estado
-			Vue.selected_estado = Vue.estados[0];
-		}
-	});
-}
-
-/**Function to load modal and necessary files in case they haven't been loaded **/
-function loadFilesAndModal(){
-	//Only load JSON files once
-	if(!Vue.jsonLoaded) {
-		loadJsonFileOntoVar("assets/json/estados.json","estados");
-		loadJsonFileOntoVar("assets/json/municipios.json","municipios");
-		Vue.jsonLoaded = true;
-	}
-	//Load modal
-	$('#modalLRForm').modal();
-}
 
 /** Restores the values of the globalInputs field on the Vue instance
  * @param: Exceptions: Which fields wont be restored
@@ -209,7 +177,6 @@ function restoreInputs(exceptions){
 **/
 function activatePanel(panelID,toStack=true){
 	//Activate labels so that it doesn't overlap the code
-	console.log('activating panel');
 	Vue.panels.forEach(function(panel){
 		panel.isActive = false;
 		if(panel.id == panelID){
@@ -219,6 +186,7 @@ function activatePanel(panelID,toStack=true){
 				Vue.panelStack.push(Vue.currentPanel);	
 			}
 			Vue.currentPanel = panel;
+			Vue.currentPanel.response = "";
 			return true;
 		}
 	});
@@ -244,15 +212,6 @@ var data = new function(){
 		LOGINERROR: 3
 	},
 	this.mensaje_error_backend = "Ocurrió un error interno en el sistema...",
-	this.estados =  [],
-	this.municipios =  [],
-	this.selected_estado =  {},
-	this.selected_municipio =  {},
-	this.selected_ciudad =  {},
-	this.selected_colonia =  {},
-	this.active_municipios = [], // Objectos de Municipios activos despues de que se selecciono un estado
-	this.active_ciudades = [], // Strings de ciudades activas despues de que se selecciono un municipio
-	this.active_colonias = [], // Objectos de colonias activas despues de que se selecciono una ciudad
 	this.jsonLoaded = false, // Variable to check that loading initial json data only happens once
 	//Constantes de estilos
 	this.activeClass =  "show active",
@@ -268,23 +227,18 @@ var data = new function(){
 			response: "",
 			inputs:[
 				{
-					iconClass: "fa-envelope",
+					iconClass: "fa-user",
 					vModel: "user",
+					type: "text",
 					id: "user",
 					label: "Usuario",
-				},
-				{
-					iconClass: "fa-lock",
-					vModel: "pass",
-					id: "pass",
-					label: "Contraseña",
-				}				
+				}		
 			],
 			buttons: [
 				{
 					vueFunction: "submitLogin",
-					label: "Login",
-					class: "btn btn-default",
+					label: "Accesar",
+					class: "btn btn-default btn-lg",
 					icon: "fa-lock"
 				},
 				{
@@ -296,8 +250,8 @@ var data = new function(){
 			],
 			isActive: false,
 			loading: false,
-			captcha: true
-			
+			passInput: true,
+			extra: "<div class'col'><div v-show='panel.captcha' class='g-recaptcha' data-sitekey='6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK'></div></div>"
 		},{
 			id: "restore",
 			header: "Restaurar contraseña",
@@ -307,6 +261,7 @@ var data = new function(){
 				{
 					iconClass: "fa-user",
 					vModel: "user",
+					type: "text",
 					id: "user",
 					label: "Usuario",
 				}		
@@ -327,6 +282,7 @@ var data = new function(){
 			],
 			isActive: false,
 			loading: false,
+			extra: "",
 			
 		},{
 			id: "enterNip",
@@ -337,6 +293,7 @@ var data = new function(){
 				{
 					iconClass: "fa-key",
 					vModel: "nip",
+					type: "text",
 					id: "nip",
 					label: "NIP",
 				}		
@@ -357,6 +314,7 @@ var data = new function(){
 			],
 			isActive: false,
 			loading: false,
+			extra: "",
 			
 		},{
 			id: "enterNipSubmit",
@@ -372,6 +330,7 @@ var data = new function(){
 			],
 			isActive: false,
 			loading: false,
+			extra: "",
 			
 		}
 	]
@@ -385,17 +344,11 @@ var Vue = new Vue({
 	methods: {
 		//open the form in the login tab
 		openLogin(){
-			//Hide the register panel
-			$('#register_tab_link').removeClass("active");
-			$('#register_panel').removeClass("show active");			
-			$('#login_tab_link').addClass("active");
-			$('#login_panel').hide();
-			$('#login_tab').show();
-			$('#register_tab').hide();
-			$('#register_panel').hide();
-			$('#login_panel').show();
-			//Load json files
-			loadFilesAndModal();
+			//Hide the register modal
+			setTimeout(function () { $('#modalRegister').modal('hide'); });
+
+			//Load modal
+			$('#modalLogin').modal('show');
 			//Restart panel stack and activate panel login
 			this.panelStack = [];
 			restoreInputs(["user"]);
@@ -403,16 +356,11 @@ var Vue = new Vue({
 		},
 		//open the form in the register tab
 		openRegister(){
-			$('#login_tab_link').removeClass("active");
-			$('#login_panel').removeClass("show active");
-			$('#register_tab_link').addClass("active");
-			$('#register_panel').addClass("show active");
-			$('#login_panel').hide();
-			$('#login_tab').hide();
-			$('#register_panel').show();
-			$('#register_tab').show();
-			//Load json files
-			loadFilesAndModal();
+			//Hide the register modal
+			setTimeout(function () { $('#modalLogin').modal('hide'); });
+
+			//Load modal
+			$('#modalRegister').modal('show');
 			//Restart panel stack and activate panel login
 			this.panelStack = [];
 			activatePanel("register");
@@ -483,7 +431,7 @@ var Vue = new Vue({
 		},
 		close(){
 			// Closes modal
-			$('#modalLRForm').modal('hide');
+			$('#modalLogin').modal('hide');
 		},
 		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), restore(), etc
 		call(vueFunction){

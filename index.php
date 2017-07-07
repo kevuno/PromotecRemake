@@ -96,7 +96,7 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-6">
-                             <button type="button" class="btn btn-danger btn-lg" @click="openRegister">Comienza a ganar dinero</button> 
+                             <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modalRegister">Comienza a ganar dinero</button> 
                         </div>
                     </div>
                     <div class="row justify-content-center" id="descarga_app">
@@ -116,7 +116,8 @@
                 </div>
             </div>
             <!--/ Descripcion -->
-            <!--Ganar dinero-->
+
+            <!--Banner de franquicias -->
             <div class="wow bounceInUp" id="franquicias-banner">
                 <div class="container">
                     <div class="row justify-content-center">
@@ -131,7 +132,7 @@
                     </div>               
                 </div>
             </div>
-            <!--/ Ganar dinero -->
+            <!--/ Banner de franquicias -->
         </div>
         <!-- /Contenido -->
 
@@ -154,35 +155,34 @@
         </footer>
         <!-- /Footer -->
 
-        <!--Modals-->
-        <div class="modal small fade right" id="modalLRForm" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-full-height modal-right modal-md " role="document">
-                <!--Content-->
-                <div class="modal-content">
-                    <!--Modal cascading tabs-->
-                    <div class="modal-c-tabs">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs tabs-2 light-blue darken-3" role="tablist">
-                            <li class="nav-item" id="login_tab">
-                                <a id="login_tab_link" class="nav-link" data-toggle="tab" href="#login_panel" role="tab"><i class="fa fa-user mr-1"></i> Acceso</a>
-                            </li>
-                            <li class="nav-item" id="register_tab">
-                                <a id="register_tab_link" class="nav-link active" data-toggle="tab" href="#register_panel" role="tab"><i class="fa fa-user-plus mr-1"></i> Registro</a>
-                            </li>
-                        </ul>
-                        <!-- Tab panels -->
-                        <div class="tab-content">
-                            <!-- A template for the panels for login process -->
-                            <div v-for="panel in panels">
-                                <!--Loading bar-->
-                                <div v-if="panel.loading" id="loading">
+        <!--Login Modal-->
+            <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog cascading-modal" role="document">
+                    <!--Content-->
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header light-blue darken-3 white-text">
+                            <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="title"><i class="fa fa-user"></i> Acceso</h4>
+                        </div>
+                        <!-- A template for the panels for login process -->
+                        <div v-for="panel in panels">
+                            <!--Loading bar-->
+                            <div v-if="panel.loading" id="loading">
+                                <div class="container">
                                     <h3> Cargando ... </h3>
                                     <div class="progress primary-color-dark">
                                         <div class="indeterminate"></div>
                                     </div>
                                 </div>
-                                <form v-else v-on:submit.prevent>
-                                    <div class="tab-pane fade in" v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id" role="tabpanel">
+                            </div>
+                            <!-- If not loading, then show the panel -->
+                            <form v-else v-on:submit.prevent>
+                                <div v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id">
+                                <!--Headers-->
+                                    <div class="container padding-top">
                                         <div class="row" id="header">
                                             <div class="col">
                                                 <h2 style="text-align: center;">{{panel.header}}</h2>
@@ -197,88 +197,112 @@
                                             <div class="col">
                                                 <span class="red-text" v-html="panel.response"></span>
                                             </div>
-                                        </div>
-
-                                        <!--Body-->
-                                        <div class="modal-body mb-1">
-                                            <div class="inputs">
-                                                <div v-for="input in panel.inputs" class="md-form form-sm">
-                                                    <i class="fa prefix" v-bind:class="input.iconClass"></i>
-                                                    <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
-                                                    <label class="active" :for="input.id">{{input.label}}</label>
-                                                </div>
-                                            </div>
-                                            <div v-if="panel.captcha" class="g-recaptcha" data-sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK"></div>
-                                            <div class="row buttons">
-                                                <div class="col" v-for="button in panel.buttons">
-                                                    <button @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button>
-                                                </div>
-                                            </div>
                                         </div> 
-                                        <!--/. Body del login -->
                                     </div>
-                                </form>
-                                <!--/.Panel de login--> 
-                            </div>
-                            
-                           
-                            <form action="check_login.php">
-                                <!--Panel de registro-->
-                                <div class="tab-pane fade show active" id="register_panel" role="tabpanel">
 
-                                        <!--Body-->
-                                        <div class="modal-body">
-                                            <div class="registro_instrucciones">
-                                                <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
+                                    <!--Body-->
+                                    <div class="modal-body mb-1">
+                                        <div class="inputs">
+                                            <div v-for="input in panel.inputs" class="md-form form-sm">
+                                                <i class="fa prefix" v-bind:class="input.iconClass"></i>
+                                                <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
+                                                <label class="active" :for="input.id">{{input.label}}</label>
                                             </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-user prefix"></i>                
-                                                <input type="text" id="nombre" class="form-control">
-                                                <label for="nombre">Nombre <span class="red-text">*</span></label>
+                                            <div v-if="panel.passInput" class="md-form form-sm">
+                                                <i class="fa prefix fa-lock"></i>
+                                                <input type="password" v-model="globalInputs.pass" id="pass" class="form-control">
+                                                <label class="active" for="pass">Contraseña</label>
                                             </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-none prefix"></i>
-                                                <input type="text" id="apaterno" class="form-control">
-                                                <label for="form24">Apellido Paterno <span class="red-text">*</span></label>
-                                            </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-none prefix"></i>
-                                                <input type="text" id="amaterno" class="form-control">
-                                                <label for="nombre">Apellido Materno <span class="red-text">*</span></label>
-                                            </div>
-                                            <div class="md-form form-sm">
-                                                <i class="fa fa-mobile prefix"></i>
-                                                <input type="text" max-length="10" id="celular" class="form-control">
-                                                <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
-                                            </div>
-
-                                            <div class="text-center form-sm mt-2">
-                                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
-                                            </div>
-
                                         </div>
+                                        <!-- Section for extra content -->
+                                        <div v-html="panel.extra">
+                                        </div>
+                                        <!-- /extra content -->
+                                        <div class="row buttons modal-footer">
+                                            <div class="col" v-for="button in panel.buttons">
+                                                <button @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <!--/. Body del login -->
                                 </div>
-                                <!--/.Panel registro-->
                             </form>
+                            <!--/.Panel de login--> 
                         </div>
+                    </div>
 
+                </div>
+            </div>
+        <!--/. Login Modal-->
+
+        <!--Modal: Register Form-->
+        <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Header-->
+                    <div class="modal-header light-blue darken-3 white-text">
+                        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="title"><i class="fa fa-user-plus"></i> Registro </h4>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="modal-body">
+                            <div class="registro_instrucciones">
+                                <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-user prefix"></i>                
+                                <input type="text" name="nombre" id="nombre" class="form-control">
+                                <label for="nombre">Nombre <span class="red-text">*</span></label>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-none prefix"></i>
+                                <input type="text" id="apaterno" class="form-control">
+                                <label for="apaterno">Apellido Paterno <span class="red-text">*</span></label>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-none prefix"></i>
+                                <input type="text" id="amaterno" class="form-control">
+                                <label for="amaterno">Apellido Materno <span class="red-text">*</span></label>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-mobile prefix"></i>
+                                <input type='text' max-length="10" id="celular" class="form-control">
+                                <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
+                            </div>
+
+                            <div class="text-center form-sm mt-2">
+                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Footer-->
+                    <div class="modal-footer">
+                        <div class="options text-center text-md-right mt-1">
+                            <p> Ya tienes una cuenta?<a href="#" @click="openLogin"> Acceder</a></p>
+                        </div>
+                        <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Cerrar <i class="fa fa-times-circle ml-1"></i></button>
                     </div>
                 </div>
                 <!--/.Content-->
             </div>
-            <!--Modal: Login / Register Form-->
         </div>
-        <!--/Modals-->
+        <!--Modal: Register Form-->
 
     </div>
-
 </body>
 
-    <!-- SCRIPTS -->       
+    <!-- SCRIPTS --> 
         <!-- JQuery -->
         <script src="assets/js/jquery-3.1.1.min.js"></script>
         <!-- Vue js -->
         <script src="https://unpkg.com/vue"></script>
+        <!-- Validators -->
+        <script src="assets/js/validate.js"></script>
         <!-- Tooltips -->
         <script src="assets/js/tether.min.js"></script>
         <!-- Bootstrap core JavaScript -->
@@ -287,8 +311,6 @@
         <script src="assets/js/mdb.min.js"></script>
         <!-- Custom JavaScript -->
         <script src="assets/js/custom.js"></script>
-        <!-- Select2.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <!-- Wow animations -->
         <script src="assets/js/wow.js"></script>
         <!-- Wow animations initialization-->
