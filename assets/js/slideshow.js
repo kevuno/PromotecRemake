@@ -23,6 +23,6 @@ function doSlideshow(dom_element,array_of_imgs,img_counter){
 	dom_element.css("background-image", "url("+array_of_imgs[img_counter++]+")").fadeIn(15000,function(){
     	setTimeout(function() {
 		    doSlideshow(dom_element,array_of_imgs,img_counter);
-		}, 5000);
+		}, 10000);
     });
 }

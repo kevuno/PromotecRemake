@@ -19,7 +19,7 @@
     <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <!-- MDB core CSS -->
-    <link href="assets/css/mdb.css" rel="stylesheet" />
+    <link href="assets/css/mdb.min.css" rel="stylesheet" />
     <!-- Google captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -159,85 +159,82 @@
         <!-- /Footer -->
 
         <!--Login Modal-->
-            <div class="modal cascading-modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog cascading-media" role="document">
-                    <!--Content-->
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header light-blue darken-3 white-text">
-                            <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="title"><i class="fa fa-user"></i> Acceso</h4>
-                        </div>
-                        <!-- A template for the panels for login process -->
-                        <div v-for="panel in panels">
-                            <!--Loading bar-->
-                            <div v-if="panel.loading" id="loading">
-                                <div class="container">
-                                    <h3> Cargando ... </h3>
-                                    <div class="progress primary-color-dark">
-                                        <div class="indeterminate"></div>
-                                    </div>
+        <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header light-blue darken-3 white-text">
+                        <h4 class="title"><i class="fa fa-user"></i> Acceso</h4>
+                    </div>
+                    <!-- A template for the panels for login process -->
+                    <div v-for="panel in panels">
+                        <!--Loading bar-->
+                        <div v-if="panel.loading" id="loading">
+                            <div class="container">
+                                <h3> Cargando ... </h3>
+                                <div class="progress primary-color-dark">
+                                    <div class="indeterminate"></div>
                                 </div>
                             </div>
-                            <!-- If not loading, then show the panel -->
-                            <form v-else v-on:submit.prevent name="geeral_form">
-                                <div v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id">
-                                <!--Headers-->
-                                    <div class="container padding-top">
-                                        <div class="row" id="header">
-                                            <div class="col">
-                                                <h2 style="text-align: center;">{{panel.header}}</h2>
-                                            </div>
+                        </div>
+                        <!-- If not loading, then show the panel -->
+                        <form v-else v-on:submit.prevent name="geeral_form">
+                            <div v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id">
+                            <!--Headers-->
+                                <div class="container padding-top">
+                                    <div class="row" id="header">
+                                        <div class="col">
+                                            <h2 style="text-align: center;">{{panel.header}}</h2>
                                         </div>
-                                        <div class="row" id="instructions">
-                                            <div class="col">
-                                                <h5 style="text-align: center;" v-html="panel.instructions"></h5>
-                                            </div>
-                                        </div>                                        
-                                        <div class="row" id="response">
-                                            <div class="col">
-                                                <span :class="panel.response.color_text">
-                                                    {{panel.response.message}}
-                                                </span>
-                                            </div>
-                                        </div> 
                                     </div>
-
-                                    <!--Body-->
-                                    <div class="modal-body mb-1">
-                                        <div class="inputs">
-                                            <div v-for="input in panel.inputs" class="md-form form-sm">
-                                                <i class="fa prefix" v-bind:class="input.iconClass"></i>
-                                                <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control validate" required data-error="Corregir">
-                                                <label class="active" :for="input.id">{{input.label}}</label>
-                                            </div>
-                                            <div v-if="panel.passInput" class="md-form form-sm">
-                                                <i class="fa prefix fa-lock"></i>
-                                                <input type="password" v-model="globalInputs.pass" id="pass" class="form-control validate">
-                                                <label class="active" for="pass">Contraseña</label>
-                                            </div>
+                                    <div class="row" id="instructions">
+                                        <div class="col">
+                                            <h5 style="text-align: center;" v-html="panel.instructions"></h5>
                                         </div>
-                                        <!-- Section for extra content -->
-                                        <div v-html="panel.extra">
-                                        </div>
-                                        <!-- /extra content -->
-                                        <div class="row buttons modal-footer">
-                                            <div class="col" v-for="button in panel.buttons">
-                                                <a href="#"><button type="button" @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" class="waves-effect waves-light" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button></a>
-                                            </div>
+                                    </div>                                        
+                                    <div class="row" id="response">
+                                        <div class="col">
+                                            <span :class="panel.response.color_text">
+                                                {{panel.response.message}}
+                                            </span>
                                         </div>
                                     </div> 
-                                    <!--/. Body del login -->
                                 </div>
-                            </form>
-                            <!--/.Panel de login--> 
-                        </div>
-                    </div>
 
+                                <!--Body-->
+                                <div class="modal-body mb-1">
+                                    <div class="inputs">
+                                        <div v-for="input in panel.inputs" class="md-form form-sm">
+                                            <i class="fa prefix" v-bind:class="input.iconClass"></i>
+                                            <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control validate" required data-error="Corregir">
+                                            <label class="active" :for="input.id">{{input.label}}</label>
+                                        </div>
+                                        <div v-if="panel.passInput" class="md-form form-sm">
+                                            <i class="fa prefix fa-lock"></i>
+                                            <input type="password" v-model="globalInputs.pass" id="pass" class="form-control validate">
+                                            <label class="active" for="pass">Contraseña</label>
+                                        </div>
+                                    </div>
+                                    <!-- Section for extra content -->
+                                    <div v-html="panel.extra">
+                                    </div>
+                                    <!-- /extra content -->
+                                    <div class="row buttons modal-footer">
+                                        <div class="col" v-for="button in panel.buttons">
+                                            <a href="#"><button type="button" @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" class="waves-effect waves-light" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button></a>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <!--/. Body del login -->
+                            </div>
+                        </form>
+                        <!--/.Panel de login--> 
+                    </div>
                 </div>
+
             </div>
+        </div>
         <!--/. Login Modal-->
 
         <!--Modal: Register Form-->
@@ -248,48 +245,44 @@
 
                     <!--Header-->
                     <div class="modal-header light-blue darken-3 white-text">
-                        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                         <h4 class="title"><i class="fa fa-user-plus"></i> Registro </h4>
                     </div>
                     <!--Body-->
                     <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="registro_instrucciones">
-                                <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
-                            </div>
-                            <div class="registro_respuesta">
-                            </div>
-                            <div class="md-form form-sm">
-                                <div class="col error" id="error">
-                                </div>
-                            </div>
-                            <div class="md-form form-sm">
-                                <i class="fa fa-user prefix"></i>                
-                                <input type="text" name="nombre" id="nombre" class="form-control validate" required>
-                                <label for="nombre">Nombre <span class="red-text">*</span></label>
-                            </div>
-                            <div class="md-form form-sm">
-                                <i class="fa fa-none prefix"></i>
-                                <input type="text" id="apaterno" class="form-control validate" required>
-                                <label for="apaterno">Apellido Paterno <span class="red-text">*</span></label>
-                            </div>
-                            <div class="md-form form-sm">
-                                <i class="fa fa-none prefix"></i>
-                                <input type="text" id="amaterno" class="form-control validate" required>
-                                <label for="amaterno">Apellido Materno <span class="red-text">*</span></label>
-                            </div>
-                            <div class="md-form form-sm">
-                                <i class="fa fa-mobile prefix"></i>
-                                <input type='text' max-length="10" id="celular" class="form-control validate" required>
-                                <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
-                            </div>
-
-                            <div class="text-center form-sm mt-2">
-                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                        <div class="registro_instrucciones">
+                            <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
+                        </div>
+                        <div class="registro_respuesta">
+                        </div>
+                        <div class="md-form form-sm">
+                            <div class="col error" id="error">
                             </div>
                         </div>
+                        <div class="md-form form-sm">
+                            <i class="fa fa-user prefix"></i>                
+                            <input type="text" name="nombre" id="nombre" class="form-control validate" required>
+                            <label for="nombre">Nombre <span class="red-text">*</span></label>
+                        </div>
+                        <div class="md-form form-sm">
+                            <i class="fa fa-none prefix"></i>
+                            <input type="text" id="apaterno" class="form-control validate" required>
+                            <label for="apaterno">Apellido Paterno <span class="red-text">*</span></label>
+                        </div>
+                        <div class="md-form form-sm">
+                            <i class="fa fa-none prefix"></i>
+                            <input type="text" id="amaterno" class="form-control validate" required>
+                            <label for="amaterno">Apellido Materno <span class="red-text">*</span></label>
+                        </div>
+                        <div class="md-form form-sm">
+                            <i class="fa fa-mobile prefix"></i>
+                            <input type='text' max-length="10" id="celular" class="form-control validate" required>
+                            <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
+                        </div>
+
+                        <div class="text-center form-sm mt-2">
+                            <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                        </div>
+                
                     </div>
                     <!--Footer-->
                     <div class="modal-footer">

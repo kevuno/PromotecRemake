@@ -295,7 +295,7 @@ var data = new function(){
 				{
 					vueFunction: "restore",
 					label: "Restaurar contraseña",
-					class: "btn btn-secondary",
+					class: "btn btn-outline-info waves-effect btn-sm",
 					icon: "fa-question"
 				}
 			],
