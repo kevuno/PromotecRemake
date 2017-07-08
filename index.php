@@ -179,7 +179,7 @@
                                 </div>
                             </div>
                             <!-- If not loading, then show the panel -->
-                            <form v-else v-on:submit.prevent>
+                            <form v-else v-on:submit.prevent name="geeral_form">
                                 <div v-bind:class="[panel.isActive ? activeClass : hiddenClass]" :id="panel.id">
                                 <!--Headers-->
                                     <div class="container padding-top">
@@ -189,13 +189,15 @@
                                             </div>
                                         </div>
                                         <div class="row" id="instructions">
-                                            <div class="col">                      
-                                                <h3 class="red-text">{{panel.instructions}}</h3>
+                                            <div class="col">
+                                                <h5 style="text-align: center;" v-html="panel.instructions"></h5>
                                             </div>
-                                        </div>
+                                        </div>                                        
                                         <div class="row" id="response">
                                             <div class="col">
-                                                <span class="red-text" v-html="panel.response"></span>
+                                                <span :class="panel.response.color_text">
+                                                    {{panel.response.message}}
+                                                </span>
                                             </div>
                                         </div> 
                                     </div>
@@ -205,12 +207,12 @@
                                         <div class="inputs">
                                             <div v-for="input in panel.inputs" class="md-form form-sm">
                                                 <i class="fa prefix" v-bind:class="input.iconClass"></i>
-                                                <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control">
+                                                <input placeholder="" type="text" v-model="globalInputs[input.vModel]" :id="input.id" class="form-control validate" required data-error="Corregir">
                                                 <label class="active" :for="input.id">{{input.label}}</label>
                                             </div>
                                             <div v-if="panel.passInput" class="md-form form-sm">
                                                 <i class="fa prefix fa-lock"></i>
-                                                <input type="password" v-model="globalInputs.pass" id="pass" class="form-control">
+                                                <input type="password" v-model="globalInputs.pass" id="pass" class="form-control validate">
                                                 <label class="active" for="pass">Contraseña</label>
                                             </div>
                                         </div>
@@ -220,7 +222,7 @@
                                         <!-- /extra content -->
                                         <div class="row buttons modal-footer">
                                             <div class="col" v-for="button in panel.buttons">
-                                                <button @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button>
+                                                <a href="#"><button type="button" @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button></a>
                                             </div>
                                         </div>
                                     </div> 
@@ -254,24 +256,30 @@
                             <div class="registro_instrucciones">
                                 <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
                             </div>
+                            <div class="registro_respuesta">
+                            </div>
+                            <div class="md-form form-sm">
+                                <div class="col error" id="error">
+                                </div>
+                            </div>
                             <div class="md-form form-sm">
                                 <i class="fa fa-user prefix"></i>                
-                                <input type="text" name="nombre" id="nombre" class="form-control">
+                                <input type="text" name="nombre" id="nombre" class="form-control validate" required>
                                 <label for="nombre">Nombre <span class="red-text">*</span></label>
                             </div>
                             <div class="md-form form-sm">
                                 <i class="fa fa-none prefix"></i>
-                                <input type="text" id="apaterno" class="form-control">
+                                <input type="text" id="apaterno" class="form-control validate" required>
                                 <label for="apaterno">Apellido Paterno <span class="red-text">*</span></label>
                             </div>
                             <div class="md-form form-sm">
                                 <i class="fa fa-none prefix"></i>
-                                <input type="text" id="amaterno" class="form-control">
+                                <input type="text" id="amaterno" class="form-control validate" required>
                                 <label for="amaterno">Apellido Materno <span class="red-text">*</span></label>
                             </div>
                             <div class="md-form form-sm">
                                 <i class="fa fa-mobile prefix"></i>
-                                <input type='text' max-length="10" id="celular" class="form-control">
+                                <input type='text' max-length="10" id="celular" class="form-control validate" required>
                                 <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
                             </div>
 

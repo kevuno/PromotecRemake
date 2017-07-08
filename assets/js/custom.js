@@ -3,68 +3,81 @@
 
 /** Envia el intento de login **/
 function Login(user,pass,captcha){
-    error="0";
-    
-    if (captcha == null || captcha.length=="" || captcha==" " || captcha=="")  { error="Da Click en 'No soy un robot'"; acc=null; }
-    if (pass == null || pass.length<3 || pass==" " || pass=="" ) { error="Revise su contraseña"; }
-    if (user == null ||  user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; }
-	
-    if (error=="0"){
-		var data = {
-			user:user,
-			pass:pass,
-			captcha:captcha
-		};
-      	Vue.currentPanel.loading = true;
-      	$.post("Login/LoginEntryPoint.php",data,function(json_response){
-			// Close loading bar
-			Vue.currentPanel.loading = false;
-			// Get response object
-			var response = assertResponse(json_response);
-			// Display response in console and in response div
-			console.log(response);
-			Vue.currentPanel.response = response.message;
-
-    		if(response.status == Vue.responseTypes.LOGINBLOCK){
-    			activatePanel("restore");
-    			Vue.currentPanel.instructions = response.message;
-    		}
-    			
-
-	        	
-			
-      	})
-    }else{
-		alert(error);
+    // Validating
+	if (user == null ||  user.length<3 || user==" " || user=="") {
+    	displayError("user","Revise su nombre de usuario");
+    	return;
     }
+    if (pass == null || pass.length<3 || pass==" " || pass=="" ){
+		displayError("pass","Revise su contraseña");
+		return;
+ 	}
+    if (captcha == null || captcha.length=="" || captcha==" " || captcha==""){
+		displayError("captcha","Da Click en 'No soy un robot'");
+		return;
+	}
+	// Send data
+	var data = {
+		user:user,
+		pass:pass,
+		captcha:captcha
+	};
+  	Vue.currentPanel.loading = true;
+  	$.post("Login/LoginEntryPoint.php",data,function(json_response){
+		// Close loading bar
+		Vue.currentPanel.loading = false;
+		// Get response object
+		var response = assertResponse(json_response);
+		// Display response in console and in response div
+		console.log(response);
+		// If there was a login block, take user to the Restore pass panel
+		if(response.status == Vue.responseTypes.LOGINBLOCK.code){
+			activatePanel("restore");
+		}
+		setUpResponseMessage(response);
+  	});
 }
 
 /** Envia el registro **/
 function Register(){
-	var nombre = $("#nombre").val();
-	var apaterno = $("#apaterno").val();
-	var amaterno = $("#amaterno").val();
-	var celular = $("#celular").val();
-	if(!(nameCheck(nombre) && nameCheck(apaterno) && nameCheck(amaterno))){
-		alert('Checar Nombre o Apellidos');
+	var nombre = $("#nombre");
+	var apaterno = $("#apaterno");
+	var amaterno = $("#amaterno");
+	var celular = $("#celular");
+	if(!nameCheck(nombre.val())){
+		nombre.addClass("invalid");
+		$("#error").html('Revisar Nombre');
+		return null;
+	} 
+	if(!nameCheck(apaterno.val())){
+		apaterno.addClass("invalid");
+		$("#error").html('Revisar Apellido Paterno');
 		return null;
 	}
-	if(!phoneCheck(celular)){
-		alert('Checar número de celular');
+	if(!nameCheck(amaterno.val())){
+		amaterno.addClass("invalid");
+		$("#error").html('Revisar Apellido Paterno');
+		return null;
+	}
+	if(!phoneCheck(celular.val())){
+		celular.addClass("invalid");
+		$("#error").html('Checar número de celular');
 		return null;
 	}
 
 	var data = {
-		nombre: nombre,
-		apaterno: apaterno,
-		amaterno: amaterno,
-		cel: celular,
+		nombre: nombre.val(),
+		apaterno: apaterno.val(),
+		amaterno: amaterno.val(),
+		cel: celular.val(),
 	};
     $.post("Registro/RegistroEntryPoint.php",data,function(json_response){
     	console.log(json_response);
-    	var response = JSON.parse(json_response);
+    	// Get response object
+		var response = assertResponse(json_response);
+		// Display response in console and in response div
 		console.log(response);
-    	Vue.currentPanel.response = response.message;
+		$("#registro_respuesta").html("<p>"+ +"</p>")
   	});
 }
 
@@ -73,27 +86,22 @@ function restore_submit(user){
 	var error = "0";
 	if (user.length<3 || user==" " || user=="") { error="Revise nombre de usuario"; acc=$('input#user').focus(); }
 	if (error=="0"){
-		if(confirm("Está seguro que quiere restaurar la contraseña del usuario " + user + ". Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.")){
 			Vue.currentPanel.loading = true;
 			$.post("RestorePassword/GenNipEntryPoint.php",{user:user},function(json_response){
 				// Close loading bar
 				Vue.currentPanel.loading = false;
 				// Get response object
 				var response = assertResponse(json_response);
-				// Display response in console and in response div
-				console.log(response);
-				Vue.currentPanel.response = response.message;
-
+				setUpResponseMessage(response);
 				// Only if success sending NIP display next panel
-				if(response.status == Vue.responseTypes.SUCCESS){
-					// If Response was of type success, then data contains the phonenumber to 
-					// which the NIP was sent
-					// Load EnterNip Panel
+				if(response.status == Vue.responseTypes.SUCCESS.code){
 					activatePanel('enterNip');
-					Vue.currentPanel.instructions = response.message;
 				}
+				// Display response in console and in divs
+				console.log(response);
+				setUpResponseMessage(response);
 	      	})
-		}
+		
 	}else{
 		alert(error);
 	}
@@ -105,7 +113,7 @@ function enterNipSubmit(nip,user){
 	var error = "0";
 	if (user==" " || user=="" || user==null ){ 
 		activatePanel('restore');
-		Vue.currentPanel.response = "Debe ingresar un nombre de usuario primero.";
+		Vue.currentPanel.response.message = "Debe ingresar un nombre de usuario primero.";
 		return null;
 	}
 	if (nip==" " || nip=="" || nip==null) { error="Revise NIP"; acc=$('input#nip').focus(); }
@@ -116,18 +124,13 @@ function enterNipSubmit(nip,user){
 			Vue.currentPanel.loading = false;
 			// Get response object
 			var response = assertResponse(json_response);
-			// Display response in console and in response div
-			console.log(response);
-			Vue.currentPanel.response = response.message;
-
 			// Only if success sending NIP display next panel
-			if(response.status == Vue.responseTypes.SUCCESS){
-				// If Response was of type success, then data contains the phonenumber to 
-				// which the NIP was sent
-				// Load EnterNip Panel
-				activatePanel('enterNip');
-				Vue.currentPanel.instructions = response.message;
+			if(response.status == Vue.responseTypes.SUCCESS.code){
+				activatePanel('enterNipSubmit');
 			}
+			// Display response in console and in divs
+			console.log(response);
+			setUpResponseMessage(response);
       	});
 		
 	}else{
@@ -136,20 +139,47 @@ function enterNipSubmit(nip,user){
 }
 
 /*************** FUNCIONES DE AYUDA **************/
+/** Displays an error in the error panel section **/
+function displayError(input,errorMessage){
+    	Vue.currentPanel.response = {
+    		"message": errorMessage,
+    		"color_text": "red-text"
+    	}
+    	$("#"+input).addClass("invalid");
+}
+
+/** Sets up response messages
+ *  @param: A json_formatted response obtained from assertResponse()
+ **/
+function setUpResponseMessage(response_obj){
+	let responseTypeObj = filterResponseType(response_obj.status);
+	Vue.currentPanel.response.color_text = responseTypeObj.color + "-text";
+	Vue.currentPanel.response.message = response_obj.message;
+}
+
+/** Filters the response types to match the one with the given response code and returns the response type object **/
+function filterResponseType(response_code){
+	for (var key in Vue.responseTypes) {
+		if(Vue.responseTypes[key].code == response_code){
+			return Vue.responseTypes[key];
+		}
+	}
+	return Vue.responseTypes.NEUTRAL;
+}
 
 /** Filters the json_response gotten from the Ajax call and returns a parsed json object **/
 function assertResponse(json_response){
 	try{
 		var response = JSON.parse(json_response);
-		if(response.status == Vue.responseTypes.ERROR){
+		if(response.status == Vue.responseTypes.ERROR.code){
 			console.log(response);
 			return response;
 		}
 		return response;
 	}catch (e){
 		// json_response was not json formatted so we display whats going on
-		console.log(json_response);
-		return {message: "Error interno del sistema, error de programación."};
+		// console.log(json_response);
+		return {message: "Error interno del sistema, error de programación.",status: -1};
 	}
 }
 
@@ -186,7 +216,7 @@ function activatePanel(panelID,toStack=true){
 				Vue.panelStack.push(Vue.currentPanel);	
 			}
 			Vue.currentPanel = panel;
-			Vue.currentPanel.response = "";
+			Vue.currentPanel.response = {};
 			return true;
 		}
 	});
@@ -205,12 +235,33 @@ var data = new function(){
 		nip: "",
 	},
 	this.responseTypes = {
-		ERROR: -1,
-		NEUTRAL: 0,
-		SUCCESS: 1,
-		LOGINBLOCK: 2,
-		LOGINERROR: 3
+		ERROR: {
+			code: -1,
+			color: "red",
+			class: "danger"
+		},
+		NEUTRAL: {
+			code: 0,
+			color: "gray",
+			class: "default"
+		},
+		SUCCESS: {
+			code: 1,
+			color: "green",
+			class: "success"
+		},
+		LOGINBLOCK: {
+			code: 2,
+			color: "red",
+			class: "danger"
+		},
+		LOGINERROR: {
+			code: 3,
+			color: "orange",
+			class: "warning"
+		}
 	},
+	this.error = "",
 	this.mensaje_error_backend = "Ocurrió un error interno en el sistema...",
 	this.jsonLoaded = false, // Variable to check that loading initial json data only happens once
 	//Constantes de estilos
@@ -224,7 +275,7 @@ var data = new function(){
 			id: "login",
 			header: "",
 			instructions: "",
-			response: "",
+			response: {},
 			inputs:[
 				{
 					iconClass: "fa-user",
@@ -256,7 +307,7 @@ var data = new function(){
 			id: "restore",
 			header: "Restaurar contraseña",
 			instructions: "",
-			response: "",
+			response: {},
 			inputs:[
 				{
 					iconClass: "fa-user",
@@ -268,7 +319,7 @@ var data = new function(){
 			],
 			buttons: [
 				{
-					vueFunction: "restore_submit",
+					vueFunction: "restore_are_you_sure",
 					label: "Enviar",
 					class: "btn btn-success",
 					icon: "fa-question"
@@ -285,10 +336,34 @@ var data = new function(){
 			extra: "",
 			
 		},{
+			id: "restore_are_you_sure",
+			header: "Restaurar contraseña",
+			instructions: "",
+			response: {},
+			inputs:[],
+			buttons: [
+				{
+					vueFunction: "restore_submit",
+					label: "Enviar",
+					class: "btn btn-success",
+					icon: "fa-check"
+				},
+				{
+					vueFunction: "goBackPanel",
+					label: "Regresar",
+					class: "btn btn-info",
+					icon: "fa-backward"
+				}
+			],
+			isActive: false,
+			loading: false,
+			extra: "",
+			
+		},{
 			id: "enterNip",
 			header: "Insertar NIP",
 			instructions: "",
-			response: "",
+			response: {},
 			inputs:[
 				{
 					iconClass: "fa-key",
@@ -320,7 +395,7 @@ var data = new function(){
 			id: "enterNipSubmit",
 			header: "Se ha restaurado su contraseña",
 			instructions: "",
-			response: "",
+			response: {},
 			inputs:[],
 			buttons: [
 				{
@@ -414,14 +489,23 @@ var Vue = new Vue({
 		restore(){
 			activatePanel("restore");
 		},
+		restore_are_you_sure(){
+			this.globalInputs.user.trim();
+			if(this.globalInputs.user){
+				activatePanel("restore_are_you_sure");
+				this.currentPanel.instructions = "¿Está seguro que quiere restaurar la contraseña del usuario <b>" + this.globalInputs.user + "</b>? Se le enviará un SMS al telefono asociado con esta cuenta con un NIP para verificar seguridad.";
+			}else{
+				displayError("user","Revisar Usuario");
+			}
+			
+		},
 		restore_submit(){
 			restore_submit(this.globalInputs.user);
 		},
 		enterNip(){
 			activatePanel("enterNip");
 		},
-		enterNipSubmit(){
-			activatePanel
+		enterNipSubmit(){			
 			enterNipSubmit(this.globalInputs.nip,this.globalInputs.user);
 		},
 		restorePass(){
