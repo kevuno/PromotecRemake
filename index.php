@@ -19,7 +19,7 @@
     <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <!-- MDB core CSS -->
-    <link href="assets/css/mdb.min.css" rel="stylesheet" />
+    <link href="assets/css/mdb.css" rel="stylesheet" />
     <!-- Google captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
@@ -27,6 +27,9 @@
 </head>
 
 <body>
+<div id="overlay">
+    
+</div>
     <div id="main_container">
 
         <!--Navbar-->
@@ -80,7 +83,7 @@
             <div class="wow fadeIn" id="descripcion">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div class="videoWrapper">
                                 <iframe width="560" height="349" src="https://www.youtube.com/embed/VNeStPWHfzk?ecver=1" frameborder="0" allowfullscreen></iframe>
                             </div>
@@ -156,8 +159,8 @@
         <!-- /Footer -->
 
         <!--Login Modal-->
-            <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog cascading-modal" role="document">
+            <div class="modal cascading-modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog cascading-media" role="document">
                     <!--Content-->
                     <div class="modal-content">
                         <!--Header-->
@@ -222,7 +225,7 @@
                                         <!-- /extra content -->
                                         <div class="row buttons modal-footer">
                                             <div class="col" v-for="button in panel.buttons">
-                                                <a href="#"><button type="button" @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button></a>
+                                                <a href="#"><button type="button" @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" class="waves-effect waves-light" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button></a>
                                             </div>
                                         </div>
                                     </div> 
@@ -319,6 +322,15 @@
         <script src="assets/js/mdb.min.js"></script>
         <!-- Custom JavaScript -->
         <script src="assets/js/custom.js"></script>
+        <!-- Slideshow component -->
+        <script src="assets/js/slideshow.js"></script>
+        <!-- Load and run slideshow -->
+        <script type="text/javascript">
+            //Array of images which you want to show: Use path you want.
+            var images = ["assets/img/promotec_bg_1.jpg","assets/img/promotec_bg_2.jpg","assets/img/promotec_bg_3.jpg","assets/img/promotec_bg_4.jpg","assets/img/promotec_bg_5.jpg"];
+            var element = $("#overlay");
+            startSlideshow(element,images);
+        </script>
         <!-- Wow animations -->
         <script src="assets/js/wow.js"></script>
         <!-- Wow animations initialization-->
