@@ -183,7 +183,6 @@ function assertResponse(json_response){
 	}
 }
 
-
 /** Restores the values of the globalInputs field on the Vue instance
  * @param: Exceptions: Which fields wont be restored
  **/
@@ -289,13 +288,13 @@ var data = new function(){
 				{
 					vueFunction: "submitLogin",
 					label: "Accesar",
-					class: "btn btn-default btn-lg",
-					icon: "fa-lock"
+					class: "btn btn-cyan",
+					icon: "fa-sign-in"
 				},
 				{
 					vueFunction: "restore",
 					label: "Restaurar contraseña",
-					class: "btn btn-outline-info waves-effect btn-sm",
+					class: "btn btn-outline-warning waves-effect btn-sm",
 					icon: "fa-question"
 				}
 			],
@@ -327,7 +326,7 @@ var data = new function(){
 				{
 					vueFunction: "goBackPanel",
 					label: "Regresar",
-					class: "btn btn-info",
+					class: "btn btn-info btn-sm",
 					icon: "fa-backward"
 				}
 			],
@@ -351,7 +350,7 @@ var data = new function(){
 				{
 					vueFunction: "goBackPanel",
 					label: "Regresar",
-					class: "btn btn-info",
+					class: "btn btn-info btn-sm",
 					icon: "fa-backward"
 				}
 			],
@@ -383,7 +382,7 @@ var data = new function(){
 				{
 					vueFunction: "goBackPanel",
 					label: "Regresar",
-					class: "btn btn-info",
+					class: "btn btn-info btn-sm",
 					icon: "fa-backward"
 				}
 			],
@@ -400,7 +399,9 @@ var data = new function(){
 			buttons: [
 				{
 					vueFunction: "close",
-					label: "Terminar"
+					class: "btn btn-info",
+					label: "Terminar",
+					icon: "fa-paper-cross"
 				}
 			],
 			isActive: false,
@@ -439,40 +440,6 @@ var Vue = new Vue({
 			//Restart panel stack and activate panel login
 			this.panelStack = [];
 			activatePanel("register");
-		},
-		//Updates the list of municipios by filtering the ones that match the estado id
-		updateActiveMunicipios(){
-			this.active_municipios = this.municipios.filter(function(el){
-				//Because out of the scope of the methdo, it needs "Vue." reference instead of "this."
-				return el.state_id == Vue.selected_estado.id;
-			});
-		},
-		//Updates the list of ciudades by filtering depending on the selected estado and municipio
-		updateActiveCiudades(){
-			var data = {
-				e: this.selected_estado.name,
-				m: this.selected_municipio.name
-			}
-			// Call the bd to get the list of ciudades
-			$.post("form_sqls/ciudad.php",data,function(respuesta){
-	        	console.log("respuesta: "+respuesta);
-	        	var ciudades = JSON.parse(respuesta);
-	        	this.active_ciudades = ciudades;
-	      	});
-		},
-		//Updates the list of ciudades by filtering depending on the selected estado and municipio
-		updateActiveColonias(){
-			var data = {
-				e: this.selected_estado.name,
-				m: this.selected_municipio.name,
-				c: this.selected_ciudad
-			}
-			// Call the bd to get the list of colonias as JSON string
-			$.post("form_sqls/colonia.php",data,function(respuesta){
-	        	console.log("respuesta: "+respuesta);	        	
-	        	var colonias = JSON.parse(respuesta);
-	        	this.active_ciudades = colonias;
-	      	});
 		},
 		goBackPanel(){
 			//Activates last viewed panel and removes it from the stack

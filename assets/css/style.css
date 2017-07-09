@@ -201,3 +201,18 @@ body{
 .registro_instrucciones > p{
   font-size: 1.5em;
 }
+/** Responsive Re-captcha **/
+.g-recaptcha {
+    transform: scale(0.77);
+    -webkit-transform:scale(0.77);
+    transform-origin:0 0;
+    -webkit-transform-origin:0 0;
+}
+
+/** Override stupid margin to footer elements **/
+.modal-footer>:not(:first-child) {
+    margin-left: 0;
+}
+.modal-footer>:not(:last-child) {
+  margin-right: 0;
+}

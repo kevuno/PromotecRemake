@@ -1,0 +1,35 @@
+1. Open "Acceso Principal or On Loading Login Panel - user is not alreay identified:
+	- Shows a "modal-dialog cascading-modal"  modal type
+	- Header is:
+	-                    <div class="modal-header light-blue darken-3 white-text">
+	-                        <h4 class="title"><i class="fa fa-user"></i> Acceso</h4>
+	- Only shows "Usuario" "input
+	- Buttons of "Accesar" and "Olvidó su contraseña"
+	1a. Click on Accesar:
+		1aa. User gets identified:
+			- State user-identified = true.
+			- Change modal class to "modal-dialog modal-avatar cascading-modal"
+			- Changes header to:
+			-                   <div class="modal-header">
+			-                   	<img src="some/img.png" class="rounded-circle img-responsive">
+			- Show password and captcha field
+			- Buttons are "Accesar" , "No eres <username>?", "Olvidó la contraseña"
+			1aaa. Clck on Accesar:
+				- Hides everything inside the panel and shows a loading circle
+				- Upon response shows everything inside the panel back again and hides the loading circle
+				- Shows response
+			1aab. Click on Olvido su contraseña?:
+				- Show Restore pass panel with a "Go" and "Back" buttons.
+				1aaba. Click on Go:
+					-Show "Are you sure panel" with "Go" and "Back" buttons. Further panels will all also have a continue button and a back button.
+				2aabb. Click on Back:
+					-Shows the main login panel (1 or 2)
+			1aac. Click on No eres <username>?:
+				- Swap status to user-identified = false.
+				- Refreshes
+		1ab. User doesn't get identified:
+			- Display error "Usuario desconocido".
+
+
+2. Open "Acceso Principal or On Loading Login Panel - user is not alreay identified:
+	- Goes to 1aa.

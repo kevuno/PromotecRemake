@@ -158,7 +158,7 @@
         </footer>
         <!-- /Footer -->
 
-        <!--Login Modal-->
+        <!--Login and PassRestore Template panel-->
         <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
             <div class="modal-dialog cascading-modal" role="document">
                 <!--Content-->
@@ -220,8 +220,8 @@
                                     <div v-html="panel.extra">
                                     </div>
                                     <!-- /extra content -->
-                                    <div class="row buttons modal-footer">
-                                        <div class="col" v-for="button in panel.buttons">
+                                    <div class="row buttons modal-footer justify-content-center">
+                                        <div v-for="button in panel.buttons">
                                             <a href="#"><button type="button" @keyup.enter="call(button.vueFunction)" @click="call(button.vueFunction)" class="waves-effect waves-light" :class="button.class">{{button.label}}<i class="fa ml-1" :class="button.icon"></i></button></a>
                                         </div>
                                     </div>
@@ -236,6 +236,37 @@
             </div>
         </div>
         <!--/. Login Modal-->
+
+        <!--Modal: Login with Avatar Form-->
+        <div class="modal fade" id="modalLoginAvatar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Header-->
+                    <div class="modal-header">
+                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20%281%29.jpg" class="rounded-circle img-responsive">
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body text-center mb-1">
+
+                        <h5 class="mt-1 mb-2">Maria Doe</h5>
+
+                        <div class="md-form ml-0 mr-0">
+                            <input type="password" type="text" id="form29" class="form-control ml-0">
+                            <label for="form29" class="ml-0">Enter password</label>
+                        </div>
+
+                        <div class="text-center">
+                            <button class="btn btn-cyan mt-1">Login <i class="fa fa-sign-in ml-1"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!--Modal: Login with Avatar Form-->
 
         <!--Modal: Register Form-->
         <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
