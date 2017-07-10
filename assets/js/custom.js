@@ -12,10 +12,11 @@ function Login(user,pass,captcha){
 		displayError("pass","Revise su contraseña");
 		return;
  	}
-    if (captcha == null || captcha.length=="" || captcha==" " || captcha==""){
+    if (!grecaptcha.getResponse()){
 		displayError("captcha","Da Click en 'No soy un robot'");
 		return;
 	}
+
 	// Send data
 	var data = {
 		user:user,
@@ -448,7 +449,7 @@ var Vue = new Vue({
 			}
 		},
 		submitLogin(){
-			Login(this.globalInputs.user,this.globalInputs.pass,this.globalInputs.ca);
+			Login(this.globalInputs.user,this.globalInputs.pass,this.globalInputs.captcha);
 		},
 		submitRegister(){
 			Register();
