@@ -36,7 +36,7 @@ class CaptchaData{
 	* Validates the captcha
 	*/
 	function validate(){
-		return CaptchaChecker::validate($this->captcha_data,$this->captcha_key,$this->ip);
+		return CaptchaChecker::validate($this->captcha_key,$this->captcha_data,$this->ip);
 	}
 }
 

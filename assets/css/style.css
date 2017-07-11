@@ -202,7 +202,7 @@ body{
   font-size: 1.5em;
 }
 /** Responsive Re-captcha **/
-.g-recaptcha {
+.recaptcha {
     transform: scale(0.77);
     -webkit-transform:scale(0.77);
     transform-origin:0 0;

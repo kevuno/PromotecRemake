@@ -12,9 +12,8 @@ class LoginMain{
 	*/
 	public static function loginGeneral(LoginData $loginData, CaptchaData $captchaData){
 		//Validar captcha
-		$captcha_checker = $captchaData->validate();
-		if($captchaData->validate()){
-			throw new Exception("No se pudo validar el captcha");
+		if(!$captchaData->validate()){
+			return new Response("No se pudo validar el captcha, favor de refrescar la página",Response::ERROR_CAPTCHA);
 		}
 		try{
 			// Construir el login correspondiente y asiganar objecto de link e informacion de usuario y pass

@@ -21,17 +21,17 @@
     <!-- MDB core CSS -->
     <link href="assets/css/mdb.min.css" rel="stylesheet" />
     <!-- Google captcha -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>
+
 
 
 </head>
 
 <body>
-<div id="overlay">
-    
-</div>
+    <div id="overlay">
+    </div>
     <div id="main_container">
-
         <!--Navbar-->
         <div class="container-fluid">
             <div class="row navbar-promotec">
@@ -216,8 +216,11 @@
                                             <label class="active" for="pass">Contraseña</label>
                                         </div>
                                     </div>
-                                    <!-- Section for extra content -->
-                                    <div v-html="panel.extra">
+                                    <!-- Section for captcha -->
+                                    <div v-if="panel.captcha" class="recaptcha">
+                                        <template>
+                                          <vue-recaptcha ref="recaptcha" sitekey="6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK" @verify="onVerify"></vue-recaptcha>
+                                        </template>
                                     </div>
                                     <!-- /extra content -->
                                     <div class="row buttons modal-footer justify-content-center">
@@ -344,8 +347,6 @@
         <script src="assets/js/bootstrap.min.js"></script>
         <!-- Material design bootstrap js -->
         <script src="assets/js/mdb.min.js"></script>
-        <!-- Custom JavaScript -->
-        <script src="assets/js/custom.js"></script>
         <!-- Slideshow component -->
         <script src="assets/js/slideshow.js"></script>
         <!-- Load and run slideshow -->
@@ -361,4 +362,5 @@
         <script type="text/javascript">
             new WOW().init();
         </script>
-    
+    <!-- Custom JavaScript -->
+    <script src="assets/js/custom.js"></script>

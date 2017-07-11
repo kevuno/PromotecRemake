@@ -22,6 +22,9 @@ class Response{
 	/** Tipo de respuesta de error al hacer login **/
 	const ERROR_LOGIN = 3;	
 
+	/** Tipo de respuesta de error al hacer login **/
+	const ERROR_CAPTCHA = 4;	
+
 	/** Objecto de informacion de la respuesta - opcional**/
 	public $data;
 

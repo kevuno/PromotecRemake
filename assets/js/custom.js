@@ -12,21 +12,27 @@ function Login(user,pass,captcha){
 		displayError("pass","Revise su contraseña");
 		return;
  	}
-    if (!grecaptcha.getResponse()){
-		displayError("captcha","Da Click en 'No soy un robot'");
-		return;
-	}
+// 	if(Vue.globalInputs.captcha == ""){
+		if (!grecaptcha.getResponse()){
+			displayError("captcha","Da Click en 'No soy un robot'");
+			return;
+		}
+//		Vue.globalInputs.captcha = grecaptcha.getResponse();
+// 	}
 
 	// Send data
-	var data = {
+	var data = {s
 		user:user,
 		pass:pass,
-		captcha:captcha
+		captcha:grecaptcha.getResponse()
 	};
   	Vue.currentPanel.loading = true;
   	$.post("Login/LoginEntryPoint.php",data,function(json_response){
 		// Close loading bar
 		Vue.currentPanel.loading = false;
+		// Reset captcha
+		Vue.resetRecaptcha();
+		grecaptcha.execute();
 		// Get response object
 		var response = assertResponse(json_response);
 		// Display response in console and in response div
@@ -36,6 +42,7 @@ function Login(user,pass,captcha){
 			activatePanel("restore");
 		}
 		setUpResponseMessage(response);
+
   	});
 }
 
@@ -140,6 +147,14 @@ function enterNipSubmit(nip,user){
 }
 
 /*************** FUNCIONES DE AYUDA **************/
+var widgetId;
+var onloadCallback = function(){
+	widgetId = grecaptcha.render('example1', {
+		'sitekey' : 'your_site_key',
+		'theme' : 'light'
+	});
+}
+
 /** Displays an error in the error panel section **/
 function displayError(input,errorMessage){
     	Vue.currentPanel.response = {
@@ -179,7 +194,7 @@ function assertResponse(json_response){
 		return response;
 	}catch (e){
 		// json_response was not json formatted so we display whats going on
-		// console.log(json_response);
+		console.log(json_response);
 		return {message: "Error interno del sistema, error de programación.",status: -1};
 	}
 }
@@ -259,6 +274,11 @@ var data = new function(){
 			code: 3,
 			color: "orange",
 			class: "warning"
+		},
+		CAPTCHAERROR: {
+			code: 4,
+			color: "red",
+			class: "danger"
 		}
 	},
 	this.error = "",
@@ -302,7 +322,8 @@ var data = new function(){
 			isActive: false,
 			loading: false,
 			passInput: true,
-			extra: "<div class'col'><div v-show='panel.captcha' class='g-recaptcha' data-sitekey='6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK'></div></div>"
+			captcha: true
+			//extra: "<div class'col'><template> <vue-recaptcha sitekey='6LdZEwcUAAAAAC4DO6u_4JxHqs_Pqck7vJ9mQfFK'></vue-recaptcha></template></div>"
 		},{
 			id: "restore",
 			header: "Restaurar contraseña",
@@ -417,7 +438,7 @@ var data = new function(){
 //Vue instance
 var Vue = new Vue({
 	el: '#main_container',
-
+	components: {'vue-recaptcha': VueRecaptcha},
 	methods: {
 		//open the form in the login tab
 		openLogin(){
@@ -488,6 +509,13 @@ var Vue = new Vue({
 		//Helper method to call the Vue function passed on the button e.g.: submitLogin(), restore(), etc
 		call(vueFunction){
 			this[vueFunction]();
+		},
+		// Helper to reset captcha
+	    resetRecaptcha() {
+	      this.$refs.recaptcha.reset();
+	    },
+		onVerify: function (response) {
+			console.log('Verify: ' + response)
 		}
 	},
 	data: data
