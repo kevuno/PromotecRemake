@@ -13,10 +13,10 @@ $pass = security($_POST["pass"]);
 $captcha = security($_POST["captcha"]);
 
 // De donde proviene el login
-$provider = "promotec";
+$provider = security($_POST["source"]);
 
 // Constates para el captcha
-$ip = "52.42.194.160"; //$_SERVER["serverdata"],
+$ip = $_SERVER["serverdata"];
 $secretKey = "6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if"; //Secret key for captcha
 
 // Call al Main login center

@@ -7,6 +7,9 @@ class PassReset {
 	/** The NIP object obtained from the username**/
 	public $nip;
 
+	/** The login Object **/
+	private $login;
+
 	/** Pass temporal **/
 	private $tempPass;
 
@@ -14,8 +17,9 @@ class PassReset {
 	private $link;
 
 	/** Construye un nuevo objecto de PassResset**/
-	function __construct($nip){
+	function __construct($nip,$login){
 		$this->nip = $nip;
+		$this->login = $login;
 		$this->link = $nip->link;
 	}
 	/**
@@ -43,7 +47,8 @@ class PassReset {
 		$today = date("Y-m-d");
 		// Actualizar contraseña
 		$idRest = $this->nip->idRest;
-		$passResetQuery="call multi.cryptoc('$idRest','$this->tempPass')";
+		$db = $this->login->db;
+		$passResetQuery="call $db.cryptoc('$idRest','$this->tempPass')";
 		
 		// Crear nuevo registro de NIP de que el nip ya quedo usado
 		$nipRegisterUpdate="INSERT into multi.nips (user, numero, nip, fecha, status, app)values('$username','$cel','$nipNumber','$fecha','2','WiMO-Web')";
@@ -68,7 +73,7 @@ class PassReset {
 	public function sendPass(){
 		// Datos
 		$cel = $this->nip->userPhoneNumber;
-		$txt="Su clave WiMO temporal es: $this->tempPass Si Ud. No solicito cambio de clave, por favor comuníquese al 2222084123.";
+		$txt="Su clave temporal es: $this->tempPass Si Ud. No solicito cambio de clave, por favor comuníquese al 2222084123.";
 		$sms="INSERT into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')";
 
 		// Si se logro enviar el msm enviar mensaje
@@ -101,7 +106,7 @@ class PassReset {
 	    	$response = Nip::getNipFromUser($username,$link,$login);
 	    	$nip = $response->data;
 	    	if($nip){
-	    		$passReset = new PassReset($nip);
+	    		$passReset = new PassReset($nip,$login);
 	    		return new Response("El NIP ha sido verificado y es valido para poder restaurar la contraseña",Response::SUCCESS,$passReset);
 	    	}
 	    	return $response;

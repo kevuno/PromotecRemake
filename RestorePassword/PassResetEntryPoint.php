@@ -7,13 +7,16 @@ require('../Login/LoginMain.php');
 require('Nip.php');
 require('PassReset.php');
 
-//Recuperar datos
+// Recuperar datos
 $nip = security($_POST["nip"]);
 $username = security($_POST["user"]);
 
+// De donde proviene el reseteo
+$provider = security($_POST["source"]);
+
 try{
 	// Obtener objecto login
-	$login = LoginMain::loginFactory("promotec");
+	$login = LoginMain::loginFactory($provider);
 	// 1. Checar si el nip es valido y obtener el objecto de restauracion
 	$response = PassReset::validateNip($nip,$username,link::getLink(),$login);
 

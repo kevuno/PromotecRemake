@@ -71,7 +71,7 @@ abstract class Login {
 			return new Response("Cuenta actualmente bloqueada por superar numero de intentos",Response::LOGIN_BLOCK);
 		}
 		// Si es mayor a 0, devolver respuesta de error con el numero de intentos que quedan
-		return new Response("Inicio de session incorrecto, checar usuario y contraseña", RESPONSE::ERROR_LOGIN,$tries_left);
+		return new Response("Inicio de session incorrecto, checar usuario o contraseña", RESPONSE::ERROR_LOGIN,$tries_left);
 	}
 
 	/** 

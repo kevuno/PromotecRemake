@@ -12,27 +12,25 @@ function Login(user,pass,captcha){
 		displayError("pass","Revise su contraseña");
 		return;
  	}
-// 	if(Vue.globalInputs.captcha == ""){
-		if (!grecaptcha.getResponse()){
+	if(Vue.globalInputs.captcha == ""){
 			displayError("captcha","Da Click en 'No soy un robot'");
 			return;
-		}
-//		Vue.globalInputs.captcha = grecaptcha.getResponse();
-// 	}
+ 	}
 
 	// Send data
-	var data = {s
+	var data = {
 		user:user,
 		pass:pass,
-		captcha:grecaptcha.getResponse()
+		captcha:Vue.globalInputs.captcha,
+		source: "promotec"
 	};
   	Vue.currentPanel.loading = true;
   	$.post("Login/LoginEntryPoint.php",data,function(json_response){
 		// Close loading bar
 		Vue.currentPanel.loading = false;
 		// Reset captcha
-		Vue.resetRecaptcha();
-		grecaptcha.execute();
+		//Recaptcha.reload();
+		//grecaptcha.execute();
 		// Get response object
 		var response = assertResponse(json_response);
 		// Display response in console and in response div
@@ -127,7 +125,12 @@ function enterNipSubmit(nip,user){
 	if (nip==" " || nip=="" || nip==null) { error="Revise NIP"; acc=$('input#nip').focus(); }
 	if (error=="0"){
 		Vue.currentPanel.loading = true;
-		$.post("RestorePassword/PassResetEntryPoint.php",{nip: nip, user: user},function(json_response){
+		var data = {
+			nip: nip,
+			user: user,
+			source: "promotec"
+		};
+		$.post("RestorePassword/PassResetEntryPoint.php",data,function(json_response){
 			// Close loading bar
 			Vue.currentPanel.loading = false;
 			// Get response object
@@ -514,8 +517,9 @@ var Vue = new Vue({
 	    resetRecaptcha() {
 	      this.$refs.recaptcha.reset();
 	    },
+	    // Recibe la respuesta de captcha
 		onVerify: function (response) {
-			console.log('Verify: ' + response)
+			Vue.globalInputs.captcha = response;
 		}
 	},
 	data: data
