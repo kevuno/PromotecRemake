@@ -23,7 +23,7 @@ class LoginPromotor extends Login{
 			$sessionObj = SessionData::Instance();
 
 			$portales = ["promotec" => "pt", "tarifario" => "tar","taf" => "taf","portabilidad" => "p", "ass" => "s", "telemarketing" => "telema" ]; // key is name of portal, value is prefix for the session name
-			$campos = ["nom" => "nombre", "user" => "user", "dis" => "dis", "suc" => "suc"]; //Key is sess field name, value is name in row var
+			$campos = ["nombre" => "nombre", "user" => "user", "dis" => "dis", "suc" => "suc"]; //Key is sess field name, value is name in row var
 			//Este array contendrá el contenido de las combinaciones de los prefijos y campos de arriba
 			$partial_data_for_sessions = SessionData::createArrayCombinations($portales, $campos, $row);
 			//Añadir al objecto final de la session

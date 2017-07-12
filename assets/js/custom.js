@@ -38,7 +38,7 @@ function Login(user,pass,captcha){
 		}else if(response.status == Vue.responseTypes.SUCCESS.code){
 			// Redirect to homepage
 			console.log("Successs");
-			window.location="../promotor";
+			window.location="/promotor";
 		}
 		setUpResponseMessage(response);
 
