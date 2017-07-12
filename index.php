@@ -1,3 +1,7 @@
+<?php
+session_start();
+include('control.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 

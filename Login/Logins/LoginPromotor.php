@@ -33,20 +33,17 @@ class LoginPromotor extends Login{
 				// TODO Checar campos ,"pt" => $row['C14'],"promolog" => $row['C14NC4']
 
 
-			$aditional_session_vars_promotec = ["ptnom" => ucwords($row["nombre"]), "ptblock" => $row["bloqp"],"ptnivel" => "","ptmesa" => "","ptref" => $row['codigo'],"ptcod" => $row['referido'],"ptref" => $row['codigo']];
-			$aditional_session_vars_tar = ["tartipo" => $row["tipo"],"tar" => md5("1c14nc4")];
-			$sessionObj->addArray($aditional_session_vars_tar);
-
+			$aditional_session_vars_promotec = ["ptnom" => ucwords($row["nombre"]), "ptblock" => $row["bloqp"],"ptnivel" => "","ptmesa" => "","ptref" => $row['codigo'],"ptcod" => $row['referido'],"ptref" => $row['codigo'],"pt" => 'C14',"promolog" => 'C14NC4'];
+			$aditional_session_vars_tar = ["tartipo" => $row["tipo"],"tar" => md5("1c14nc4")];			
 			$aditional_session_vars_taf = ["taftipo" => "0","taf" => md5("1c14nc4")];
-			$sessionObj->addArray($aditional_session_vars_taf);
-
 			$aditional_session_vars_porta = ["pref" => $row['codigo'], "pcod" => $row['referido'], "porta" => md5("1c14nc4") ];
-			$sessionObj->addArray($aditional_session_vars_porta);
-
 			$aditional_session_vars_ass = ["stípo" => $row["tipo"], "ass" => md5("1c14nc4")];
-			$sessionObj->addArray($aditional_session_vars_ass);
-
 			$aditional_session_vars_telemarketing = ["teletipo" => $row["tipo"], "teletipo" => md5("1c14nc4")];
+			$sessionObj->addArray($aditional_session_vars_promotec);
+			$sessionObj->addArray($aditional_session_vars_tar);
+			$sessionObj->addArray($aditional_session_vars_taf);
+			$sessionObj->addArray($aditional_session_vars_porta);
+			$sessionObj->addArray($aditional_session_vars_ass);
 			$sessionObj->addArray($aditional_session_vars_telemarketing);
 
 			return $sessionObj;

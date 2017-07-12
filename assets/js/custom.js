@@ -28,9 +28,6 @@ function Login(user,pass,captcha){
   	$.post("Login/LoginEntryPoint.php",data,function(json_response){
 		// Close loading bar
 		Vue.currentPanel.loading = false;
-		// Reset captcha
-		//Recaptcha.reload();
-		//grecaptcha.execute();
 		// Get response object
 		var response = assertResponse(json_response);
 		// Display response in console and in response div
@@ -38,6 +35,10 @@ function Login(user,pass,captcha){
 		// If there was a login block, take user to the Restore pass panel
 		if(response.status == Vue.responseTypes.LOGINBLOCK.code){
 			activatePanel("restore");
+		}else if(response.status == Vue.responseTypes.SUCCESS.code){
+			// Redirect to homepage
+			console.log("Successs");
+			window.location="../promotor";
 		}
 		setUpResponseMessage(response);
 
