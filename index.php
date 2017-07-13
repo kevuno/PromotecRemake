@@ -3,14 +3,15 @@ session_start();
 include('control.php');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
+    <meta name="Description" content="Buscas cómo iniciar un negocio o cómo ganar dinero extra, tenemos diferentes modelos de negocio para ti, Promotec y franquicias telcel.">
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Promotec</title>
+    <title>Promotec tu propio negocio.</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
@@ -28,7 +29,21 @@ include('control.php');
     <script src="https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>
 
-
+    <!-- Facebook Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '238193969980173'); // Insert your pixel ID here.
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=238193969980173&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- DO NOT MODIFY -->
+    <!-- End Facebook Pixel Code -->
 
 </head>
 
@@ -111,12 +126,12 @@ include('control.php');
                              <b><span>Descarga la App</span></b>
                              <br>
                              <br>
-                             <a href=""><img src="assets/img/promotec-logo.png" alt="Entrar" class="logo"></a>
+                             <a href="https://play.google.com/store/apps/details?id=com.promotormicrotec.promotec"><img src="assets/img/promotec-logo.png" alt="Entrar" class="logo"></a>
                         </div>
                     </div>
                     <div class="row justify-content-center" id="store-logos-container">
                         <div class="col-md-10">
-                             <a href="#"><img src="assets/img/ios.png" alt="Entrar" class="store-logo"></a>
+                             <a href="https://itunes.apple.com/mx/app/promotec/id1093302288?mt=8"><img src="assets/img/ios.png" alt="Entrar" class="store-logo"></a>
                              <a href="#"><img src="assets/img/android.png" alt="Entrar" class="store-logo"></a>
                         </div>
                     </div>                                                
@@ -129,12 +144,12 @@ include('control.php');
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-9 vertical-center-text">
-                            <a><p>
+                            <a href="https://www.micro-tec.com.mx/pagina/microtec/franquicias.html"><p>
                                     O si te interesa invertir en una franquicia con excelentes ingresos tenemos una opción para tí!
                             </p></a>
                         </div>
                         <div class="col-md-3">
-                        <a href=""><img src="assets/img/franquicias.png" alt="Más información" class="franquicias-img"></a>
+                        <a href="https://www.micro-tec.com.mx/pagina/microtec/franquicias.html"><img src="assets/img/franquicias.png" alt="Más información" class="franquicias-img"></a>
                         </div>
                     </div>               
                 </div>
@@ -154,7 +169,7 @@ include('control.php');
                     </div>
                     <div class="col-6">
                         <div class="float-right">
-                                Un programa de <img src="assets/img/micro-logo.png" class="footer-logo-microtec">
+                                <a href="https://www.micro-tec.com.mx">Un programa de <img src="assets/img/micro-logo.png" class="footer-logo-microtec"></a>
                         </div>
                     </div>
                 </div>
@@ -366,5 +381,24 @@ include('control.php');
         <script type="text/javascript">
             new WOW().init();
         </script>
-    <!-- Custom JavaScript -->
-    <script src="assets/js/custom.js"></script>
+        <!-- Custom JavaScript -->
+        <script src="assets/js/custom.js"></script>
+        <!-- Google analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-102480590-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+        <script type="text/javascript">
+            window.smartlook||(function(d) {
+            var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+            var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+            c.charset='utf-8';c.src='https://rec.smartlook.com/recorder.js';h.appendChild(c);
+            })(document);
+            smartlook('init', 'fad4193ab3c289c1fe0c2b64ed576470ee47d90d');
+        </script>
