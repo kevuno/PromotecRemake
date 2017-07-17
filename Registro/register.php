@@ -70,12 +70,13 @@ function execRegistro($nombre,$apaterno,$amaterno,$cel,$link){
     $ap=substr($apaterno,0,1);
     $am=substr($amaterno,0,1);
     //consecutivo
+    $link_call=mysqli_connect($_SERVER['serverdata'],'samtec','sam33');
     $query = "call promotec.folio('conse')";
-    $result = mysqli_query($link, $query);
-    $row = mysqli_fetch_array($result, MYSQLI_BOTH);
+    $result = mysqli_query($link_call, $query);
+    $row = mysqli_fetch_array($result);
     $conse = $row['valor'];
     mysqli_free_result($result);
-    mysqli_close($link);
+
     //aumentar 0
     if (strlen($conse)==1) {
       $conse="00".$conse;
@@ -87,17 +88,13 @@ function execRegistro($nombre,$apaterno,$amaterno,$cel,$link){
     $codigo=strtoupper($codigo);
 
     //saco clisat
+    $link_call=mysqli_connect($_SERVER['serverdata'],'samtec','sam33');
     $query="call canal.folio('clisat')";
-    $result=mysqli_query($link, $query);
-    $row=mysqli_fetch_array($result, MYSQLI_BOTH);
+    $result=mysqli_query($link_call, $query);
+    $row=mysqli_fetch_array($result);
     $clisat = $row['folio'];
     mysqli_free_result($result);
-    mysqli_close($link);
-
-    //inserto en canal.lista
-    //query anterior
-    //$sql=html_entity_decode("INSERT INTO canal.lista (fecha,nombre,apaterno,amaterno,cel,tel,email,nnego,mediov,calle,next,colonia,muni,cd,edi,cp,user,dis,representa,lim,tipopre,recibe,sucursal,tipo,bloqp,agente,satcli) VALUES ('$fecha','$nombre','$apaterno','$amaterno','$cel','$tel','$email','$nnego','$mediov','$calle','$next','$colonia','$muni','$cd','$edi','$cp','$us','$nnego','$repre','$lim','$tipopre','$recibe','$suc','6','2','$agente','$clisat')");
-    //query sin los datos que se removieron del formulario
+    
     $sql=html_entity_decode("INSERT INTO canal.lista (fecha,nombre,apaterno,amaterno,cel,nnego,mediov,user,dis,representa,lim,tipopre,recibe,sucursal,tipo,bloqp,agente,satcli) VALUES ('$fecha','$nombre','$apaterno','$amaterno','$cel','$nnego','$mediov','$us','$nnego','$repre','$lim','$tipopre','$recibe','$suc','6','2','$agente','$clisat')");
     
     //compruebo insercion en canal.lista
@@ -107,9 +104,6 @@ function execRegistro($nombre,$apaterno,$amaterno,$cel,$link){
       //compruebo insercion en canal.descuento
       if (mysqli_query($link, $sql)) {
         //insertar cliente
-        //antigua query
-        //$cli=html_entity_decode("insert into SAT.clientes (idcliente,nombre,calle,numext,colonia,localidad,municipio,estado,pais,cp,email,telefono) values ('$clisat','$repre','$calle','$next','$colonia','$cd','$muni','$edi','Mexico','$cp','$email','$cel')");
-        //query actual sin los demas datos
         $cli=html_entity_decode("insert into SAT.clientes (idcliente,nombre,telefono) values ('$clisat','$repre','$cel')");
         mysqli_query($link, $cli);
         //se registra el usuario
@@ -122,16 +116,18 @@ function execRegistro($nombre,$apaterno,$amaterno,$cel,$link){
         $sql_id=mysqli_query($link, "select id from recargas.usuarios where user='$ugen'");
         if ($row=mysqli_fetch_array($sql_id)) { $idus=$row['id']; }
         //asigno pass
+        $link_call=mysqli_connect($_SERVER['serverdata'],'samtec','sam33');
         $query="call recargas.cryptoc('$idus','$pgen')";
-        $result=mysqli_query($link, $query);
-        mysqli_close($link);
+        $result=mysqli_query($link_call, $query);
+        //mysqli_close($link);
 
           $aplicado="SI";
           //enviar sms con user y pass
-    $txt="Nueva alta PromoTec su usuario: ".$ugen." password: ".$pgen." y el portal: http://www.promotormicrotec.mx";
-    mysqli_query($link, "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')");
-
-      return new Response("Solicitud capturada correctamente",Response::SUCCESS);
+          $txt="Nueva alta PromoTec su usuario: ".$ugen." password: ".$pgen." y el portal: http://www.promotormicrotec.mx";
+          if(!mysqli_query($link, "insert into SMSServer.MessageOut (MessageTo,MessageText) values ('52$cel','$txt')")){
+            return new Response("Solicitud capturada satisfactoriamente! Sin embargo ocurrió un problema al enviar sus datos a su telefono. Porfavor comuníquese a cualquiera de los siguientes números y un representate lo ayudará a completar el proceso: 2225051926 o 2221123782.  ",Response::SUCCESS);
+          }
+          return new Response("Solicitud capturada satisfactoriamente! Se le ha enviado un mensaje SMS a su celular con los datos de acceso a promotec. Un representate se pondrá en contacto con usted en un máximo de 48 horas. De no ser así, porfavor comuníquese a cualquiera de los siguientes números y un representate lo ayudará a completar el proceso: 2225051926 o 2221123782.",Response::SUCCESS);
         } else {
           return new Response("No se creo el usuario, pongase en contacto con el area de sistemas MicroTec",Response::ERROR);
         }
@@ -144,86 +140,6 @@ function execRegistro($nombre,$apaterno,$amaterno,$cel,$link){
           
   } else {
     return new Response("Faltan campos requeridos por rellenar",Response::ERROR);
-  }
-}
-
-//registro de depositos
-function reg_depo() {
-  //datos del deposito
-  $fdepo=security($_POST['fdepo']);
-  $tipo=security($_POST['tipo']);
-  $banco=security($_POST['banco']);
-  $monto=security($_POST['monto']);
-  $nmovi=security($_POST['nummovi']);
-  $telc=security($_POST['telc']);
-  $emailc=security($_POST['emailc']);
-  //validamos si el usuario es su primer registro, de ser asi se recolectaran los siguientes datos.
-  if(security($_POST['bloqueo']=="2")){
-   //datos personales usuario
-  $tel=security($_POST['tel']);
-  $email=security($_POST['correo']);
-  $email=strtolower($email);
-  $referido=security($_POST['referido']);
-  $referido=strtoupper(trim($referido));
-  //datos de la direccion del usuario
-  $edi=security($_POST['edi']);
-  $edi=ucwords(strtolower(trim($edi)));
-  $muni=security($_POST['munic']);
-  $muni=ucwords(strtolower(trim($muni)));
-  $cd=security($_POST['ciudad']);
-  $cd=ucwords(strtolower(trim($cd)));
-  $colonia=security($_POST['colonia']);
-  $colonia=ucwords(strtolower(trim($colonia)));
-  $cp=security($_POST['cp']);
-  $calle=security($_POST['calle']);
-  $calle=ucwords(strtolower(trim($calle)));
-  $next=security($_POST['next']); 
-  }
-  
-  //
-  $agente=$_SESSION['ptnom'];
-  $dis=$_SESSION['ptdis'];
-
-  if(!empty($agente) && !empty($dis)){
-    if (!empty($fdepo) && !empty($banco) && !empty($monto) && !empty($nmovi) && !empty($telc)) {
-    //fecha
-    date_default_timezone_set('America/Mexico_City');
-    $fecha=date ("Y-m-d H:i:s");
-      //actualizo datos en la bd
-        $sql=html_entity_decode("INSERT into multi.depositos (dis, agente, tipo, fecha, fdep, monto, banco, movimiento,telefono,email) values ('$dis', '$agente', '$tipo', '$fecha', '$fdepo', '$monto', '$banco', '$nmovi','$telc','$emailc')");
-    if(security($_POST['bloqueo']=="2")){
-      //actualizo canal.lista 
-    $ActLista=html_entity_decode("UPDATE canal.lista set tel='$tel', email='$email' ,calle='$calle',next='$next' ,colonia='$colonia' ,muni='$muni' ,cd='$cd' ,edi='$edi' ,cp='$cp' where user='$dis'");
-    //obtenemos el satcli del usuario para poder actualizar SAT.clientes
-    $obtnSatcli="SELECT satcli from canal.lista where user='$dis'";
-    $result1=mysqli_query($link, $obtnSatcli);
-      $row1=mysqli_fetch_array($result1);
-      $satcli=$row1['satcli'];
-    //se actualizan datos de sat.clientes
-    $cli=html_entity_decode("UPDATE SAT.clientes set calle='$calle', numext='$next', colonia='$colonia', localidad='$cd', municipio='$muni' ,estado='$edi', pais='Mexico', cp='$cp' , email='$email' where idcliente='$satcli'");
-
-    //ejecutamos querys
-    mysqli_query($link, $ActLista);
-    mysqli_query($link, $cli);
-    //echo $ActLista."  --|--   ".$cli."  --|--   ".$obtnSatcli;
-    }  
-    
-    
-    if ($result=mysqli_query($link, $sql)) {
-      $sqlid="SELECT id from multi.depositos where fecha='$fecha' and movimiento='$nmovi'";
-      $result=mysqli_query($link, $sqlid);
-      $row=mysqli_fetch_array($result);
-      $id=$row['id'];
-      echo "S|Se registro correctamente su deposito|success|depositos|Realizar otro deposito|$id|";
-      
-    } else {
-      echo "E|Ocurrio un error al intentar registrar su deposito, por favor reintente!|warning|depositos|Reintentar";
-    }
-  } else {
-    echo "E|Faltan datos necesarios para registrar su deposito, reintente!|danger|depositos|Reintentar";
-  }
-  }else{
-    echo "E|Su sesión expiro, por favor inicie sesión nuevamente.|danger|depositos|Reintentar";
   }
 }
 

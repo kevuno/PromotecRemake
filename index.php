@@ -4,7 +4,6 @@ include('control.php');
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta name="Description" content="Buscas cómo iniciar un negocio o cómo ganar dinero extra, tenemos diferentes modelos de negocio para ti, Promotec y franquicias telcel.">
     <!-- Required meta tags always come first -->
@@ -21,14 +20,8 @@ include('control.php');
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- Responsive styles -->
     <link href="assets/css/responsive_style.css" rel="stylesheet">
-    <!-- Select2 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <!-- MDB core CSS -->
     <link href="assets/css/mdb.min.css" rel="stylesheet" />
-    <!-- Google captcha -->
-    <script src="https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>
-
     <!-- Facebook Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -132,7 +125,7 @@ include('control.php');
                     <div class="row justify-content-center" id="store-logos-container">
                         <div class="col-md-10">
                              <a href="https://itunes.apple.com/mx/app/promotec/id1093302288?mt=8"><img src="assets/img/ios.png" alt="Entrar" class="store-logo"></a>
-                             <a href="#"><img src="assets/img/android.png" alt="Entrar" class="store-logo"></a>
+                             <a href="https://play.google.com/store/apps/details?id=com.promotormicrotec.promotec"><img src="assets/img/android.png" alt="Entrar" class="store-logo"></a>
                         </div>
                     </div>                                                
                 </div>
@@ -186,6 +179,11 @@ include('control.php');
                     <div class="modal-header light-blue darken-3 white-text">
                         <h4 class="title"><i class="fa fa-user"></i> Acceso</h4>
                     </div>
+                    <!--
+                    <div class="col-2 offset-8">
+                        <button type="button" class="btn btn-sm btn-secondary waves-effect close-button" data-dismiss="modal">Cerrar <i class="fa fa-times-circle ml-1"></i></button>
+                    </div>
+                    -->
                     <!-- A template for the panels for login process -->
                     <div v-for="panel in panels">
                         <!--Loading bar-->
@@ -302,47 +300,55 @@ include('control.php');
                     </div>
                     <!--Body-->
                     <div class="modal-body">
-                        <div class="registro_instrucciones">
-                            <p>Registra tus datos a continuación para empezar a ganar dinero: </p>
-                        </div>
-                        <div class="registro_respuesta">
-                        </div>
-                        <div class="md-form form-sm">
-                            <div class="col error" id="error">
+                        <!--Loading circle-->
+                        <div id="registro_loading" style="display: none">
+                            Cargando...
+                            <div class="progress primary-color-dark">
+                                <div class="indeterminate"></div>
                             </div>
                         </div>
-                        <div class="md-form form-sm">
-                            <i class="fa fa-user prefix"></i>                
-                            <input type="text" name="nombre" id="nombre" class="form-control validate" required>
-                            <label for="nombre">Nombre <span class="red-text">*</span></label>
+                        <div class="col response" id="registro_respuesta">
                         </div>
-                        <div class="md-form form-sm">
-                            <i class="fa fa-none prefix"></i>
-                            <input type="text" id="apaterno" class="form-control validate" required>
-                            <label for="apaterno">Apellido Paterno <span class="red-text">*</span></label>
-                        </div>
-                        <div class="md-form form-sm">
-                            <i class="fa fa-none prefix"></i>
-                            <input type="text" id="amaterno" class="form-control validate" required>
-                            <label for="amaterno">Apellido Materno <span class="red-text">*</span></label>
-                        </div>
-                        <div class="md-form form-sm">
-                            <i class="fa fa-mobile prefix"></i>
-                            <input type='text' max-length="10" id="celular" class="form-control validate" required>
-                            <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
-                        </div>
+                        <div id="registro_content">
+                            <div class="registro_instrucciones">
+                                <span>Registra tus datos a continuación para empezar a ganar dinero: </span>
+                            </div>
+                            <div class="md-form form-sm">
+                                <div class="col error" id="registro_error">
+                                </div>
+                            </div>                   
+                            <div class="md-form form-sm">
+                                <i class="fa fa-user prefix"></i>                
+                                <input type="text" name="nombre" id="nombre" class="form-control validate" required>
+                                <label for="nombre">Nombre <span class="red-text">*</span></label>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-none prefix"></i>
+                                <input type="text" id="apaterno" class="form-control validate" required>
+                                <label for="apaterno">Apellido Paterno <span class="red-text">*</span></label>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-none prefix"></i>
+                                <input type="text" id="amaterno" class="form-control validate" required>
+                                <label for="amaterno">Apellido Materno <span class="red-text">*</span></label>
+                            </div>
+                            <div class="md-form form-sm">
+                                <i class="fa fa-mobile prefix"></i>
+                                <input type='text' max-length="10" id="celular" class="form-control validate" required>
+                                <label for="celular">Teléfono Celular<span class="red-text">*</span></label>
+                            </div>
 
-                        <div class="text-center form-sm mt-2">
-                            <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                            <div class="text-center form-sm mt-2">
+                                <button @keyup.enter="submitRegister" @click="submitRegister" class="btn btn-indigo">Guardar solicitud <i class="fa fa-sign-in ml-1"></i></button>
+                            </div>
                         </div>
-                
                     </div>
                     <!--Footer-->
                     <div class="modal-footer">
                         <div class="options text-center text-md-right mt-1">
                             <p> Ya tienes una cuenta?<a href="#" @click="openLogin"> Acceder</a></p>
                         </div>
-                        <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Cerrar <i class="fa fa-times-circle ml-1"></i></button>
+                        <button type="button" class="btn btn-outline-info waves-effect ml-auto close-button" data-dismiss="modal">Cerrar <i class="fa fa-times-circle ml-1"></i></button>
                     </div>
                 </div>
                 <!--/.Content-->
@@ -358,8 +364,6 @@ include('control.php');
         <script src="assets/js/jquery-3.1.1.min.js"></script>
         <!-- Vue js -->
         <script src="https://unpkg.com/vue"></script>
-        <!-- Validators -->
-        <script src="assets/js/validate.js"></script>
         <!-- Tooltips -->
         <script src="assets/js/tether.min.js"></script>
         <!-- Bootstrap core JavaScript -->
@@ -381,6 +385,11 @@ include('control.php');
         <script type="text/javascript">
             new WOW().init();
         </script>
+        <!-- Google captcha -->
+        <script src="https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.min.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>
+        <!-- Validators -->
+        <script src="assets/js/validate.js"></script>
         <!-- Custom JavaScript -->
         <script src="assets/js/custom.js"></script>
         <!-- Google analytics -->
