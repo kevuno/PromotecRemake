@@ -5,13 +5,15 @@ include('control.php');
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="google-site-verification" content="7OPmsIj1eIdkGL54xVF7kueXQ2qDbXiuCGf5-4itEe4" />
     <meta name="Description" content="Buscas cómo iniciar un negocio o cómo ganar dinero extra, tenemos diferentes modelos de negocio para ti, Promotec y franquicias telcel.">
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Promotec tu propio negocio.</title>
-
+    <!-- Lenguage -->
+    <link rel="alternate" href="www.promotormicrotec.mx" hreflang="es-mx" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
     <!-- Bootstrap core CSS -->
