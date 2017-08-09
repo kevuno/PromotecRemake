@@ -1,8 +1,0 @@
-CAMBIOS:
-
-1- Hacer el panel mas pequeño!!! - DONE
-
-2- Agregar instrucciones en el panel de registro - DONE
-
-3- Quitar inputs inecesarios, solo nombres y numero de celular. -DOME
-4- Hacer el baner de "Inicia tu propi..." mas pequeño en movil.
