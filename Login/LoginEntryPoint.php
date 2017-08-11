@@ -13,7 +13,7 @@ $pass = security($_POST["pass"]);
 $captcha = security($_POST["captcha"]);
 
 // De donde proviene el login
-$provider = security($_POST["source"]);
+$tipo = security($_POST["source"]);
 
 // Constates para el captcha
 $ip = $_SERVER["serverdata"];
@@ -21,7 +21,8 @@ $secretKey = "6LdZEwcUAAAAAHJK2O6yxnM2cw0C-P7hG5UeC6if"; //Secret key for captch
 
 // Call al Main login center
 try{
-	$loginData = new LoginData($user,$pass,$provider);
+	// Crear objectos para contener la informacion
+	$loginData = new LoginData($user,$pass,$tipo);
 	$captchaData = new CaptchaData($captcha,$secretKey,$ip);
 	$response = LoginMain::loginGeneral($loginData,$captchaData);
 	echo $response->toJson();

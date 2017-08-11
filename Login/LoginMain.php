@@ -3,7 +3,6 @@ require_once('../link.php');
 require('Login.php');
 
 class LoginMain{
-
 	/**
 	* Funcion que ejecuta todas las funciones necesarias para hacer login ejecutando el login principal en
 	* en la base de datos base y despues obtiene los datos de sesión dependiendo del login del cual se trate.
@@ -31,8 +30,7 @@ class LoginMain{
 
 				//Iniciamos las variables de session
 				$session_data->initializeSessions();
-
-				return new Response("Login satisfactorio.",Response::SUCCESS,self::generateToken());
+				return new Response("Login satisfactorio.",Response::SUCCESS);
 			}
 			// Si no solo se regresa la respuesta
 			return $response;
@@ -43,26 +41,19 @@ class LoginMain{
 
 	/**
 	* Construlle el objeto de login dependiendo del tipo de login
-	* @param: $tipo_login: El tipo de login que se va a crear
+	* @param: $login_tipo: El tipo de login que se va a crear
 	**/
-	public static function loginFactory($tipo_login){
-		if($tipo_login === "promotec"){
+	public static function loginFactory($login_tipo){
+		if($login_tipo === "promotec"){
 			return new LoginPromotor();
-
-		}else if($tipo_login === "microtae"){
-
-		}else if($tipo_login === "login3"){
-			
-		}else if($tipo_login === "login4"){
-			
+		}else if($login_tipo === "microtae"){
+			return new LoginMicroTae();
+		}else if($login_tipo === "micropay"){
+			return new LoginMicroPay();
+		}else if($login_tipo === "samtec"){
+			return new LoginSamtec();
 		}else{
-			throw new Exception("Tipo de login ".$tipo_login." no es valido.");
+			throw new Exception("Tipo de login ".$login_tipo." no es valido.");
 		}
-	}
-
-
-	private function generateToken(){
-		$length = 20;
-    	return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
 	}
 }

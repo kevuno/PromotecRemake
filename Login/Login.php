@@ -1,10 +1,10 @@
 <? 
-// Logins // TODO improve namespace
+// Logins 
 require('Logins/LoginPromotor.php');
 require('Logins/LoginSamtec.php');
 require('Logins/LoginMicroTae.php');
 require('Logins/LoginMicroPay.php');
-// Other classes
+// Otras classes
 require('BlockUserMiddleware.php');
 require('SessionData.php');
 abstract class Login {
@@ -20,14 +20,17 @@ abstract class Login {
 	/** Objecto de respuesta **/
 	protected $response;
 
-	/** Database connection link **/
+	/** Link de conexion de BD**/
 	protected $link;
 
 	/** Block Middleware **/
 	public $blockMiddleware;
 
 
-	/** Object constructor with optional parameters**/
+	/**
+	* Construye el objecto de cualquier tipo de login
+	* @param $db y $table: La base de datos y tabla del login en concreto.
+	**/
 	function __construct($db,$table){
 		$this->db = $db;
 		$this->table = $table;
@@ -48,18 +51,18 @@ abstract class Login {
 				return $check_response;
 			}
 
-			// No esta bloqueado el usuario asi que continua
+			// No esta bloqueado el usuario asi que continua intentando hacer login
 			$user = $this->loginData->user;
 			$pass = $this->loginData->pass;
-			//$sql="SELECT id FROM $this->db.$this->table WHERE user='$user' AND pass='$pass'";
-			$sql="SELECT id FROM $this->db.$this->table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
-			$result = mysqli_query($this->link, $sql);	
-			if($row = mysqli_fetch_array($result)){
+			$db = $this->db;
+			$table = $this->table;
+			$link = $this->link;
+			if(intentarLogin($user,$pass,$db,$table,$link)){
 				// Login logrado, actualizar estado de bloqueo, se ignoran los intentos restantes que devuelve updateBlockIP()
 				$this->blockMiddleware->updateBlockIP(true);
 				return new Response("Login basico fue exitoso",Response::SUCCESS);
 			}
-		} catch(Exception $e){
+		} catch (Exception $e){
 			throw $e;
 		}
 
@@ -74,17 +77,31 @@ abstract class Login {
 		return new Response("Inicio de session incorrecto, checar usuario o contraseña", RESPONSE::ERROR_LOGIN,$tries_left);
 	}
 
+	/**
+	* Intenta hacer login con los datos del usuario y de bd
+	**/
+	private function intentarLogin($user,$pass,$db,$table,$link){
+		$sql="SELECT id FROM $db.$table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
+		$result = mysqli_query($link, $sql);	
+		if($row = mysqli_fetch_array($result)){
+			return True;
+		}
+		return False;
+	}
+
 	/** 
 	* Funcíon que buscará en la base de datos los datos necesarios para hacer las variables de session
 	* y regresara un objecto con todas las variables de session. Debera de ser implementada por separado por cada login.
-	* @return Objecto de Respuesta de Session.
+	* @return Objecto de SessionData.
 	**/
-
 	abstract protected function getSessionData();
 
+
+	/** ----- FUNCIONES DE AYUDA ----- **/
+
 	/**
-	* Sets the mysqli link object to the login and to the middleware
-	* @param: The mysqli link object
+	* Coloca el objecto de mysqli link en el login y al midleware de bloqueos
+	* @param link: El objecto mysqli 
 	**/
 	function setLink(mysqli $link){
 		$this->link = $link;

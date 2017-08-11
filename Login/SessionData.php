@@ -17,7 +17,7 @@ class SessionData {
      * @return UserFactory
      */
     public static function Instance(){
-    	//Creandon la instancia por primera vez tendrá a $inst = null. Las proximas veces $inst será la instancia como tal
+    	// Creandon la instancia por primera vez tendrá a $inst = null. Las proximas veces $inst será la instancia como tal
     	// a pesar de llamar "static $inst = null" cada vez que se quiere obtener la instancia.
         static $inst = null;
         if ($inst === null) {
