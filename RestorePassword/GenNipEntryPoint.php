@@ -9,12 +9,12 @@ require('../Login/LoginMain.php');
 
 //Recuperar datos
 $user = security($_POST["user"]);
-
+$tipo = "promotec";
 
 try{
 	// 1. Generar un nip con el usuario dado.
 		// Obtener objecto login
-		$login = LoginMain::loginFactory("promotec");
+		$login = LoginMain::loginFactory($tipo);
 		$response = Nip::getNipFromUser($user,link::getLink(),$login);
 
 		// Si el usuario es valido y tiene un NIP valido para enviar entonces el nip estara en el campo data del objecto de respuesta
