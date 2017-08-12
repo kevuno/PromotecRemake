@@ -57,7 +57,7 @@ abstract class Login {
 			$db = $this->db;
 			$table = $this->table;
 			$link = $this->link;
-			if(intentarLogin($user,$pass,$db,$table,$link)){
+			if($self::intentarLogin($user,$pass,$db,$table,$link)){
 				// Login logrado, actualizar estado de bloqueo, se ignoran los intentos restantes que devuelve updateBlockIP()
 				$this->blockMiddleware->updateBlockIP(true);
 				return new Response("Login basico fue exitoso",Response::SUCCESS);
@@ -80,7 +80,7 @@ abstract class Login {
 	/**
 	* Intenta hacer login con los datos del usuario y de bd
 	**/
-	private function intentarLogin($user,$pass,$db,$table,$link){
+	private static function intentarLogin($user,$pass,$db,$table,$link){
 		$sql="SELECT id FROM $db.$table WHERE user='$user' AND (pass=recargas.crypto('$user','$pass'))";
 		$result = mysqli_query($link, $sql);	
 		if($row = mysqli_fetch_array($result)){
